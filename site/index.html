@@ -124,6 +124,7 @@ input.spell:focus{border-color:var(--honey);outline:none}
 .steps li{padding:4px 12px;border-radius:999px;background:var(--sunk);color:var(--muted)}
 .steps li.now{background:var(--sky);color:#fff}
 .steps li.ok{background:var(--ok-soft);color:var(--ok)}
+.cmds{margin:0;font-size:.85rem;color:var(--muted)} .cmds b{color:var(--ink);font-family:var(--letter)}
 .heard{font-family:var(--letter);font-size:1.5rem;letter-spacing:.1em;min-height:2em}
 .ritual{margin:0 auto;padding-left:1.4em;text-align:left;color:var(--muted);font-size:.92rem;display:grid;gap:2px;max-width:340px}
 .newtag{display:inline-block;background:var(--sky);color:#fff;font-weight:800;border-radius:999px;padding:2px 12px;font-size:.8rem;letter-spacing:.06em}
@@ -1058,13 +1059,28 @@ const wordTokens = w => w.toLowerCase().split(/[\s-]+/).filter(Boolean);
 const lettersOf = w => w.toLowerCase().replace(/ /g, '');
 // Nombres de letras en inglés (y cómo los puede escribir el reconocedor) -> letra
 const LN = { a:'a',ay:'a',eh:'a',b:'b',be:'b',bee:'b',c:'c',see:'c',sea:'c',si:'c',d:'d',dee:'d',e:'e',ee:'e',f:'f',ef:'f',eff:'f',g:'g',gee:'g',h:'h',aitch:'h',i:'i',eye:'i',aye:'i',j:'j',jay:'j',k:'k',kay:'k',l:'l',el:'l',ell:'l',m:'m',em:'m',n:'n',en:'n',o:'o',oh:'o',owe:'o',p:'p',pee:'p',pea:'p',q:'q',queue:'q',cue:'q',r:'r',are:'r',ar:'r',s:'s',es:'s',ess:'s',t:'t',tee:'t',tea:'t',u:'u',you:'u',yew:'u',v:'v',vee:'v',w:'w',x:'x',ex:'x',y:'y',why:'y',z:'z',zee:'z',zed:'z' };
+// Comandos de voz, como los que se le piden al juez en el concurso
+const VCMD = { 'repeat':'hear', 'repeat please':'hear', 'please repeat':'hear', 'slowly':'slow', 'definition':'def', 'sentence':'sent', 'again':'again', 'start over':'again' };
+const VCMD_WORDS = ['repeat', 'please', 'slowly', 'definition', 'sentence', 'again', 'start', 'over'];
+function findCmd(text){
+  const s = ' ' + text.toLowerCase().replace(/\[unk\]/g, ' ').replace(/\s+/g, ' ').trim() + ' ';
+  for (const k of Object.keys(VCMD).sort((a, b) => b.length - a.length)) if (s.includes(' ' + k + ' ')) return VCMD[k];
+  return null;
+}
+// Ejecuta un comando: apaga el micrófono, reproduce el audio y vuelve a escuchar al terminar
+function runCmd(c){
+  micAbort(); const x = G.cur;
+  if (c === 'again'){ if (G.step === 'spell') toast('Empieza otra vez a deletrear'); render(); micStart(); return; }
+  render();
+  if (c === 'hear') A.word(x); else if (c === 'slow') A.word(x, true); else if (c === 'def') A.def(x); else if (c === 'sent') A.sent(x);
+}
 // Gramática para decir la palabra: la correcta + distractoras, para que una mala pronunciación no "parezca" la palabra
 function grammarSay(w){
   const others = shuffle(WORDS.filter(x => x.w !== w && !MIC.oov.has(x.w.toLowerCase())).map(x => x.w.toLowerCase())).slice(0, 40);
-  return JSON.stringify([...new Set([wordTokens(w).join(' '), ...others.map(o => wordTokens(o).join(' ')), '[unk]'])]);
+  return JSON.stringify([...new Set([wordTokens(w).join(' '), ...others.map(o => wordTokens(o).join(' ')), ...Object.keys(VCMD), '[unk]'])]);
 }
 // Gramática para deletrear: solo nombres de letras (más la palabra, que se dice antes y después)
-function grammarSpell(w){ return JSON.stringify([...new Set([...Object.keys(LN), 'double', 'hyphen', 'dash', 'space', 'capital', ...wordTokens(w), '[unk]'])]); }
+function grammarSpell(w){ return JSON.stringify([...new Set([...Object.keys(LN), 'double', 'hyphen', 'dash', 'space', 'capital', ...wordTokens(w), ...VCMD_WORDS, '[unk]'])]); }
 // "shave s h a v e shave" -> "shave"
 function parseSpelling(text, word){
   const wt = wordTokens(word), n = wt.length;
@@ -1094,10 +1110,17 @@ async function micStart(){
   MIC.text = ''; MIC.partial = ''; MIC.done = false; MIC.t0 = MIC.tChange = Date.now();
   MIC.rec.on('result', m => {
     const t = (m.result.text || '').trim(); if (!t) return;
-    if (!spelling){ MIC.text = t; micFinish(); return; }
+    const cmd = findCmd(t);
+    if (!spelling){ if (cmd && cmd !== 'again') return runCmd(cmd); if (cmd === 'again') return; MIC.text = t; micFinish(); return; }
+    if (cmd === 'again'){ MIC.text = afterAgain(t); MIC.partial = ''; MIC.tChange = MIC.t0 = Date.now(); paintSpelling(); toast('Empieza otra vez a deletrear'); return; }
+    if (cmd) return runCmd(cmd);
     MIC.text += ' ' + t; MIC.partial = ''; MIC.tChange = Date.now(); paintSpelling();
   });
-  MIC.rec.on('partialresult', m => { if (!spelling) return; const p = m.result.partial || ''; if (p !== MIC.partial){ MIC.partial = p; MIC.tChange = Date.now(); paintSpelling(); } });
+  MIC.rec.on('partialresult', m => {
+    if (!spelling) return; let p = m.result.partial || '';
+    if (findCmd(p) === 'again'){ MIC.text = ''; p = afterAgain(p); }
+    if (p !== MIC.partial){ MIC.partial = p; MIC.tChange = Date.now(); paintSpelling(); }
+  });
   MIC.src = MIC.ac.createMediaStreamSource(MIC.stream);
   MIC.node = MIC.ac.createScriptProcessor(4096, 1, 1);
   MIC.node.onaudioprocess = ev => { try { MIC.rec && MIC.rec.acceptWaveform(ev.inputBuffer); } catch(_){} };
@@ -1111,6 +1134,12 @@ async function micStart(){
       if ((got >= need && idle > 1300) || (got > 0 && idle > 3500) || (got === 0 && total > 10000) || total > 40000) micStop();
     }, 250);
   } else MIC.timer = setTimeout(micStop, 8000);
+}
+// Lo que dijo después del último "again" / "start over"
+function afterAgain(t){
+  const s = t.toLowerCase(), a = s.lastIndexOf('again'), b = s.lastIndexOf('start over');
+  const i = Math.max(a >= 0 ? a + 5 : -1, b >= 0 ? b + 10 : -1);
+  return i >= 0 ? s.slice(i) : s;
 }
 function paintSpelling(){
   const box = document.querySelector('.secret'); if (!box || !G) return;
@@ -1379,6 +1408,7 @@ function vPlay(){
       ${hintRow}
       <div class="secret" aria-label="Palabra oculta">${x.w.split('').map(c => c === ' ' ? '<i class="sp"></i>' : '<i></i>').join('')}</div>
       ${micArea}
+      ${MIC_HOST ? `<p class="cmds">Puedes decir: <b>repeat</b> · <b>slowly</b> · <b>definition</b> · <b>sentence</b>${G.step === 'spell' ? ' · <b>again</b> (empezar de nuevo)' : ''}</p>` : ''}
       <div class="heard" id="heard" aria-live="polite"></div>
       ${spellMsg}
       ${G.step === 'say' && G.fails ? `<div class="fb bad" role="status" style="padding:10px 14px"><b>${G.heard ? 'Escuché: «' + esc(G.heard) + '»' : 'No te entendí bien'}. Escúchala otra vez y repítela.</b>${G.fails >= 2 ? `<span class="muted" style="font-size:.85rem">Pronunciación fácil (la sílaba grande se dice más fuerte):</span>${pronHTML(x.p)}` : ''}</div>` : ''}`;
