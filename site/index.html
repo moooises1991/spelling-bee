@@ -933,9 +933,21 @@ const bufs = {}, loading = {};
 let playTok = 0, curSrc = null;
 ['pointerdown','keydown','touchend'].forEach(e => addEventListener(e, () => { try { if (ctx().state !== 'running') ctx().resume(); } catch(_){} }, { passive:true }));
 // Descarga con avance; guarda en la caché del navegador para que la próxima vez abra al instante
+// Audios: cada archivo lleva su versión, así una actualización solo descarga lo que cambió.
+// El modelo del micrófono va en su propia caché y no se vuelve a descargar con las actualizaciones.
+const AUDIO_VER = {"l5c":"f960f4aa","l6w":"80492754","l5w":"c1d18bf9","l4w":"e9b806ab","l0w":"2e9e877c","l2c":"c192efe6","l7c":"5aad3f08","l7w":"6bf3b02f","l4c":"274eae73","l6c":"f006e014","base":"ca10e93b","l0c":"a5e57224","l1w":"817fa3b5","l1c":"aa8476c7","l2w":"c42a0aa2","l3c":"3188ce40","l3w":"a0a1adcc"};
+const audioUrl = sp => 'audio/' + sp + '.mp3?v=' + (AUDIO_VER[sp] || '0');
+const cacheFor = url => url.startsWith('model') ? 'colmena-modelo-v1' : 'colmena-audio';
+async function cleanCaches(){
+  try {
+    for (const k of await caches.keys()) if (/^colmena-v\d+$/.test(k)) await caches.delete(k);
+    const c = await caches.open('colmena-audio'), keep = new Set(Object.keys(AUDIO_VER).map(sp => new URL(audioUrl(sp), location.href).href));
+    for (const req of await c.keys()) if (!keep.has(req.url)) await c.delete(req);
+  } catch(_){}
+}
 async function fetchBytes(url, onProg, onNet, headOnly){
   let cache = null;
-  try { cache = await caches.open('colmena-v3'); const hit = await cache.match(url); if (hit){ if (headOnly) return null; const b = await hit.arrayBuffer(); onProg && onProg(b.byteLength, b.byteLength); return b; } } catch(_){ cache = null; }
+  try { cache = await caches.open(cacheFor(url)); const hit = await cache.match(url); if (hit){ if (headOnly) return null; const b = await hit.arrayBuffer(); onProg && onProg(b.byteLength, b.byteLength); return b; } } catch(_){ cache = null; }
   onNet && onNet();
   const r = await fetch(url); if (!r.ok) throw new Error(r.status);
   const total = +r.headers.get('content-length') || 0;
@@ -950,7 +962,7 @@ async function fetchBytes(url, onProg, onNet, headOnly){
 }
 function getBuf(sp, onProg, onNet){
   if (bufs[sp]) return Promise.resolve(bufs[sp]);
-  return loading[sp] || (loading[sp] = fetchBytes('audio/' + sp + '.mp3', onProg, onNet)
+  return loading[sp] || (loading[sp] = fetchBytes(audioUrl(sp), onProg, onNet)
     .then(a => new Promise((res, rej) => ctx().decodeAudioData(a, res, rej))).then(b => (bufs[sp] = b)).catch(e => { delete loading[sp]; throw e; }));
 }
 function playOne(id, tok){
@@ -1010,7 +1022,7 @@ async function runLoader(){
       if (sp === 'MIC') await micLoad(net);
       // solo se decodifica lo que se usa ya; lo demás se guarda en la tablet para después
       else if (sp === 'base' || sp === 'l' + S.sel + 'w') await getBuf(sp, prog, net);
-      else if (!bufs[sp]) await fetchBytes('audio/' + sp + '.mp3', prog, net, true);
+      else if (!bufs[sp]) await fetchBytes(audioUrl(sp), prog, net, true);
       LOAD.done.add(sp);
       if (sp === 'l' + S.sel + 'w' && !G && tab === 'home') render();
       if (sp === 'MIC' && G){ render(); autoListen(); }
@@ -1568,7 +1580,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden){ try 
 /* ---------- arranque ---------- */
 (async function boot(){
   const local = loadLocal(); if (local) S = merge(local);
-  render(); runLoader();
+  render(); runLoader(); cleanCaches();
   try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch(_){}
   try {
     db = await window.claude?.use?.('db');

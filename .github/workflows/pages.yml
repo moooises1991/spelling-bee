@@ -23,7 +23,7 @@ jobs:
           curl -sSL --retry 3 -o m.zip https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip
           unzip -q m.zip
           mv vosk-model-small-en-us-0.15 model
-          tar -czf site/model.tar.gz model
+          tar -cf - model | gzip -9 > site/model.tar.gz
       - name: Lista de palabras que el modelo de voz no conoce
         run: |
           python3 - <<'PY'
