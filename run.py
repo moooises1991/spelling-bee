@@ -12,6 +12,6 @@ for i, k in enumerate(sorted(exp)):
     audio = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
     segs, _ = m.transcribe(audio, language="en", beam_size=5, without_timestamps=True, vad_filter=False, condition_on_previous_text=False)
     out[k] = " ".join(s.text.strip() for s in segs)
-    if i % 200 == 0: print(i, k, out[k], round(time.time() - t0), flush=True)
+    print("RES\t" + k + "\t" + out[k], flush=True)
 json.dump(out, open("results.json", "w"), indent=0)
 print("listo", len(out))
