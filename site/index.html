@@ -1,0 +1,1397 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Colmena Spelling Bee</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika:wght@400;700&family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: a single-column "hive" app — a sticky honeycomb tab bar over one working card; levels drawn as hexagon cells. */
+:root{
+  --bg:#FFF9EC; --surface:#FFFFFF; --sunk:#FCEFD0; --ink:#1E2247; --muted:#5D6088; --line:#EAD9AE;
+  --honey:#F2A900; --honey-deep:#C47F00; --honey-soft:#FFE7A3;
+  --ok:#1F9D63; --ok-soft:#D7F5E6; --bad:#D9483B; --bad-soft:#FDE1DD; --sky:#3A62D6;
+  --display:"Baloo 2", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --body:"Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --letter:"Andika", "Comic Sans MS", "Trebuchet MS", sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#14162E; --surface:#1E2142; --sunk:#262A52; --ink:#F6F1E4; --muted:#B3B4D6; --line:#353A6B;
+  --honey:#FFC233; --honey-deep:#FFD066; --honey-soft:#4A3F1C;
+  --ok:#3CCB8A; --ok-soft:#173E31; --bad:#FF7466; --bad-soft:#4A2228; --sky:#8EA8FF; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#14162E; --surface:#1E2142; --sunk:#262A52; --ink:#F6F1E4; --muted:#B3B4D6; --line:#353A6B;
+  --honey:#FFC233; --honey-deep:#FFD066; --honey-soft:#4A3F1C;
+  --ok:#3CCB8A; --ok-soft:#173E31; --bad:#FF7466; --bad-soft:#4A2228; --sky:#8EA8FF; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  background-image:radial-gradient(circle at 1px 1px, color-mix(in srgb,var(--honey) 18%, transparent) 1px, transparent 0);background-size:22px 22px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;margin:0;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--sky);outline-offset:2px}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px;display:grid;gap:16px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:2px solid var(--line)}
+.topin{max-width:860px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:800;font-size:1.25rem;margin-right:auto}
+.brand svg{width:34px;height:34px}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap}
+nav.tabs button{border:0;background:transparent;padding:6px 12px;border-radius:999px;font-weight:800;color:var(--muted)}
+nav.tabs button[aria-current="page"]{background:var(--honey);color:#1E2247}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--sunk);border-radius:999px;padding:4px 12px;font-weight:800;font-variant-numeric:tabular-nums;font-size:.92rem}
+.chip b{font-family:var(--display);font-size:1.05rem}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:var(--r);padding:20px;min-width:0}
+.muted{color:var(--muted)}
+.eyebrow{font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--honey-deep)}
+.btn{border:0;border-radius:14px;padding:12px 18px;font-weight:800;background:var(--sunk);display:inline-flex;align-items:center;gap:8px;justify-content:center;transition:transform .08s}
+.btn:active{transform:translateY(2px)}
+.btn.primary{background:var(--honey);color:#1E2247;box-shadow:0 4px 0 var(--honey-deep)}
+.btn.primary:active{box-shadow:0 1px 0 var(--honey-deep)}
+.btn.ok{background:var(--ok);color:#fff}
+.btn.ghost{background:transparent;border:2px solid var(--line)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.big{font-size:1.15rem;padding:16px 24px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+
+/* hive map */
+.hive{display:flex;flex-wrap:wrap;gap:6px 4px;justify-content:center;padding:8px 0}
+.cell{width:104px;height:116px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);background:var(--sunk);border:0;display:grid;place-items:center;text-align:center;position:relative;padding:14px 8px;overflow:hidden}
+.cell .fill{position:absolute;inset:auto 0 0 0;background:var(--honey-soft);z-index:0}
+.cell > span{position:relative;z-index:1;display:grid;gap:0;line-height:1.1}
+.cell .n{font-family:var(--display);font-weight:800;font-size:1.6rem}
+.cell .t{font-size:.72rem;font-weight:800}
+.cell .p{font-size:.7rem;font-variant-numeric:tabular-nums;color:var(--muted)}
+.cell.done{background:var(--honey)}
+.cell.done .p,.cell.done .t,.cell.done .n{color:#1E2247}
+.cell.cur{outline:none;background:var(--ok-soft)}
+.cell.sel::after{content:"";position:absolute;inset:6px;clip-path:inherit;border:0}
+.cell.sel{box-shadow:inset 0 0 0 4px var(--sky)}
+.cell.locked{opacity:.5;cursor:not-allowed}
+
+/* ring */
+.ringbox{display:flex;align-items:center;gap:16px}
+.ring{width:96px;height:96px;flex:none}
+.ring circle{fill:none;stroke-width:10}
+.ring .bgc{stroke:var(--sunk)} .ring .fg{stroke:var(--honey);stroke-linecap:round;transition:stroke-dashoffset .6s}
+.ring text{fill:var(--ink);font-family:var(--display);font-weight:800}
+
+/* play */
+.stage{display:grid;gap:16px;text-align:center}
+.listen{width:132px;height:132px;border-radius:50%;border:0;background:var(--honey);color:#1E2247;box-shadow:0 6px 0 var(--honey-deep);display:grid;place-items:center;margin:0 auto}
+.listen svg{width:60px;height:60px}
+.listen.speaking{animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.05)}}
+.hints{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.hints .btn{padding:8px 12px;font-size:.92rem}
+.clue{background:var(--sunk);border-radius:14px;padding:12px 16px;text-align:left;display:grid;gap:4px}
+.clue .lab{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.clue .en{font-family:var(--letter);font-size:1.1rem}
+input.spell{font-family:var(--letter);font-size:clamp(1.6rem,6vw,2.4rem);text-align:center;letter-spacing:.12em;width:100%;padding:14px;border-radius:16px;border:3px solid var(--line);background:var(--bg);color:var(--ink)}
+input.spell:focus{border-color:var(--honey);outline:none}
+.word{font-family:var(--letter);font-weight:700;font-size:clamp(2rem,8vw,3.2rem);letter-spacing:.06em;line-height:1.1;word-break:break-word}
+.pron{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.syl{font-family:var(--letter);font-size:1.25rem;background:var(--sunk);padding:2px 10px;border-radius:10px}
+.syl.st{background:var(--honey);color:#1E2247;font-weight:700}
+.fb{border-radius:16px;padding:16px;display:grid;gap:10px}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)}
+.fb h3{font-size:1.5rem}
+.fb.ok h3{color:var(--ok)} .fb.bad h3{color:var(--bad)}
+.diff{font-family:var(--letter);font-size:1.6rem;letter-spacing:.1em;word-break:break-all}
+.diff .x{color:var(--bad);text-decoration:line-through;text-decoration-thickness:3px}
+.diff .m{color:var(--bad);font-weight:700;background:color-mix(in srgb,var(--bad) 18%,transparent);border-radius:4px}
+.diff .g{color:var(--ok)}
+.dots{display:flex;gap:4px;justify-content:center;flex-wrap:wrap}
+.dots i{width:14px;height:14px;border-radius:50%;background:var(--sunk);display:block}
+.dots i.on{background:var(--ok)} .dots i.now{background:var(--honey)}
+.mic{border:0;border-radius:999px;background:var(--sky);color:#fff;font-weight:800;font-size:1.2rem;padding:16px 28px;display:inline-flex;align-items:center;gap:10px;margin:0 auto;box-shadow:0 5px 0 color-mix(in srgb,var(--sky) 60%,#000)}
+.mic svg{width:30px;height:30px}
+.mic.on{background:var(--bad);animation:pulse 1s infinite;box-shadow:0 5px 0 color-mix(in srgb,var(--bad) 60%,#000)}
+.heard{font-family:var(--letter);font-size:1.5rem;letter-spacing:.1em;min-height:2em}
+.ritual{margin:0 auto;padding-left:1.4em;text-align:left;color:var(--muted);font-size:.92rem;display:grid;gap:2px;max-width:340px}
+.newtag{display:inline-block;background:var(--sky);color:#fff;font-weight:800;border-radius:999px;padding:2px 12px;font-size:.8rem;letter-spacing:.06em}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:999px;font-weight:800;z-index:20;max-width:calc(100% - 32px);text-align:center}
+.overlay{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 55%,transparent);display:grid;place-items:center;z-index:30;padding:16px}
+.overlay .card{max-width:440px;text-align:center;display:grid;gap:14px}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:40;width:100%;height:100%}
+
+/* list */
+.letters{display:flex;flex-wrap:wrap;gap:4px}
+.letters button{width:38px;height:38px;border-radius:10px;border:0;background:var(--sunk);font-family:var(--letter);font-weight:700;font-size:1.05rem}
+.letters button[aria-pressed="true"]{background:var(--honey);color:#1E2247}
+.wl{display:grid;gap:8px}
+.wi{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;background:var(--sunk)}
+.wi .w{font-family:var(--letter);font-weight:700;font-size:1.2rem}
+.wi .d{font-size:.88rem;color:var(--muted)}
+.wi .pp{font-family:var(--letter);font-size:.95rem}
+.wi .pp b{color:var(--honey-deep)}
+.say{width:44px;height:44px;border-radius:50%;border:0;background:var(--honey);color:#1E2247;display:grid;place-items:center;flex:none}
+.say svg{width:22px;height:22px}
+.state{font-size:.75rem;font-weight:800;border-radius:999px;padding:2px 10px;white-space:nowrap}
+.state.m{background:var(--ok-soft);color:var(--ok)} .state.l{background:var(--honey-soft);color:var(--honey-deep)} .state.n{background:var(--surface);color:var(--muted)} .state.h{background:var(--bad-soft);color:var(--bad)}
+
+/* report */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--sunk);border-radius:14px;padding:12px 14px}
+.kpi .v{font-family:var(--display);font-weight:800;font-size:1.9rem;font-variant-numeric:tabular-nums;line-height:1.1}
+.kpi .k{font-size:.82rem;color:var(--muted);font-weight:700}
+.chart{overflow-x:auto}
+.chart svg text{fill:var(--muted);font-family:var(--body);font-size:11px}
+.bars rect.b{fill:var(--honey)} .bars rect.b.full{fill:var(--ok)}
+.bars line.goal{stroke:var(--bad);stroke-dasharray:4 4;stroke-width:1.5}
+.bars line.grid{stroke:var(--line)}
+.lvlbar{display:grid;grid-template-columns:120px 1fr 64px;gap:10px;align-items:center;font-size:.9rem}
+.track{height:12px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.track i{display:block;height:100%;background:var(--honey);border-radius:99px}
+.track i.ok{background:var(--ok)}
+.az{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px}
+.az div{border-radius:10px;padding:6px 0;text-align:center;font-family:var(--letter);font-weight:700;background:var(--sunk);position:relative;overflow:hidden}
+.az div small{display:block;font-family:var(--body);font-size:.68rem;color:var(--muted);font-variant-numeric:tabular-nums}
+table.t{border-collapse:collapse;width:100%;font-size:.92rem}
+table.t th,table.t td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left}
+table.t td.n{text-align:right;font-variant-numeric:tabular-nums}
+table.t th{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.tbl{overflow-x:auto}
+label.f{display:grid;gap:6px;font-weight:700}
+label.f input,label.f select{font:inherit;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+.sync{font-size:.8rem;color:var(--muted)}
+@media (max-width:520px){
+  .lvlbar{grid-template-columns:90px 1fr 54px}
+  .cell{width:88px;height:98px}
+  .cell .n{font-size:1.3rem}
+  .card{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="top"><div class="topin">
+  <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="22" cy="20" rx="12" ry="9" fill="#CFE6FF" opacity=".9" transform="rotate(-25 22 20)"/><ellipse cx="42" cy="20" rx="12" ry="9" fill="#CFE6FF" opacity=".9" transform="rotate(25 42 20)"/><ellipse cx="32" cy="38" rx="17" ry="15" fill="#F2A900"/><path d="M19 33h26M17 40h30M20 47h24" stroke="#1E2247" stroke-width="4" stroke-linecap="round"/><circle cx="26" cy="31" r="2.4" fill="#1E2247"/><circle cx="38" cy="31" r="2.4" fill="#1E2247"/></svg>Colmena Spelling Bee</div>
+  <nav class="tabs" aria-label="Secciones">
+    <button data-tab="home" aria-current="page">Jugar</button>
+    <button data-tab="list">Palabras</button>
+    <button data-tab="report">Reporte</button>
+    <button data-tab="settings">Ajustes</button>
+  </nav>
+</div></header>
+<main class="wrap" id="app"></main>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+const RAW = `anxiety|4|ang-ZY-ih-tee|a worried, nervous feeling|She felt anxiety before her big test.
+agriculture|5|AG-rih-kul-chur|farming; growing crops and raising animals|Agriculture feeds people all over the world.
+apply|2|uh-PLY|to put on, or to ask for something in writing|Apply sunscreen before you go outside.
+absorb|3|ub-ZORB|to soak up|A sponge can absorb a lot of water.
+alien|3|AY-lee-un|a creature from another planet|The movie was about a friendly alien.
+appoint|3|uh-POINT|to choose someone for a job|The teacher will appoint a class helper.
+abstract|4|AB-strakt|an idea you cannot touch; art made of shapes and colors|The painting was abstract, with only colors and shapes.
+analyze|4|AN-uh-lyze|to study something closely|Scientists analyze the water to see if it is clean.
+appreciate|5|uh-PREE-shee-ayt|to be thankful for|I appreciate your help with my homework.
+argument|4|AR-gyoo-ment|a disagreement, or reasons for an idea|The brothers had an argument about the game.
+announce|4|uh-NOUNSS|to tell everyone|The principal will announce the winner.
+approach|4|uh-PROHCH|to come closer|The cat began to approach the bird slowly.
+add|1|AD|to put together; to join numbers|Add two and three to get five.
+anticipate|5|an-TISS-ih-payt|to expect something to happen|We anticipate a lot of snow tomorrow.
+appropriate|5|uh-PROH-pree-it|right for the situation|Wear appropriate shoes for the hike.
+accept|3|ak-SEPT|to take something that is offered|Please accept this gift.
+agreement|4|uh-GREE-ment|when people think the same way|The friends came to an agreement.
+accomplish|5|uh-KOM-plish|to finish something successfully|You can accomplish anything if you practice.
+apology|4|uh-POL-uh-jee|saying you are sorry|He gave his sister an apology.
+arise|3|uh-RIZE|to come up or happen|Problems may arise if we do not plan.
+advocate|5|AD-vuh-kayt|to speak up in support of someone|She will advocate for animals.
+apparent|5|uh-PAIR-ent|easy to see or understand|It was apparent that the dog was hungry.
+artificial|5|ar-tih-FISH-ul|made by people, not by nature|The flowers on the table are artificial.
+appeal|4|uh-PEEL|to be attractive or interesting|Sweet treats appeal to most kids.
+appliance|5|uh-PLY-unss|a machine used in the home|A toaster is a kitchen appliance.
+annoy|3|uh-NOY|to bother someone|Buzzing flies annoy me.
+articulate|6|ar-TIK-yoo-lit|able to speak clearly and well|She is articulate when she gives a speech.
+assignment|5|uh-SINE-ment|a job or task given to you|Our reading assignment is due Friday.
+avenue|4|AV-uh-noo|a wide street|We live on Maple Avenue.
+balloon|3|buh-LOON|a rubber bag filled with air|The red balloon floated into the sky.
+beautiful|4|BYOO-tih-ful|very pretty|The sunset was beautiful.
+bunny|2|BUN-ee|a rabbit|The bunny hopped across the grass.
+butterfly|3|BUT-er-fly|an insect with colorful wings|A butterfly landed on the flower.
+bored|2|BORD|tired of something that is not interesting|I was bored on the long car ride.
+blizzard|4|BLIZ-erd|a big snowstorm with strong wind|The blizzard closed all the schools.
+beauty|3|BYOO-tee|the quality of being beautiful|We admired the beauty of the mountains.
+bless|2|BLESS|to wish good things for someone|Bless you, she said after I sneezed.
+bridge|3|BRIJ|something built to cross over water or a road|We walked across the bridge.
+balance|4|BAL-unss|to stay steady without falling|She can balance on one foot.
+bingo|2|BING-goh|a game with numbered cards|Grandma yelled bingo and won.
+brilliant|5|BRIL-yunt|very bright or very smart|That was a brilliant idea.
+bamboo|3|bam-BOO|a tall plant with hollow stems|Pandas love to eat bamboo.
+bounce|3|BOUNSS|to spring back up after hitting something|The ball will bounce on the floor.
+brass|2|BRASS|a yellow metal|The trumpet is made of brass.
+build|3|BILD|to make something by putting parts together|Let's build a sandcastle.
+bracelet|4|BRAYSS-lit|jewelry worn around the wrist|She wore a silver bracelet.
+beetle|3|BEE-tul|an insect with a hard shell|A shiny beetle crawled on the leaf.
+brother|2|BRUTH-er|a boy who has the same parents as you|My brother is two years older than me.
+battle|3|BAT-ul|a fight between groups|The knights fought a battle.
+biology|4|by-OL-uh-jee|the study of living things|In biology we learn about plants and animals.
+book|1|BUK|pages with words bound together|I read a book every night.
+boyfriend|3|BOY-frend|a boy someone is dating|In the story, the princess had a boyfriend.
+backpack|2|BAK-pak|a bag you carry on your back|I put my lunch in my backpack.
+banana|2|buh-NAN-uh|a long yellow fruit|Monkeys like to eat a banana.
+basketball|3|BASS-kit-bawl|a game where you throw a ball through a hoop|We play basketball at recess.
+browse|3|BROWZ|to look around casually|We like to browse the library shelves.
+boulder|4|BOHL-der|a very large rock|A huge boulder blocked the path.
+bargain|4|BAR-gin|something bought for a low price|The shoes were a bargain.
+brought|4|BRAWT|past of bring; carried here|She brought cookies to school.
+calf|3|KAF|a baby cow|The calf stayed close to its mother.
+chicken|2|CHIK-in|a farm bird that lays eggs|The chicken laid an egg.
+concern|3|kun-SURN|a worry|My mom showed concern when I was sick.
+caring|2|KAIR-ing|kind and helpful|The nurse was very caring.
+cousin|4|KUZ-in|the child of your aunt or uncle|My cousin is visiting this summer.
+condition|4|kun-DISH-un|the state something is in|The old bike is in good condition.
+carry|2|KAIR-ee|to hold and take somewhere|Can you carry this box?
+choice|3|CHOISS|something you choose|You have a choice of apple or orange.
+conclusion|5|kun-KLOO-zhun|the end, or a final decision|The conclusion of the story was happy.
+catch|2|KACH|to grab something moving|Catch the ball!
+choose|3|CHOOZ|to pick|Choose your favorite color.
+couple|3|KUP-ul|two of something|I need a couple of pencils.
+certain|4|SUR-tin|sure|I am certain that I locked the door.
+concert|3|KON-surt|a music show|We went to a concert in the park.
+clumsy|3|KLUM-zee|moving in an awkward way, often dropping things|The clumsy puppy tripped over its paws.
+cavern|3|KAV-ern|a large cave|Bats live in the dark cavern.
+column|5|KOL-um|a tall post, or a line going up and down|Write your answers in the first column.
+crowd|2|KROWD|a large group of people|A crowd cheered at the game.
+creature|4|KREE-chur|a living animal|A strange creature lived in the pond.
+castle|4|KASS-ul|a large stone building where kings lived|The queen lived in a castle.
+culture|4|KUL-chur|the way of life of a group of people|Music is part of every culture.
+classy|2|KLASS-ee|stylish and elegant|She wore a classy dress to the party.
+collar|3|KOL-er|the part of a shirt around the neck; a band on a pet's neck|The dog has a blue collar.
+curious|4|KYUR-ee-us|wanting to learn or know|The curious kitten explored the box.
+charge|3|CHARJ|to ask a price, or to rush forward|They charge five dollars for a ticket.
+consider|4|kun-SID-er|to think carefully about|Consider all your choices.
+curtain|4|KUR-tin|cloth that hangs over a window or stage|Close the curtain to keep out the sun.
+cheer|1|CHEER|to shout for joy or support|We cheer for our team.
+consumer|4|kun-SOO-mer|a person who buys and uses things|A consumer buys food at the store.
+cylinder|5|SIL-in-der|a shape like a can|A soup can is a cylinder.
+describe|3|dih-SKRIBE|to tell what something is like|Describe your best friend.
+decrease|3|dih-KREESS|to make or become smaller|The temperature will decrease tonight.
+decide|3|dih-SIDE|to make up your mind|I can't decide which book to read.
+disappear|4|diss-uh-PEER|to go out of sight|The magician made the coin disappear.
+dental|2|DEN-tul|about the teeth|I have a dental checkup today.
+daughter|4|DAW-ter|a girl child of a parent|She is my daughter.
+dialogue|5|DY-uh-log|a talk between people, as in a story|The play has a lot of dialogue.
+depend|2|dih-PEND|to rely on|You can depend on me.
+daydream|2|DAY-dreem|to think pleasant thoughts while awake|I like to daydream about the beach.
+discuss|3|dih-SKUSS|to talk about|Let's discuss the plan.
+drain|2|DRAYN|a pipe that carries water away|Water went down the drain.
+discovery|4|dih-SKUV-er-ee|finding something new|The discovery of the fossil was exciting.
+dishwasher|3|DISH-wosh-er|a machine that washes dishes|Put the plates in the dishwasher.
+dispersal|5|dih-SPUR-sul|spreading out in many directions|Wind helps the dispersal of seeds.
+doubt|4|DOWT|to not be sure|I doubt it will rain today.
+downstairs|3|down-STAIRZ|on a lower floor|Breakfast is downstairs.
+determine|4|dih-TUR-min|to find out or decide|We need to determine the answer.
+detail|3|DEE-tayl|a small part or fact|Look at every detail in the picture.
+direct|3|dih-REKT|straight, or to show the way|Can you direct me to the library?
+dwelling|3|DWEL-ing|a home; a place to live|A tent can be a dwelling.
+decision|4|dih-SIZH-un|a choice you make|It was a hard decision.
+draw|1|DRAW|to make a picture with a pencil|I like to draw horses.
+demand|3|dih-MAND|to ask for strongly|The kids demand more recess.
+difficult|4|DIF-ih-kult|hard to do|The puzzle was difficult.
+during|2|DUR-ing|while something is happening|Don't talk during the movie.
+departure|4|dih-PAR-chur|leaving|Our departure is at noon.
+dangerous|4|DAYN-jer-us|not safe|It is dangerous to play in the street.
+deposit|4|dih-POZ-it|to put in, like money in a bank|I deposit my allowance in the bank.
+dimple|2|DIM-pul|a small dent in the cheek|She has a dimple when she smiles.
+delight|4|dih-LITE|great joy|The children squealed with delight.
+expense|4|ik-SPENSS|the cost of something|The trip was a big expense.
+excel|4|ik-SEL|to be very good at something|She works hard to excel at math.
+evaluate|5|ih-VAL-yoo-ayt|to judge how good something is|The teacher will evaluate our projects.
+education|4|ej-uh-KAY-shun|learning and teaching|Education helps us grow.
+efficient|6|ih-FISH-ent|working well without wasting time or energy|A bike is an efficient way to travel.
+eggplant|2|EG-plant|a purple vegetable|Mom cooked eggplant for dinner.
+economic|5|ek-uh-NOM-ik|about money and business|The town had economic problems.
+evidence|4|EV-ih-denss|facts that prove something|The muddy paw prints were evidence.
+emotion|4|ih-MOH-shun|a feeling, like happy or sad|Joy is a happy emotion.
+encyclopedia|6|en-sy-kluh-PEE-dee-uh|a book with facts about many topics|I looked up sharks in the encyclopedia.
+educate|4|EJ-uh-kayt|to teach|Schools educate children.
+electricity|5|ih-lek-TRISS-ih-tee|energy that powers lights and machines|The storm knocked out the electricity.
+excellent|5|EK-suh-lent|very, very good|You did an excellent job.
+early|2|UR-lee|before the usual time|I woke up early today.
+elephant|3|EL-uh-fant|a huge gray animal with a trunk|The elephant sprayed water with its trunk.
+expressive|4|ik-SPRESS-iv|showing feelings clearly|She has an expressive face.
+earn|2|URN|to get by working|I earn money by walking dogs.
+eliminate|5|ih-LIM-ih-nayt|to get rid of|We need to eliminate the mistakes.
+eighty|3|AY-tee|the number 80|My grandpa is eighty years old.
+elevator|4|EL-uh-vay-ter|a moving room that goes up and down|We took the elevator to the tenth floor.
+encourage|5|en-KUR-ij|to give someone hope or support|My coach will encourage me to try.
+express|3|ik-SPRESS|to show or tell your feelings|Art helps me express myself.
+except|4|ik-SEPT|leaving out; but not|Everyone came except Sam.
+exchange|4|iks-CHAYNJ|to trade one thing for another|Let's exchange stickers.
+extreme|4|ik-STREEM|very great or very far|The desert has extreme heat.
+evening|2|EEV-ning|the time between afternoon and night|We eat dinner in the evening.
+engage|3|en-GAYJ|to take part, or hold attention|Games engage students in learning.
+examination|5|ig-zam-ih-NAY-shun|a test or a close look|The doctor did an examination.
+either|4|EE-ther|one or the other|You can have either juice or milk.
+fabric|3|FAB-rik|cloth|The dress is made of soft fabric.
+function|4|FUNGK-shun|the job something does|The function of the heart is to pump blood.
+faction|4|FAK-shun|a small group inside a larger group|One faction of the club wanted a new name.
+festival|3|FESS-tih-vul|a big celebration|We went to the music festival.
+falling|2|FAWL-ing|dropping down|The leaves are falling from the trees.
+fishery|4|FISH-er-ee|a place where fish are caught or raised|The fishery sells fresh salmon.
+follower|3|FOL-oh-er|someone who follows|The leader had a loyal follower.
+fertile|4|FUR-tul|good for growing plants|Fertile soil grows big crops.
+focus|3|FOH-kus|to pay close attention|Focus on your reading.
+fountain|4|FOWN-tin|water shooting up into the air|We threw coins into the fountain.
+freedom|3|FREE-dum|being free|Birds have the freedom to fly.
+fortify|4|FOR-tih-fy|to make stronger|They fortify the castle walls.
+fragile|4|FRAJ-ul|easy to break|Be careful, the glass is fragile.
+formulate|5|FOR-myoo-layt|to plan or put together carefully|Let's formulate a plan.
+foil|2|FOIL|a thin sheet of metal|Wrap the sandwich in foil.
+forehead|4|FOR-hed|the part of the face above the eyebrows|Mom felt my forehead for a fever.
+firefly|3|FIRE-fly|a bug that glows at night|A firefly blinked in the dark.
+finesse|6|fih-NESS|skill and grace|She played the piano with finesse.
+famous|3|FAY-mus|known by many people|He wants to be a famous singer.
+flourish|5|FLUR-ish|to grow well and be healthy|Plants flourish in the sunlight.
+flounder|4|FLOWN-der|a flat fish, or to struggle|The flounder hid in the sand.
+fulfill|5|ful-FIL|to make something come true|I will fulfill my promise.
+fabricate|5|FAB-rih-kayt|to make or build; or to make up a lie|They fabricate car parts in the factory.
+fixture|4|FIKS-chur|something fixed in place, like a light|The new light fixture is bright.
+fortress|4|FOR-triss|a strong building that protects people|Soldiers guarded the fortress.
+frantic|4|FRAN-tik|wild with worry or hurry|The frantic mom looked for her keys.
+facility|5|fuh-SIL-ih-tee|a building made for a purpose|The sports facility has a pool.
+factor|3|FAK-ter|one thing that causes a result|Rain was a factor in the game.
+frequent|4|FREE-kwent|happening often|We make frequent trips to the park.
+folklore|4|FOHK-lor|old stories passed down by people|Dragons are part of folklore.
+genius|4|JEEN-yus|a very smart person|Einstein was a genius.
+garbage|3|GAR-bij|trash|Take out the garbage.
+ginger|3|JIN-jer|a spicy root used in cooking|Ginger cookies smell great.
+genre|6|ZHAHN-ruh|a kind or type of art, music, or book|Mystery is my favorite genre.
+glasses|2|GLASS-iz|lenses you wear to see better|Grandpa wears glasses to read.
+gazette|5|guh-ZET|a newspaper|The town gazette comes out on Sunday.
+gobble|3|GOB-ul|to eat quickly|Don't gobble your food.
+greedy|3|GREE-dee|wanting more than you need|The greedy king took all the gold.
+glorious|4|GLOR-ee-us|wonderful and beautiful|It was a glorious sunny day.
+galaxy|4|GAL-uk-see|a huge group of stars|We live in the Milky Way galaxy.
+gathered|3|GATH-erd|brought together|We gathered around the campfire.
+gentlemen|4|JEN-tul-men|polite men|Ladies and gentlemen, welcome!
+germ|2|JURM|a tiny living thing that can make you sick|Wash your hands to kill every germ.
+grocer|4|GROH-ser|a person who sells food|The grocer sold us fresh apples.
+glimpse|5|GLIMPS|a quick look|I caught a glimpse of the deer.
+gesture|5|JESS-chur|a movement of the hands to show meaning|A wave is a friendly gesture.
+gloomy|3|GLOO-mee|dark or sad|It was a gloomy, rainy day.
+greeting|2|GREE-ting|a hello|She waved a greeting.
+grumble|3|GRUM-bul|to complain in a low voice|Don't grumble about chores.
+gargle|3|GAR-gul|to rinse your throat with liquid|Gargle with salt water.
+glimmer|3|GLIM-er|a faint light|A glimmer of light came through the door.
+grateful|4|GRAYT-ful|thankful|I am grateful for my family.
+griddle|3|GRID-ul|a flat pan for cooking|Dad made pancakes on the griddle.
+gamble|3|GAM-bul|to take a risk|Don't gamble with your safety.
+gander|3|GAN-der|a male goose, or a look|Take a gander at this!
+grit|1|GRIT|tiny bits of sand; courage to keep going|She showed grit and kept going.
+guideline|4|GIDE-line|a rule that helps you|Follow the safety guideline.
+growth|3|GROHTH|getting bigger|The plant had a growth spurt.
+glider|3|GLY-der|an aircraft with no engine|The glider soared over the hills.
+grammar|5|GRAM-er|the rules of a language|Good grammar helps your writing.
+handsome|4|HAN-sum|good-looking|The prince was handsome.
+hotdog|2|HOT-dog|a sausage in a bun|I ate a hotdog at the game.
+hesitate|4|HEZ-ih-tayt|to pause before acting|Don't hesitate to ask for help.
+handful|2|HAND-ful|as much as a hand can hold|He took a handful of popcorn.
+honey|2|HUN-ee|sweet food made by bees|Bees make honey.
+hump|1|HUMP|a round bump|A camel has a hump.
+hardly|2|HARD-lee|almost not|I could hardly see in the fog.
+hospitality|6|hoss-pih-TAL-ih-tee|being friendly and welcoming to guests|Thank you for your hospitality.
+heroic|4|hih-ROH-ik|brave like a hero|The firefighter made a heroic rescue.
+happiest|4|HAP-ee-ist|the most happy|This is the happiest day of my life.
+humanity|4|hyoo-MAN-ih-tee|all people; kindness|Helping others shows humanity.
+humble|3|HUM-bul|not proud or bragging|She is humble about her talent.
+hunt|1|HUNT|to search for|We hunt for eggs in the garden.
+however|3|how-EV-er|but; in whatever way|I like cats; however, I like dogs more.
+homeless|3|HOME-liss|having no home|We gave food to a homeless family.
+hurry|2|HUR-ee|to move fast|Hurry, or we'll be late!
+howl|2|HOWL|a long, loud cry|The wolf let out a howl.
+humility|5|hyoo-MIL-ih-tee|being humble|The champion showed humility.
+health|3|HELTH|how well your body is|Eating vegetables is good for your health.
+hostel|4|HOSS-tul|a cheap place to stay for travelers|We stayed in a hostel in the city.
+heat|1|HEET|warmth|The heat from the fire kept us warm.
+heaven|3|HEV-un|the sky; a wonderful place|This cake tastes like heaven.
+hungry|2|HUNG-gree|wanting food|I am hungry for lunch.
+heave|3|HEEV|to lift or throw with effort|Heave the bag over the fence.
+heard|4|HURD|past of hear|I heard a noise outside.
+habitat|4|HAB-ih-tat|the natural home of an animal or plant|The ocean is a whale's habitat.
+hibernate|4|HY-ber-nayt|to sleep all winter|Bears hibernate in caves.
+hiking|2|HIKE-ing|taking a long walk in nature|We went hiking in the mountains.
+hardworking|3|hard-WUR-king|always working hard|She is a hardworking student.
+hoist|3|HOIST|to lift up, often with ropes|They hoist the flag every morning.
+ideal|3|eye-DEEL|perfect|Today is ideal weather for a picnic.
+inform|3|in-FORM|to tell|Please inform your teacher if you're sick.
+injure|4|IN-jer|to hurt|Wear a helmet so you don't injure your head.
+indeed|3|in-DEED|truly; yes|It was indeed a great show.
+initial|5|ih-NISH-ul|first; the first letter of a name|My first initial is M.
+international|5|in-ter-NASH-uh-nul|between countries|It was an international soccer game.
+illness|3|ILL-niss|being sick|She missed school because of an illness.
+Indian|3|IN-dee-un|from India, or Native American|We ate Indian food for dinner.
+increase|3|in-KREESS|to make bigger|Increase the volume, please.
+imitate|4|IM-ih-tayt|to copy|Parrots imitate sounds.
+individuality|6|in-dih-vij-oo-AL-ih-tee|what makes a person different from others|Her clothes show her individuality.
+influence|5|IN-floo-enss|the power to change someone or something|Friends can influence your choices.
+imperfect|4|im-PUR-fikt|not perfect|The apple was imperfect but tasty.
+island|5|EYE-lund|land surrounded by water|We sailed to a small island.
+Irish|3|EYE-rish|from Ireland|She danced an Irish jig.
+investigate|5|in-VESS-tih-gayt|to look into carefully|The detective will investigate the case.
+interest|4|IN-trist|wanting to know more|I have an interest in space.
+invisible|5|in-VIZ-ih-bul|not able to be seen|Air is invisible.
+income|3|IN-kum|money earned|Dad's income pays the bills.
+interrupt|5|in-ter-RUPT|to stop someone while they talk|Please don't interrupt me.
+issue|5|ISH-oo|a problem or topic|Pollution is a big issue.
+improve|3|im-PROOV|to make better|Practice will improve your spelling.
+invite|2|in-VITE|to ask someone to come|I will invite you to my party.
+invent|2|in-VENT|to create something new|Edison worked hard to invent the light bulb.
+index|2|IN-deks|a list at the back of a book|Look up the topic in the index.
+ignore|3|ig-NOR|to pay no attention to|Ignore the noise and keep reading.
+itch|2|ICH|a feeling that makes you want to scratch|The bug bite made me itch.
+indicate|4|IN-dih-kayt|to point out or show|The arrow will indicate the way.
+insult|3|IN-sult|a rude remark|It is mean to insult others.
+illogical|5|ih-LOJ-ih-kul|not making sense|It is illogical to wear a coat at the beach.
+jacket|2|JAK-it|a short coat|Wear your jacket; it's cold.
+jaw|1|JAW|the bone that holds your teeth|The shark has a strong jaw.
+job|1|JOB|work you do|My job is to feed the fish.
+jellyfish|3|JEL-ee-fish|a sea animal with a soft body that can sting|A jellyfish floated in the water.
+jam|1|JAM|fruit spread for bread|I like strawberry jam on toast.
+jumbled|3|JUM-buld|mixed up|The letters were all jumbled.
+jump|1|JUMP|to leap off the ground|Frogs can jump high.
+jubilant|5|JOO-bih-lunt|very happy and excited|The team was jubilant after the win.
+jade|2|JAYD|a green stone|She wore a jade necklace.
+juicy|3|JOO-see|full of juice|The peach was sweet and juicy.
+jogger|2|JOG-er|a person who runs slowly for exercise|A jogger ran past our house.
+jumper|2|JUM-per|someone who jumps; a sleeveless dress|The jumper won the high jump.
+Japan|2|juh-PAN|a country in Asia|Tokyo is the capital of Japan.
+javelin|4|JAV-lin|a long spear thrown in sports|He threw the javelin far.
+journalism|5|JUR-nul-iz-um|writing and reporting the news|She studies journalism.
+jellybean|3|JEL-ee-been|a small chewy candy|I love the red jellybean.
+justify|4|JUSS-tih-fy|to give a good reason for|Can you justify your answer?
+joyful|3|JOY-ful|full of joy|It was a joyful party.
+jury|3|JUR-ee|people who decide a court case|The jury said he was not guilty.
+jinx|2|JINKS|bad luck|Don't jinx the game!
+junior|3|JOON-yer|younger; a student in the third year of high school|My brother is a junior in high school.
+juvenile|5|JOO-vuh-nile|young; not grown up|A juvenile eagle has brown feathers.
+junction|4|JUNGK-shun|a place where things meet|Turn left at the road junction.
+jackal|3|JAK-ul|a wild dog of Africa and Asia|A jackal howled at night.
+jetlag|3|JET-lag|tiredness after a long flight|I had jetlag after flying to Spain.
+kidnapping|5|KID-nap-ing|taking someone away by force|The movie was about a kidnapping.
+karate|3|kuh-RAH-tee|a martial art from Japan|She has a yellow belt in karate.
+kirk|2|KURK|a church, in Scotland|The old kirk stood on the hill.
+kooky|3|KOO-kee|silly or strange|My uncle wears a kooky hat.
+karma|3|KAR-muh|the idea that good or bad actions come back to you|Be kind; good karma comes back.
+kraft|3|KRAFT|strong brown paper|We wrapped the gift in kraft paper.
+kindergartener|6|KIN-der-gart-ner|a child in kindergarten|My sister is a kindergartener.
+kennel|3|KEN-ul|a house or shelter for dogs|The dog sleeps in a kennel.
+king crab|3|KING krab|a very large crab (two words)|We ate king crab at the beach.
+keystone|3|KEE-stone|the top stone of an arch; the most important part|The keystone holds the arch together.
+kingdom|2|KING-dum|a land ruled by a king or queen|The kingdom had a big castle.
+keynote|3|KEE-note|the main speech or idea|She gave the keynote at the meeting.
+kilogram|4|KIL-uh-gram|a unit of weight, about 2.2 pounds|The puppy weighs one kilogram.
+kneecap|4|NEE-kap|the bone at the front of the knee|I bumped my kneecap.
+kept|2|KEPT|past of keep|I kept the note in my drawer.
+knelt|4|NELT|past of kneel|She knelt to pet the cat.
+kickboxing|4|KIK-boks-ing|a sport using punches and kicks|Mom takes kickboxing classes.
+knives|4|NIVZ|more than one knife|Be careful with sharp knives.
+keen|2|KEEN|eager, or sharp|Owls have keen eyesight.
+knocker|4|NOK-er|a metal handle used to knock on a door|The door has a brass knocker.
+kneel|4|NEEL|to go down on your knees|Kneel down to tie your shoe.
+kickboxer|4|KIK-boks-er|a person who does kickboxing|The kickboxer won the match.
+lasting|2|LASS-ting|going on for a long time|They have a lasting friendship.
+luster|4|LUSS-ter|shine|The pearl has a soft luster.
+lethal|4|LEE-thul|deadly|Some snakes have lethal venom.
+latent|4|LAY-tent|hidden; not yet showing|She has a latent talent for art.
+log|1|LOG|a piece of a tree trunk|We sat on a log by the fire.
+limber|3|LIM-ber|able to bend easily|Dancers are very limber.
+lazy|2|LAY-zee|not wanting to work|The lazy cat slept all day.
+leash|2|LEESH|a strap to walk a dog|Put the leash on the dog.
+lash|2|LASH|to hit hard; an eyelash|A lash fell on my cheek.
+lean|2|LEEN|to bend or rest against; thin|Don't lean on the wet paint.
+lapse|4|LAPS|a small mistake or slip|It was a lapse in memory.
+loop|1|LOOP|a circle shape in a string or path|Make a loop with the rope.
+lease|3|LEESS|an agreement to rent|We signed a lease for the apartment.
+lavender|4|LAV-en-der|a purple flower that smells nice|The soap smells like lavender.
+languid|6|LANG-gwid|slow and relaxed, without energy|The languid cat stretched in the sun.
+legal|3|LEE-gul|allowed by law|It is legal to ride bikes here.
+Latino|4|luh-TEE-noh|a person with roots in Latin America|She is proud to be Latino.
+lofty|3|LAWF-tee|very high|The eagle sat on a lofty perch.
+level|2|LEV-ul|flat and even; a step or stage|You reached the next level!
+lovely|2|LUV-lee|beautiful|What a lovely garden!
+lucky|2|LUK-ee|having good luck|I found a lucky penny.
+lipstick|2|LIP-stik|color for the lips|Mom wore red lipstick.
+leftover|3|LEFT-oh-ver|food that is not eaten|We had leftover pizza for lunch.
+laziness|5|LAY-zee-niss|not wanting to work|Laziness won't help you win.
+license|5|LY-senss|a paper that gives permission|Dad has a driver's license.
+liberty|4|LIB-er-tee|freedom|The Statue of Liberty is in New York.
+lunar|3|LOO-ner|about the moon|We watched the lunar eclipse.
+lynx|4|LINKS|a wild cat with tufted ears|The lynx hunted in the snow.
+latitude|5|LAT-ih-tood|distance north or south of the equator|The map shows lines of latitude.
+longitude|5|LON-jih-tood|distance east or west on a map|Lines of longitude run north to south.
+message|3|MESS-ij|words sent to someone|I sent Grandma a message.
+midnight|2|MID-nite|twelve o'clock at night|We stayed up until midnight.
+museum|4|myoo-ZEE-um|a building with art or history to see|We saw dinosaur bones at the museum.
+molt|3|MOHLT|to shed skin or feathers|Snakes molt their skin.
+moisture|4|MOISS-chur|a little wetness|There is moisture on the grass.
+magnet|2|MAG-nit|a metal that pulls iron|The magnet stuck to the fridge.
+mold|2|MOHLD|a fuzzy growth on old food; a shape|There is mold on the bread.
+material|4|muh-TEER-ee-ul|what something is made of|Wood is a strong material.
+meditate|4|MED-ih-tayt|to sit quietly and think|I meditate to feel calm.
+metaphor|5|MET-uh-for|comparing things without like or as|"Time is money" is a metaphor.
+monitor|3|MON-ih-ter|a screen, or to watch over|The nurse will monitor your heart.
+model|2|MOD-ul|a small copy of something|I built a model airplane.
+magnify|4|MAG-nih-fy|to make look bigger|A lens can magnify a bug.
+mischief|6|MISS-chif|playful trouble|The puppy is always getting into mischief.
+metamorphic|6|met-uh-MOR-fik|changed by heat and pressure (a type of rock)|Marble is a metamorphic rock.
+memory|3|MEM-er-ee|something you remember|I have a happy memory of the beach.
+movement|3|MOOV-ment|moving|The dancer's movement was graceful.
+mellow|3|MEL-oh|soft, calm, and gentle|The music was mellow.
+manager|3|MAN-ih-jer|a person in charge|The store manager helped us.
+myth|3|MITH|an old story about gods or heroes|We read a Greek myth.
+marvel|3|MAR-vul|to be amazed|We marvel at the stars.
+magnitude|5|MAG-nih-tood|size or importance|The earthquake had a large magnitude.
+migration|4|my-GRAY-shun|moving from one place to another|Bird migration happens in the fall.
+miscount|3|miss-KOUNT|to count wrong|Don't miscount the coins.
+magnificent|5|mag-NIF-ih-sent|very beautiful and grand|The palace was magnificent.
+medic|3|MED-ik|a person who gives medical help|The medic helped the hurt player.
+mention|3|MEN-shun|to say something briefly|Did she mention the party?
+marathon|4|MAIR-uh-thon|a very long race|Mom ran a marathon.
+mission|4|MISH-un|an important job|The astronauts went on a mission to space.
+misplace|3|miss-PLAYSS|to lose for a little while|I always misplace my keys.
+necessary|6|NESS-uh-sair-ee|needed|Water is necessary for life.
+naive|5|nah-EEV|believing things too easily|The naive boy believed the joke.
+numerous|4|NOO-mer-us|very many|There were numerous stars in the sky.
+nuisance|6|NOO-sunss|something that bothers you|The mosquitoes are a nuisance.
+nostril|3|NOSS-tril|an opening of the nose|A bug flew into my nostril.
+nutrition|4|noo-TRISH-un|healthy food your body needs|Good nutrition helps you grow.
+neighbor|5|NAY-ber|a person who lives near you|Our neighbor has a big dog.
+notable|4|NOH-tuh-bul|important; worth noticing|It was a notable win.
+navigate|4|NAV-ih-gayt|to find the way|Sailors navigate by the stars.
+negotiate|6|nih-GOH-shee-ayt|to talk to reach an agreement|We negotiate bedtime with Mom.
+nominate|4|NOM-ih-nayt|to name someone for a prize or job|I nominate Ana for class president.
+naughty|5|NAW-tee|badly behaved|The naughty puppy chewed my shoe.
+nickel|4|NIK-ul|a five-cent coin|A nickel is worth five cents.
+notice|3|NOH-tiss|to see; a sign|Did you notice the new sign?
+network|2|NET-wurk|a system of connected things|The computer network went down.
+niece|5|NEESS|the daughter of your brother or sister|My niece is three years old.
+nourish|4|NUR-ish|to feed and keep healthy|Food will nourish your body.
+neutral|5|NOO-trul|not taking sides|Switzerland stayed neutral.
+nifty|2|NIF-tee|cool or clever|That's a nifty trick!
+novice|4|NOV-iss|a beginner|I am a novice at chess.
+neither|4|NEE-ther|not one and not the other|Neither of us was hungry.
+nightmare|3|NITE-mair|a bad dream|I had a nightmare about a monster.
+nowadays|3|NOW-uh-dayz|these days|Nowadays, many people have phones.
+nightstand|3|NITE-stand|a small table by the bed|My book is on the nightstand.
+nibble|3|NIB-ul|to take small bites|The mouse began to nibble the cheese.
+numb|4|NUM|unable to feel|My fingers were numb from the cold.
+nobleman|3|NOH-bul-man|a man of high rank|The nobleman lived in a castle.
+ninety|4|NINE-tee|the number 90|My great-grandma is ninety.
+number|2|NUM-ber|a word or symbol for how many|Pick a number from one to ten.
+nomad|3|NOH-mad|a person who moves from place to place|The nomad traveled across the desert.
+oasis|4|oh-AY-siss|a place with water in the desert|The camels drank at the oasis.
+official|5|uh-FISH-ul|approved; a person in charge|The official blew the whistle.
+optimism|5|OP-tih-miz-um|hope that things will turn out well|She faced the test with optimism.
+obedient|5|oh-BEE-dee-ent|doing what you are told|The obedient dog sat down.
+orchid|5|OR-kid|a beautiful tropical flower|Mom grows a purple orchid.
+orchestra|6|OR-kess-truh|a large group of musicians|The orchestra played a symphony.
+obscure|5|ub-SKYOOR|hard to see or understand; not well known|The path was obscure in the fog.
+Olympics|4|oh-LIM-piks|world sports games held every four years|She wants to swim in the Olympics.
+ordination|5|or-dih-NAY-shun|a ceremony to make someone a minister or priest|The church held an ordination.
+obsolete|5|ob-suh-LEET|no longer used|Floppy disks are obsolete.
+omit|3|oh-MIT|to leave out|Don't omit any steps.
+organize|4|OR-guh-nize|to put in order|Organize your desk.
+obtuse|5|ub-TOOSS|an angle greater than 90 degrees; slow to understand|An obtuse angle is wider than a corner.
+omnibus|5|OM-nih-bus|a bus; a book with many stories|The omnibus has ten fairy tales.
+outrage|4|OUT-rayj|great anger|There was outrage over the unfair rule.
+occasion|5|uh-KAY-zhun|a special event|A birthday is a happy occasion.
+omnipotent|6|om-NIP-uh-tent|all-powerful|The wizard thought he was omnipotent.
+opponent|5|uh-POH-nent|a person you play against|I shook hands with my opponent.
+outfit|2|OUT-fit|a set of clothes|I love your new outfit.
+onomatopoeia|6|on-uh-mat-uh-PEE-uh|a word that sounds like what it means, like buzz|Buzz is an example of onomatopoeia.
+overtaking|4|oh-ver-TAY-king|passing someone|The red car is overtaking the bus.
+octopus|3|OK-tuh-pus|a sea animal with eight arms|The octopus squirted ink.
+offend|4|uh-FEND|to hurt someone's feelings|I didn't mean to offend you.
+outrageous|6|out-RAY-jus|shocking or very surprising|That's an outrageous price for gum!
+occupy|5|OK-yoo-py|to fill or take up|The kids occupy the whole couch.
+origin|4|OR-ih-jin|where something comes from|What is the origin of this word?
+oxygen|4|OK-sih-jen|a gas we breathe|We need oxygen to live.
+overlay|3|OH-ver-lay|to cover on top|Overlay the cake with icing.
+optimist|5|OP-tih-mist|a person who expects good things|An optimist sees the glass half full.
+overdue|3|oh-ver-DOO|late|My library book is overdue.
+paragraph|4|PAIR-uh-graf|a group of sentences about one idea|Write one paragraph about your pet.
+possibility|5|poss-ih-BIL-ih-tee|something that might happen|There is a possibility of rain.
+precious|5|PRESH-us|very valuable|The ring is precious to her.
+patient|5|PAY-shunt|able to wait calmly; a person seeing a doctor|Be patient; dinner is almost ready.
+prepare|3|prih-PAIR|to get ready|Prepare for the test.
+planetarium|5|plan-ih-TAIR-ee-um|a building that shows stars on a dome|We saw the stars at the planetarium.
+pattern|3|PAT-ern|a design that repeats|The shirt has a striped pattern.
+preview|3|PREE-vyoo|a look ahead of time|We watched a preview of the movie.
+primary|4|PRY-mair-ee|first or most important|Red is a primary color.
+permission|5|per-MISH-un|being allowed|Ask permission before you leave.
+process|4|PROSS-ess|steps to do something|Baking bread is a long process.
+privacy|4|PRY-vuh-see|being away from others|I want privacy in my room.
+population|4|pop-yuh-LAY-shun|the number of people in a place|The city has a large population.
+pressure|5|PRESH-er|pushing force; stress|Check the tire pressure.
+protective|4|pruh-TEK-tiv|keeping safe|Wear protective glasses.
+portable|4|POR-tuh-bul|easy to carry|We have a portable speaker.
+prediction|4|prih-DIK-shun|a guess about the future|My prediction is that our team will win.
+purpose|4|PUR-pus|the reason for something|What is the purpose of this button?
+predator|4|PRED-uh-ter|an animal that hunts others|The lion is a predator.
+potential|5|puh-TEN-shul|possible ability|She has the potential to be a star.
+peninsula|5|puh-NIN-suh-luh|land almost surrounded by water|Florida is a peninsula.
+perimeter|5|puh-RIM-ih-ter|the distance around a shape|Find the perimeter of the square.
+permanent|5|PUR-muh-nent|lasting forever|Use a permanent marker.
+peaceful|4|PEESS-ful|calm and quiet|The lake was peaceful.
+painter|2|PAYN-ter|a person who paints|The painter used bright colors.
+partnership|4|PART-ner-ship|working together|The two friends formed a partnership.
+position|4|puh-ZISH-un|where something is; a job|What position do you play?
+participate|5|par-TISS-ih-payt|to take part|Everyone can participate in the game.
+precaution|5|prih-KAW-shun|something done to stay safe|Wear a helmet as a precaution.
+quadrilateral|6|kwod-rih-LAT-er-ul|a shape with four sides|A square is a quadrilateral.
+quota|4|KWOH-tuh|a set amount|We met our reading quota.
+qualify|4|KWOL-ih-fy|to meet the rules to take part|She hopes to qualify for the finals.
+quotient|6|KWOH-shunt|the answer to a division problem|The quotient of ten divided by two is five.
+qualified|5|KWOL-ih-fyd|having the right skills|She is qualified to teach swimming.
+quenchless|6|KWENCH-liss|unable to be satisfied|He had a quenchless thirst for adventure.
+quorum|5|KWOR-um|the number of members needed for a meeting|We need a quorum to vote.
+quaver|4|KWAY-ver|to shake, like a voice|Her voice began to quaver.
+quizzical|6|KWIZ-ih-kul|puzzled; questioning|He gave me a quizzical look.
+quasar|5|KWAY-zar|a very bright, faraway object in space|A quasar shines like a billion stars.
+quandary|6|KWON-dree|a confusing situation|I was in a quandary about what to do.
+railroad|2|RAYL-rohd|a track for trains|The railroad goes through town.
+refuse|3|rih-FYOOZ|to say no|I refuse to give up.
+review|3|rih-VYOO|to look over again|Review your notes before the test.
+race|1|RAYSS|a contest of speed|I won the race.
+relax|2|rih-LAKS|to rest|Relax and take a deep breath.
+roar|2|ROR|a loud, deep sound|The lion let out a roar.
+rain|1|RAYN|water falling from clouds|The rain watered the garden.
+release|4|rih-LEESS|to let go|Release the bird into the sky.
+rock|1|ROK|a stone|I found a smooth rock.
+ramification|6|ram-ih-fih-KAY-shun|a result of an action|Think about the ramification of your choice.
+remove|3|rih-MOOV|to take away|Remove your shoes at the door.
+role|3|ROHL|a part played|She has the main role in the play.
+reasonable|4|REE-zun-uh-bul|fair and sensible|That's a reasonable price.
+resourceful|5|rih-SORSS-ful|good at solving problems|The resourceful girl fixed the bike.
+room|1|ROOM|a part of a house|My room is painted blue.
+rubric|4|ROO-brik|a scoring guide|The teacher gave us a rubric for the essay.
+rainforest|3|RAYN-for-ist|a thick forest with lots of rain|Parrots live in the rainforest.
+rope|1|ROHP|a thick cord|Climb the rope in gym class.
+rebuild|3|ree-BILD|to build again|They will rebuild the old bridge.
+rhythm|6|RITH-um|a repeated beat in music|Clap to the rhythm.
+round|1|ROWND|shaped like a circle|The ball is round.
+reuse|2|ree-YOOZ|to use again|Reuse your water bottle.
+receive|5|rih-SEEV|to get|I receive a letter every week.
+revolution|5|rev-uh-LOO-shun|a big change; a turn around|The American Revolution began in 1775.
+radiograph|5|RAY-dee-oh-graf|an X-ray picture|The radiograph showed a broken bone.
+respond|3|rih-SPOND|to answer|Please respond to my email.
+respectable|5|rih-SPEK-tuh-bul|deserving respect|He has a respectable job.
+reduce|3|rih-DOOSS|to make smaller|Reduce, reuse, and recycle.
+return|2|rih-TURN|to come or give back|Return the book to the library.
+remedy|4|REM-ih-dee|a cure|Hot tea is a remedy for a sore throat.
+sailor|3|SAY-ler|a person who works on a ship|The sailor tied a knot.
+senior|4|SEEN-yer|older; a student in the last year|My cousin is a senior in high school.
+skeleton|4|SKEL-ih-tun|all the bones of a body|The skeleton has 206 bones.
+scenery|5|SEE-ner-ee|the view of nature around you|The mountain scenery was beautiful.
+shave|1|SHAYV|to cut off hair with a razor|Dad will shave his beard.
+special|4|SPESH-ul|different and important|Today is a special day.
+schedule|5|SKEJ-ool|a plan of times|Check the bus schedule.
+skinny|2|SKIN-ee|very thin|The skinny cat ate a lot.
+speech|3|SPEECH|a talk given to a group|She gave a speech to the class.
+scavenger|5|SKAV-in-jer|an animal that eats leftovers; someone who searches|We went on a scavenger hunt.
+shiver|2|SHIV-er|to shake from cold|I shiver in the snow.
+spirit|3|SPEER-it|energy and attitude; a ghost|We have great school spirit.
+sufficient|6|suh-FISH-ent|enough|We have sufficient food for the trip.
+service|3|SUR-viss|helping others; work done|The restaurant has good service.
+sportsmanship|5|SPORTS-mun-ship|playing fair and being a good sport|Shaking hands shows sportsmanship.
+scribble|3|SKRIB-ul|to write messily|The baby likes to scribble.
+stupendous|5|stoo-PEN-dus|amazing|The fireworks were stupendous.
+station|3|STAY-shun|a place where trains or buses stop|We waited at the train station.
+sculpture|5|SKULP-chur|art carved or shaped from stone, clay, or wood|The sculpture was made of clay.
+shelter|3|SHEL-ter|a place that protects|We found shelter from the rain.
+stomach|5|STUM-uk|where food goes after you swallow|My stomach is growling.
+search|3|SURCH|to look for|Search for your lost shoe.
+submerge|4|sub-MURJ|to put under water|The submarine will submerge.
+struggle|4|STRUG-ul|to try very hard|It's okay to struggle when learning.
+sequence|5|SEE-kwenss|an order of things|Put the pictures in sequence.
+similar|4|SIM-ih-ler|almost the same|The twins look similar.
+succeed|5|suk-SEED|to do well; to reach a goal|If you practice, you will succeed.
+strategy|4|STRAT-ih-jee|a plan to win|We need a strategy for the game.
+simple|2|SIM-pul|easy|The answer is simple.
+surprise|4|ser-PRIZE|something you didn't expect|The party was a surprise.
+tablet|2|TAB-lit|a flat computer, or a pill|I read books on my tablet.
+tender|2|TEN-der|soft or gentle|The steak was tender.
+thunder|2|THUN-der|the loud noise after lightning|The thunder scared the dog.
+talent|3|TAL-ent|a natural skill|She has a talent for singing.
+therapy|4|THAIR-uh-pee|treatment to help you heal|He went to therapy for his hurt knee.
+title|3|TY-tul|the name of a book or movie|What is the title of your story?
+terminal|4|TUR-mih-nul|a station for planes or buses|We waited at the airport terminal.
+texture|4|TEKS-chur|how something feels to touch|Sandpaper has a rough texture.
+tolerate|4|TOL-er-ayt|to put up with|I can't tolerate loud noise.
+tapestry|5|TAP-ih-stree|a cloth with woven pictures|A tapestry hung on the castle wall.
+thriller|3|THRIL-er|an exciting story|We watched a spooky thriller.
+tortoise|5|TOR-tus|a slow land turtle|The tortoise won the race against the hare.
+tarantula|5|tuh-RAN-chuh-luh|a big hairy spider|The tarantula has eight hairy legs.
+thermometer|5|ther-MOM-ih-ter|a tool that measures temperature|The thermometer says seventy degrees.
+total|2|TOH-tul|the whole amount|The total is ten dollars.
+teaspoon|3|TEE-spoon|a small spoon|Add a teaspoon of sugar.
+thimble|3|THIM-bul|a cap to protect a finger when sewing|Grandma uses a thimble to sew.
+tourist|4|TUR-ist|a person who travels for fun|The tourist took photos.
+technology|5|tek-NOL-uh-jee|tools and machines made with science|Computers are technology.
+thorn|2|THORN|a sharp point on a plant|The rose has a thorn.
+tournament|5|TUR-nuh-ment|a series of games to find a winner|We won the soccer tournament.
+typical|4|TIP-ih-kul|normal; usual|It was a typical school day.
+thoughtful|5|THAWT-ful|kind and caring; thinking a lot|What a thoughtful gift!
+tragedy|5|TRAJ-ih-dee|a very sad event|The fire was a tragedy.
+temporary|5|TEM-puh-rair-ee|lasting a short time|The tattoo is temporary.
+threaten|4|THRET-un|to warn that you will hurt|Dark clouds threaten rain.
+translate|4|tranz-LAYT|to change words into another language|Can you translate this into Spanish?
+tenant|3|TEN-ent|a person who rents a home|The tenant pays rent each month.
+thrive|3|THRIVE|to grow strong and healthy|Plants thrive in sunlight.
+treasure|4|TREZH-er|gold, jewels, or something valuable|The pirates buried the treasure.
+ultimate|4|UL-tih-mit|the greatest or final|Winning is the ultimate goal.
+unfortunate|5|un-FOR-chuh-nit|unlucky|It was unfortunate that it rained.
+unripe|3|un-RIPE|not ready to eat|The banana is green and unripe.
+unbelievable|5|un-bih-LEE-vuh-bul|hard to believe|The magic trick was unbelievable.
+unimaginable|5|un-ih-MAJ-ih-nuh-bul|impossible to imagine|The size of space is unimaginable.
+upcoming|3|UP-kum-ing|happening soon|We have an upcoming test.
+understand|3|un-der-STAND|to know what something means|I understand the lesson.
+unintended|4|un-in-TEN-did|not planned|The joke had an unintended result.
+upholstery|6|up-HOHL-stuh-ree|the soft covering on chairs and sofas|The cat scratched the upholstery.
+uncomfortable|5|un-KUMF-ter-bul|not comfortable|These shoes are uncomfortable.
+unity|3|YOO-nih-tee|being together as one|The team showed unity.
+unnatural|5|un-NACH-er-ul|not natural|The hair was an unnatural green.
+ultrasound|4|UL-truh-sownd|a picture made with sound waves|The ultrasound showed the baby.
+universal|4|yoo-nih-VUR-sul|for everyone or everywhere|A smile is a universal sign.
+upward|2|UP-werd|toward a higher place|The balloon floated upward.
+understandable|5|un-der-STAN-duh-bul|easy to understand|Your mistake is understandable.
+unkind|2|un-KIND|not kind; mean|It is unkind to tease.
+urban|3|UR-bun|about the city|We live in an urban area.
+undertake|3|un-der-TAKE|to begin a job|We will undertake a big project.
+unpack|2|un-PAK|to take things out|Unpack your suitcase.
+urgency|5|UR-jen-see|needing fast action|The doctor spoke with urgency.
+unbutton|4|un-BUT-un|to open buttons|Unbutton your coat.
+unnecessary|6|un-NESS-uh-sair-ee|not needed|It's unnecessary to shout.
+utensil|5|yoo-TEN-sul|a tool for eating or cooking|A fork is a utensil.
+unfinished|4|un-FIN-isht|not done|My drawing is unfinished.
+unpredictable|5|un-prih-DIK-tuh-bul|hard to know ahead of time|The weather is unpredictable.
+unlike|2|un-LIKE|different from|Unlike my brother, I like peas.
+unfold|2|un-FOLD|to open up|Unfold the map.
+unravel|4|un-RAV-ul|to come apart|The sweater began to unravel.
+utilize|5|YOO-tih-lize|to use|Utilize your time wisely.
+vaporize|4|VAY-puh-rize|to turn into gas|Heat can vaporize water.
+vibration|4|vy-BRAY-shun|fast shaking|I felt the vibration of the phone.
+vortex|4|VOR-teks|a spinning mass of water or air|A tornado is a vortex.
+vague|5|VAYG|not clear|His answer was vague.
+victimize|5|VIK-tih-mize|to treat someone unfairly or hurt them|Bullies victimize others.
+valiant|5|VAL-yunt|very brave|The valiant knight saved the town.
+vacancy|5|VAY-kun-see|an empty room or job|The hotel has a vacancy.
+village|3|VIL-ij|a small town|The village had one store.
+visual|4|VIZH-oo-ul|about seeing|Use a visual aid in your talk.
+vertebrate|5|VUR-tuh-brit|an animal with a backbone|A fish is a vertebrate.
+view|3|VYOO|what you can see|The view from the top was amazing.
+variety|5|vuh-RY-ih-tee|many different kinds|The store has a variety of fruit.
+vegetation|5|vej-ih-TAY-shun|plants|The jungle is full of vegetation.
+victory|3|VIK-ter-ee|a win|The team celebrated the victory.
+vinegar|4|VIN-ih-ger|a sour liquid for cooking|Put vinegar on the salad.
+variable|5|VAIR-ee-uh-bul|something that can change|The weather is variable.
+videotape|3|VID-ee-oh-tayp|to record video|We will videotape the play.
+verify|4|VAIR-ih-fy|to check that something is true|Verify your answer.
+vertical|4|VUR-tih-kul|straight up and down|Draw a vertical line.
+vintage|4|VIN-tij|old and of good quality|She has a vintage dress.
+villager|4|VIL-ih-jer|a person who lives in a village|The villager fed the chickens.
+verse|3|VURSS|a part of a song or poem|Sing the first verse.
+vulture|4|VUL-chur|a large bird that eats dead animals|A vulture circled overhead.
+vegetable|5|VEJ-tuh-bul|a plant we eat, like a carrot|Eat a vegetable with dinner.
+velociraptor|6|vuh-LOSS-ih-rap-ter|a small, fast dinosaur|The velociraptor was a fast hunter.
+violin|3|vy-uh-LIN|a string instrument played with a bow|She plays the violin.
+wonderful|3|WUN-der-ful|very good|We had a wonderful time.
+weary|3|WEER-ee|very tired|The weary hikers rested.
+wisdom|3|WIZ-dum|good judgment and knowledge|Grandpa shares his wisdom.
+wagon|2|WAG-un|a cart with wheels|Pull the wagon up the hill.
+weave|3|WEEV|to make cloth by crossing threads|Spiders weave webs.
+willing|2|WIL-ing|ready to help|I am willing to help.
+wonder|2|WUN-der|to be curious; amazement|I wonder what is in the box.
+wedlock|3|WED-lok|marriage|The couple joined in wedlock.
+withdraw|4|with-DRAW|to take out or pull back|Withdraw money from the bank.
+wander|3|WON-der|to walk around without a plan|Don't wander off at the mall.
+welfare|3|WEL-fair|health and happiness|We care about our pets' welfare.
+witness|4|WIT-niss|a person who sees something happen|The witness saw the accident.
+wording|3|WUR-ding|the words used|Check the wording of the question.
+whale|3|WAYL|a huge sea mammal|The whale sprayed water.
+waterfall|3|WAW-ter-fawl|water falling over a cliff|We swam under the waterfall.
+warden|3|WOR-den|a person in charge, like of a park|The park warden helped us.
+whisker|4|WISS-ker|a long hair on an animal's face|The cat has a white whisker.
+worship|4|WUR-ship|to praise and pray|They worship at the church.
+warm|1|WORM|a little hot|The soup is warm.
+whistle|4|WISS-ul|a high sound made by blowing|The coach blew the whistle.
+woodland|2|WUD-land|land covered with trees|Deer live in the woodland.
+warp|2|WORP|to bend out of shape|Heat can warp plastic.
+wicked|3|WIK-id|evil|The wicked witch cast a spell.
+workshop|2|WURK-shop|a place where things are made or fixed|Dad fixes chairs in his workshop.
+warrior|4|WOR-ee-er|a fighter|The warrior was brave.
+wiggle|3|WIG-ul|to move side to side|Wiggle your toes.
+wrangle|5|RANG-gul|to round up animals; to argue|Cowboys wrangle the horses.
+wildlife|3|WILD-life|wild animals|We saw wildlife at the park.
+wreck|4|REK|to destroy; a ruined thing|The storm will wreck the boat.
+xylophone|5|ZY-luh-fone|an instrument with bars you hit|I played the xylophone in music class.
+x-ray|3|EKS-ray|a picture of the inside of the body (with a hyphen)|The x-ray showed my broken arm.
+yearn|4|YURN|to want very much|I yearn for summer.
+yearly|3|YEER-lee|once a year|We have a yearly checkup.
+yelp|2|YELP|a short, sharp cry|The puppy gave a yelp.
+yowl|3|YOWL|a long, loud cry|The cat let out a yowl.
+yardstick|3|YARD-stik|a ruler three feet long|Measure the table with a yardstick.
+yoke|3|YOKE|a wooden bar that joins two animals|The oxen wore a yoke.
+youngster|4|YUNG-ster|a young person|The youngster rode a bike.
+yodel|3|YOH-dul|to sing switching between high and low|He likes to yodel in the mountains.
+youthful|4|YOOTH-ful|young or looking young|Grandma has a youthful smile.
+yeti|3|YET-ee|a legendary snow monster|The yeti lives in the mountains.
+yonder|3|YON-der|over there|Look at the hill yonder.
+zany|3|ZAY-nee|silly and funny|The clown was zany.
+zip|1|ZIP|to close a zipper|Zip up your jacket.
+zoology|5|zoh-OL-uh-jee|the study of animals|She wants to study zoology.
+zeppelin|5|ZEP-uh-lin|a big airship shaped like a cigar|A zeppelin floated over the city.
+zodiac|4|ZOH-dee-ak|a circle of star signs|My zodiac sign is Leo.
+zeta|3|ZAY-tuh|a letter of the Greek alphabet|Zeta is the sixth Greek letter.
+zenith|4|ZEE-nith|the highest point|The sun is at its zenith at noon.
+zoning|3|ZOH-ning|rules for how land is used|Zoning rules keep factories away from homes.
+zucchini|6|zoo-KEE-nee|a long green squash|We grilled zucchini.`;
+const WORDS = RAW.trim().split('\n').map(l => { const [w,d,p,def,s] = l.split('|'); return { w, d:+d, p, def, s }; });
+const BYW = Object.fromEntries(WORDS.map(x => [x.w, x]));
+const LEVEL_NAMES = ['Huevito','Larva','Abejita','Exploradora','Recolectora','Constructora','Guardiana','Reina de la colmena'];
+const NLEV = LEVEL_NAMES.length;
+const EXAM_LEN = 20, FINAL_LEN = 30, MASTER_BOX = 3, POOL = 6;
+const INTERVAL = [0,1,2,4,7,14,30]; // días hasta volver a ver una palabra según su caja
+// Niveles: ordenar por dificultad y largo, luego repartir en 8 grupos parejos
+const LEVELS = (() => {
+  const sorted = [...WORDS].sort((a,b) => a.d - b.d || a.w.length - b.w.length || a.w.localeCompare(b.w));
+  const size = Math.ceil(sorted.length / NLEV), out = [];
+  for (let i = 0; i < NLEV; i++) out.push(sorted.slice(i*size, (i+1)*size).map(x => x.w));
+  return out;
+})();
+const LEVEL_OF = {}; LEVELS.forEach((l,i) => l.forEach(w => LEVEL_OF[w] = i));
+
+/* ---------- estado ---------- */
+const LS_KEY = 'colmena-bee-v1';
+const blank = () => ({ v:1, name:'', unlocked:0, sel:0, passed:Array(NLEV).fill(false), champion:false,
+  words:{}, days:{}, points:0, best:0, settings:{ voice:'', rate:0.85, intro:true, goal:60 }, updatedAt:0 });
+let S = blank();
+const today = () => { const d = new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const dayNum = (k = today()) => Math.floor(new Date(k+'T12:00:00').getTime() / 864e5);
+const W = w => S.words[w] || (S.words[w] = { b:0, c:0, x:0, s:0, due:0, m:0 });
+const D = () => S.days[today()] || (S.days[today()] = { sec:0, a:0, o:0, n:0, e:0, p:0 });
+const mastered = w => (S.words[w]?.b || 0) >= MASTER_BOX || !!S.words[w]?.m && (S.words[w]?.b||0) >= MASTER_BOX;
+const levelStats = i => { const ws = LEVELS[i]; let m = 0, seen = 0; ws.forEach(w => { if (mastered(w)) m++; if (S.words[w]?.s) seen++; }); return { total:ws.length, m, seen, pct: Math.round(100*m/ws.length) }; };
+
+let db = null, saveTimer = null, saving = false, pendingSave = false, syncState = 'local';
+function loadLocal(){ try { const j = localStorage.getItem(LS_KEY); return j ? JSON.parse(j) : null; } catch(e){ return null; } }
+function merge(x){ const b = blank(); return Object.assign(b, x, { settings:Object.assign(b.settings, x.settings||{}), passed: (x.passed && x.passed.length===NLEV) ? x.passed : b.passed }); }
+function save(){
+  S.updatedAt = Date.now();
+  try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e){}
+  clearTimeout(saveTimer); saveTimer = setTimeout(pushRemote, 4000);
+}
+async function pushRemote(){
+  if (!db) return;
+  if (saving){ pendingSave = true; return; }
+  saving = true;
+  try { await db.doc('progreso/principal').set(JSON.parse(JSON.stringify(S))); syncState = 'nube'; }
+  catch(e){ syncState = 'local'; }
+  saving = false; paintSync();
+  if (pendingSave){ pendingSave = false; pushRemote(); }
+}
+function paintSync(){ const el = document.getElementById('sync'); if (el) el.textContent = syncState === 'nube' ? 'Progreso guardado en tu cuenta' : 'Progreso guardado en este dispositivo'; }
+
+/* ---------- audio grabado (sprites mp3 publicados junto a la página) ---------- */
+const CLIPS = {"D_000":["d0",0.3,1.664],"D_001":["d0",2.264,2.773],"D_002":["d0",5.337,2.688],"D_003":["d0",8.325,1.003],"D_004":["d0",9.628,1.835],"D_005":["d0",11.763,1.728],"D_006":["d0",13.791,3.435],"D_007":["d0",17.525,1.707],"D_008":["d0",19.532,1.301],"D_009":["d0",21.133,2.603],"D_010":["d0",24.036,1.195],"D_011":["d0",25.531,1.152],"D_012":["d0",26.983,2.091],"D_013":["d0",29.373,1.685],"D_014":["d0",31.359,1.515],"D_015":["d0",33.173,1.899],"D_016":["d0",35.372,1.749],"D_017":["d0",37.421,1.728],"D_018":["d0",39.449,1.301],"D_019":["d0",41.051,1.365],"D_020":["d0",42.716,1.941],"D_021":["d0",44.957,1.771],"D_022":["d0",47.028,2.155],"D_023":["d0",49.483,1.835],"D_024":["d0",51.617,1.579],"D_025":["d0",53.496,1.152],"D_026":["d0",54.948,1.792],"D_027":["d0",57.04,1.941],"D_028":["d0",59.281,1.131],"D_029":["d0",60.712,1.728],"D_030":["d0",62.74,0.96],"D_031":["d0",64.0,0.917],"D_032":["d0",65.217,1.813],"D_033":["d0",67.331,2.411],"D_034":["d0",70.041,1.984],"D_035":["d0",72.325,1.749],"D_036":["d0",74.375,1.792],"D_037":["d0",76.467,2.539],"D_038":["d0",79.305,1.813],"D_039":["d0",81.419,1.621],"D_040":["d0",83.34,1.835],"D_041":["d0",85.475,1.899],"D_042":["d0",87.673,2.261],"D_043":["d0",90.235,1.152],"D_044":["d0",91.687,2.261],"D_045":["d0",94.248,1.749],"D_046":["d0",96.297,1.749],"D_047":["d0",98.347,2.219],"D_048":["d0",100.865,1.451],"D_049":["d0",102.616,1.579],"D_050":["d0",104.495,2.005],"D_051":["d0",106.8,1.515],"D_052":["d0",108.615,1.6],"D_053":["d0",110.515,1.387],"D_054":["d0",112.201,2.155],"D_055":["d0",114.656,1.536],"D_056":["d0",116.492,1.472],"D_057":["d0",118.264,1.835],"D_058":["d0",120.399,1.749],"D_059":["d0",122.448,1.067],"D_060":["d0",123.815,1.728],"D_061":["d0",125.843,0.853],"D_062":["d0",126.996,1.259],"D_063":["d0",128.555,1.92],"D_064":["d0",130.775,1.493],"D_065":["d0",132.568,1.579],"D_066":["d0",134.447,1.195],"D_067":["d0",135.941,2.069],"D_068":["d0",138.311,1.493],"D_069":["d0",140.104,0.853],"D_070":["d0",141.257,1.067],"D_071":["d0",142.624,0.704],"D_072":["d0",143.628,1.045],"D_073":["d0",144.973,3.008],"D_074":["d0",148.281,1.173],"D_075":["d0",149.755,2.667],"D_076":["d0",152.721,1.557],"D_077":["d0",154.579,1.173],"D_078":["d0",156.052,2.261],"D_079":["d0",158.613,2.219],"D_080":["d0",161.132,1.408],"D_081":["d0",162.84,3.307],"D_082":["d0",166.447,1.451],"D_083":["d0",168.197,2.24],"D_084":["d0",170.737,1.515],"D_085":["d0",172.552,2.261],"D_086":["d0",175.113,1.835],"D_087":["d0",177.248,2.197],"D_088":["d0",179.745,1.365],"D_089":["d0",181.411,1.728],"D_090":["d0",183.439,1.728],"D_091":["d0",185.467,1.301],"D_092":["d0",187.068,1.237],"D_093":["d0",188.605,1.045],"D_094":["d0",189.951,1.621],"D_095":["d0",191.872,2.432],"D_096":["d0",194.604,1.109],"D_097":["d0",196.013,1.963],"D_098":["d0",198.276,1.109],"D_099":["d0",199.685,1.899],"D_100":["d1",0.3,1.365],"D_101":["d1",1.965,1.749],"D_102":["d1",4.015,1.899],"D_103":["d1",6.213,1.088],"D_104":["d1",7.601,1.259],"D_105":["d1",9.16,1.6],"D_106":["d1",11.06,1.515],"D_107":["d1",12.875,1.771],"D_108":["d1",14.945,1.728],"D_109":["d1",16.973,1.216],"D_110":["d1",18.489,1.707],"D_111":["d1",20.496,1.408],"D_112":["d1",22.204,1.003],"D_113":["d1",23.507,1.536],"D_114":["d1",25.343,0.875],"D_115":["d1",26.517,1.003],"D_116":["d1",27.82,1.92],"D_117":["d1",30.04,1.6],"D_118":["d1",31.94,1.024],"D_119":["d1",33.264,1.28],"D_120":["d1",34.844,1.643],"D_121":["d1",36.787,1.877],"D_122":["d1",38.964,1.301],"D_123":["d1",40.565,2.859],"D_124":["d1",43.724,1.387],"D_125":["d1",45.411,1.536],"D_126":["d1",47.247,1.557],"D_127":["d1",49.104,2.005],"D_128":["d1",51.409,2.027],"D_129":["d1",53.736,0.896],"D_130":["d1",54.932,2.155],"D_131":["d1",57.387,1.323],"D_132":["d1",59.009,1.472],"D_133":["d1",60.781,2.069],"D_134":["d1",63.151,1.515],"D_135":["d1",64.965,1.216],"D_136":["d1",66.481,1.024],"D_137":["d1",67.805,1.109],"D_138":["d1",69.215,2.005],"D_139":["d1",71.52,1.877],"D_140":["d1",73.697,1.707],"D_141":["d1",75.704,1.536],"D_142":["d1",77.54,1.707],"D_143":["d1",79.547,1.728],"D_144":["d1",81.575,2.091],"D_145":["d1",83.965,2.133],"D_146":["d1",86.399,1.6],"D_147":["d1",88.299,1.152],"D_148":["d1",89.751,0.747],"D_149":["d1",90.797,1.451],"D_150":["d1",92.548,2.368],"D_151":["d1",95.216,1.365],"D_152":["d1",96.881,1.067],"D_153":["d1",98.248,2.155],"D_154":["d1",100.703,1.365],"D_155":["d1",102.368,1.451],"D_156":["d1",104.119,1.472],"D_157":["d1",105.891,1.707],"D_158":["d1",107.897,1.003],"D_159":["d1",109.2,1.152],"D_160":["d1",110.652,1.131],"D_161":["d1",112.083,2.091],"D_162":["d1",114.473,1.408],"D_163":["d1",116.181,2.155],"D_164":["d1",118.636,1.6],"D_165":["d1",120.536,1.195],"D_166":["d1",122.031,1.429],"D_167":["d1",123.76,1.664],"D_168":["d1",125.724,1.749],"D_169":["d1",127.773,1.557],"D_170":["d1",129.631,2.453],"D_171":["d1",132.384,2.133],"D_172":["d1",134.817,2.133],"D_173":["d1",137.251,1.664],"D_174":["d1",139.215,1.749],"D_175":["d1",141.264,1.877],"D_176":["d1",143.441,1.173],"D_177":["d1",144.915,2.155],"D_178":["d1",147.369,1.472],"D_179":["d1",149.141,0.832],"D_180":["d1",150.273,1.856],"D_181":["d1",152.429,2.603],"D_182":["d1",155.332,1.877],"D_183":["d1",157.509,1.067],"D_184":["d1",158.876,1.131],"D_185":["d1",160.307,1.429],"D_186":["d1",162.036,1.643],"D_187":["d1",163.979,1.6],"D_188":["d1",165.879,1.003],"D_189":["d1",167.181,0.981],"D_190":["d1",168.463,2.389],"D_191":["d1",171.152,1.6],"D_192":["d1",173.052,1.003],"D_193":["d1",174.355,2.197],"D_194":["d1",176.852,1.109],"D_195":["d1",178.261,0.917],"D_196":["d1",179.479,1.707],"D_197":["d1",181.485,1.749],"D_198":["d1",183.535,1.109],"D_199":["d1",184.944,0.875],"D_200":["d2",0.3,1.536],"D_201":["d2",2.136,1.237],"D_202":["d2",3.673,1.536],"D_203":["d2",5.509,2.795],"D_204":["d2",8.604,1.451],"D_205":["d2",10.355,1.045],"D_206":["d2",11.7,1.792],"D_207":["d2",13.792,1.536],"D_208":["d2",15.628,0.96],"D_209":["d2",16.888,1.408],"D_210":["d2",18.596,1.6],"D_211":["d2",20.496,1.707],"D_212":["d2",22.503,1.685],"D_213":["d2",24.488,1.045],"D_214":["d2",25.833,1.045],"D_215":["d2",27.179,2.347],"D_216":["d2",29.825,1.323],"D_217":["d2",31.448,1.067],"D_218":["d2",32.815,1.579],"D_219":["d2",34.693,1.493],"D_220":["d2",36.487,1.088],"D_221":["d2",37.875,1.451],"D_222":["d2",39.625,1.152],"D_223":["d2",41.077,1.067],"D_224":["d2",42.444,1.408],"D_225":["d2",44.152,1.045],"D_226":["d2",45.497,1.472],"D_227":["d2",47.269,2.197],"D_228":["d2",49.767,0.832],"D_229":["d2",50.899,1.92],"D_230":["d2",53.119,1.003],"D_231":["d2",54.421,1.792],"D_232":["d2",56.513,1.045],"D_233":["d2",57.859,2.261],"D_234":["d2",60.42,1.387],"D_235":["d2",62.107,1.877],"D_236":["d2",64.284,1.451],"D_237":["d2",66.035,1.877],"D_238":["d2",68.212,0.875],"D_239":["d2",69.387,0.853],"D_240":["d2",70.54,0.832],"D_241":["d2",71.672,1.237],"D_242":["d2",73.209,2.069],"D_243":["d2",75.579,1.237],"D_244":["d2",77.116,0.96],"D_245":["d2",78.376,2.112],"D_246":["d2",80.788,1.088],"D_247":["d2",82.176,0.917],"D_248":["d2",83.393,2.133],"D_249":["d2",85.827,2.24],"D_250":["d2",88.367,1.067],"D_251":["d2",89.733,1.685],"D_252":["d2",91.719,1.024],"D_253":["d2",93.043,1.387],"D_254":["d2",94.729,1.237],"D_255":["d2",96.267,1.387],"D_256":["d2",97.953,0.96],"D_257":["d2",99.213,1.749],"D_258":["d2",101.263,1.451],"D_259":["d2",103.013,1.088],"D_260":["d2",104.401,1.472],"D_261":["d2",106.173,1.451],"D_262":["d2",107.924,1.707],"D_263":["d2",109.931,1.6],"D_264":["d2",111.831,2.112],"D_265":["d2",114.243,1.387],"D_266":["d2",115.929,1.195],"D_267":["d2",117.424,1.237],"D_268":["d2",118.961,1.109],"D_269":["d2",120.371,1.621],"D_270":["d2",122.292,0.981],"D_271":["d2",123.573,2.859],"D_272":["d2",126.732,1.408],"D_273":["d2",128.44,0.896],"D_274":["d2",129.636,1.408],"D_275":["d2",131.344,1.536],"D_276":["d2",133.18,1.173],"D_277":["d2",134.653,1.109],"D_278":["d2",136.063,2.517],"D_279":["d2",138.88,2.389],"D_280":["d2",141.569,1.216],"D_281":["d2",143.085,1.899],"D_282":["d2",145.284,1.877],"D_283":["d2",147.461,1.365],"D_284":["d2",149.127,1.621],"D_285":["d2",151.048,1.109],"D_286":["d2",152.457,1.856],"D_287":["d2",154.613,0.981],"D_288":["d2",155.895,2.773],"D_289":["d2",158.968,1.408],"D_290":["d2",160.676,1.493],"D_291":["d2",162.469,2.133],"D_292":["d2",164.903,1.856],"D_293":["d2",167.059,1.835],"D_294":["d2",169.193,1.707],"D_295":["d2",171.2,1.579],"D_296":["d2",173.079,1.323],"D_297":["d2",174.701,3.093],"D_298":["d2",178.095,1.429],"D_299":["d2",179.824,1.685],"D_300":["d3",0.3,1.984],"D_301":["d3",2.584,2.133],"D_302":["d3",5.017,2.987],"D_303":["d3",8.304,2.112],"D_304":["d3",10.716,1.6],"D_305":["d3",12.616,2.517],"D_306":["d3",15.433,1.685],"D_307":["d3",17.419,1.109],"D_308":["d3",18.828,1.088],"D_309":["d3",20.216,2.027],"D_310":["d3",22.543,1.28],"D_311":["d3",24.123,1.301],"D_312":["d3",25.724,2.453],"D_313":["d3",28.477,1.493],"D_314":["d3",30.271,1.813],"D_315":["d3",32.384,1.621],"D_316":["d3",34.305,0.747],"D_317":["d3",35.352,0.768],"D_318":["d3",36.42,1.557],"D_319":["d3",38.277,1.515],"D_320":["d3",40.092,1.493],"D_321":["d3",41.885,1.408],"D_322":["d3",43.593,1.515],"D_323":["d3",45.408,1.749],"D_324":["d3",47.457,2.048],"D_325":["d3",49.805,1.557],"D_326":["d3",51.663,2.069],"D_327":["d3",54.032,1.408],"D_328":["d3",55.74,2.069],"D_329":["d3",58.109,2.261],"D_330":["d3",60.671,1.173],"D_331":["d3",62.144,2.283],"D_332":["d3",64.727,0.939],"D_333":["d3",65.965,2.283],"D_334":["d3",68.548,0.939],"D_335":["d3",69.787,1.131],"D_336":["d3",71.217,1.216],"D_337":["d3",72.733,1.451],"D_338":["d3",74.484,1.408],"D_339":["d3",76.192,1.685],"D_340":["d3",78.177,0.875],"D_341":["d3",79.352,1.024],"D_342":["d3",80.676,1.877],"D_343":["d3",82.853,2.411],"D_344":["d3",85.564,2.069],"D_345":["d3",87.933,1.493],"D_346":["d3",89.727,1.493],"D_347":["d3",91.52,2.219],"D_348":["d3",94.039,1.6],"D_349":["d3",95.939,1.195],"D_350":["d3",97.433,1.557],"D_351":["d3",99.291,2.453],"D_352":["d3",102.044,1.536],"D_353":["d3",103.88,1.536],"D_354":["d3",105.716,2.027],"D_355":["d3",108.043,1.877],"D_356":["d3",110.22,1.621],"D_357":["d3",112.141,1.259],"D_358":["d3",113.7,1.088],"D_359":["d3",115.088,2.859],"D_360":["d3",118.247,1.323],"D_361":["d3",119.869,0.811],"D_362":["d3",120.98,1.685],"D_363":["d3",122.965,1.429],"D_364":["d3",124.695,2.261],"D_365":["d3",127.256,1.131],"D_366":["d3",128.687,1.429],"D_367":["d3",130.416,1.92],"D_368":["d3",132.636,1.088],"D_369":["d3",134.024,1.621],"D_370":["d3",135.945,2.069],"D_371":["d3",138.315,1.536],"D_372":["d3",140.151,1.28],"D_373":["d3",141.731,1.323],"D_374":["d3",143.353,1.557],"D_375":["d3",145.211,0.811],"D_376":["d3",146.321,1.792],"D_377":["d3",148.413,0.981],"D_378":["d3",149.695,1.536],"D_379":["d3",151.531,1.515],"D_380":["d3",153.345,1.813],"D_381":["d3",155.459,1.728],"D_382":["d3",157.487,1.877],"D_383":["d3",159.664,1.109],"D_384":["d3",161.073,1.685],"D_385":["d3",163.059,2.155],"D_386":["d3",165.513,1.173],"D_387":["d3",166.987,1.259],"D_388":["d3",168.545,1.429],"D_389":["d3",170.275,1.856],"D_390":["d3",172.431,1.984],"D_391":["d3",174.715,1.6],"D_392":["d3",176.615,1.387],"D_393":["d3",178.301,1.216],"D_394":["d3",179.817,0.917],"D_395":["d3",181.035,1.749],"D_396":["d3",183.084,1.088],"D_397":["d3",184.472,1.024],"D_398":["d3",185.796,1.664],"D_399":["d3",187.76,1.408],"D_400":["d4",0.3,1.195],"D_401":["d4",1.795,1.28],"D_402":["d4",3.375,1.152],"D_403":["d4",4.827,1.984],"D_404":["d4",7.111,2.304],"D_405":["d4",9.715,1.899],"D_406":["d4",11.913,2.005],"D_407":["d4",14.219,1.877],"D_408":["d4",16.396,1.387],"D_409":["d4",18.083,1.792],"D_410":["d4",20.175,1.771],"D_411":["d4",22.245,2.731],"D_412":["d4",25.276,2.475],"D_413":["d4",28.051,2.795],"D_414":["d4",31.145,1.216],"D_415":["d4",32.661,1.024],"D_416":["d4",33.985,1.131],"D_417":["d4",35.416,3.627],"D_418":["d4",39.343,2.112],"D_419":["d4",41.755,1.024],"D_420":["d4",43.079,1.195],"D_421":["d4",44.573,1.067],"D_422":["d4",45.94,1.579],"D_423":["d4",47.819,1.237],"D_424":["d4",49.356,2.752],"D_425":["d4",52.408,1.152],"D_426":["d4",53.86,1.877],"D_427":["d4",56.037,1.557],"D_428":["d4",57.895,1.856],"D_429":["d4",60.051,1.365],"D_430":["d4",61.716,1.408],"D_431":["d4",63.424,1.216],"D_432":["d4",64.94,1.259],"D_433":["d4",66.499,1.984],"D_434":["d4",68.783,0.768],"D_435":["d4",69.851,2.411],"D_436":["d4",72.561,1.557],"D_437":["d4",74.419,1.152],"D_438":["d4",75.871,3.072],"D_439":["d4",79.243,1.024],"D_440":["d4",80.567,2.048],"D_441":["d4",82.915,1.493],"D_442":["d4",84.708,1.344],"D_443":["d4",86.352,1.771],"D_444":["d4",88.423,1.003],"D_445":["d4",89.725,1.365],"D_446":["d4",91.391,1.408],"D_447":["d4",93.099,1.707],"D_448":["d4",95.105,1.6],"D_449":["d4",97.005,1.067],"D_450":["d4",98.372,1.109],"D_451":["d4",99.781,1.6],"D_452":["d4",101.681,1.429],"D_453":["d4",103.411,1.728],"D_454":["d4",105.439,1.28],"D_455":["d4",107.019,2.027],"D_456":["d4",109.345,1.579],"D_457":["d4",111.224,1.216],"D_458":["d4",112.74,1.152],"D_459":["d4",114.192,1.301],"D_460":["d4",115.793,1.067],"D_461":["d4",117.16,1.877],"D_462":["d4",119.337,1.152],"D_463":["d4",120.789,1.621],"D_464":["d4",122.711,1.557],"D_465":["d4",124.568,1.045],"D_466":["d4",125.913,1.835],"D_467":["d4",128.048,2.005],"D_468":["d4",130.353,1.408],"D_469":["d4",132.061,1.643],"D_470":["d4",134.004,2.453],"D_471":["d4",136.757,1.451],"D_472":["d4",138.508,1.323],"D_473":["d4",140.131,2.667],"D_474":["d4",143.097,1.685],"D_475":["d4",145.083,1.323],"D_476":["d4",146.705,1.024],"D_477":["d4",148.029,1.195],"D_478":["d4",149.524,1.408],"D_479":["d4",151.232,0.917],"D_480":["d4",152.449,1.493],"D_481":["d4",154.243,1.621],"D_482":["d4",156.164,1.024],"D_483":["d4",157.488,0.939],"D_484":["d4",158.727,1.472],"D_485":["d4",160.499,1.131],"D_486":["d4",161.929,1.067],"D_487":["d4",163.296,1.195],"D_488":["d4",164.791,1.579],"D_489":["d4",166.669,1.216],"D_490":["d4",168.185,1.173],"D_491":["d4",169.659,2.005],"D_492":["d4",171.964,1.109],"D_493":["d4",173.373,1.088],"D_494":["d4",174.761,1.685],"D_495":["d4",176.747,1.323],"D_496":["d4",178.369,1.131],"D_497":["d4",179.8,0.811],"D_498":["d4",180.911,2.155],"D_499":["d4",183.365,1.387],"D_500":["d5",0.3,0.981],"D_501":["d5",1.581,1.323],"D_502":["d5",3.204,1.088],"D_503":["d5",4.592,1.408],"D_504":["d5",6.3,0.853],"D_505":["d5",7.453,1.792],"D_506":["d5",9.545,2.091],"D_507":["d5",11.936,1.621],"D_508":["d5",13.857,1.728],"D_509":["d5",15.885,1.707],"D_510":["d5",17.892,1.515],"D_511":["d5",19.707,1.216],"D_512":["d5",21.223,0.981],"D_513":["d5",22.504,1.536],"D_514":["d5",24.34,3.243],"D_515":["d5",27.883,1.365],"D_516":["d5",29.548,2.027],"D_517":["d5",31.875,0.747],"D_518":["d5",32.921,1.621],"D_519":["d5",34.843,2.155],"D_520":["d5",37.297,1.195],"D_521":["d5",38.792,0.917],"D_522":["d5",40.009,2.048],"D_523":["d5",42.357,3.115],"D_524":["d5",45.772,1.429],"D_525":["d5",47.501,1.856],"D_526":["d5",49.657,1.003],"D_527":["d5",50.96,1.259],"D_528":["d5",52.519,1.387],"D_529":["d5",54.205,1.259],"D_530":["d5",55.764,1.152],"D_531":["d5",57.216,1.749],"D_532":["d5",59.265,1.131],"D_533":["d5",60.696,0.811],"D_534":["d5",61.807,1.579],"D_535":["d5",63.685,1.835],"D_536":["d5",65.82,1.301],"D_537":["d5",67.421,1.856],"D_538":["d5",69.577,1.195],"D_539":["d5",71.072,1.557],"D_540":["d5",72.929,1.664],"D_541":["d5",74.893,2.027],"D_542":["d5",77.22,1.685],"D_543":["d5",79.205,1.024],"D_544":["d5",80.529,1.771],"D_545":["d5",82.6,1.323],"D_546":["d5",84.223,1.344],"D_547":["d5",85.867,1.365],"D_548":["d5",87.532,1.835],"D_549":["d5",89.667,1.067],"D_550":["d5",91.033,1.173],"D_551":["d5",92.507,2.133],"D_552":["d5",94.94,1.984],"D_553":["d5",97.224,2.155],"D_554":["d5",99.679,1.6],"D_555":["d5",101.579,2.005],"D_556":["d5",103.884,1.408],"D_557":["d5",105.592,1.984],"D_558":["d5",107.876,1.28],"D_559":["d5",109.456,1.387],"D_560":["d5",111.143,1.515],"D_561":["d5",112.957,2.368],"D_562":["d5",115.625,1.664],"D_563":["d5",117.589,1.579],"D_564":["d5",119.468,2.475],"D_565":["d5",122.243,1.429],"D_566":["d5",123.972,0.939],"D_567":["d5",125.211,1.237],"D_568":["d5",126.748,1.088],"D_569":["d5",128.136,1.6],"D_570":["d5",130.036,1.131],"D_571":["d5",131.467,1.557],"D_572":["d5",133.324,1.003],"D_573":["d5",134.627,2.261],"D_574":["d5",137.188,1.152],"D_575":["d5",138.64,1.451],"D_576":["d5",140.391,1.067],"D_577":["d5",141.757,1.856],"D_578":["d5",143.913,1.664],"D_579":["d5",145.877,1.301],"D_580":["d5",147.479,1.301],"D_581":["d5",149.08,1.237],"D_582":["d5",150.617,1.045],"D_583":["d5",151.963,1.237],"D_584":["d5",153.5,1.28],"D_585":["d5",155.08,1.408],"D_586":["d5",156.788,1.152],"D_587":["d5",158.24,1.003],"D_588":["d5",159.543,1.835],"D_589":["d5",161.677,0.917],"D_590":["d5",162.895,1.557],"D_591":["d5",164.752,1.003],"D_592":["d5",166.055,1.003],"D_593":["d5",167.357,1.109],"D_594":["d5",168.767,0.981],"D_595":["d5",170.048,1.216],"D_596":["d5",171.564,1.131],"D_597":["d5",172.995,1.835],"D_598":["d5",175.129,0.939],"D_599":["d5",176.368,2.325],"D_600":["d6",0.3,1.003],"D_601":["d6",1.603,1.621],"D_602":["d6",3.524,1.109],"D_603":["d6",4.933,1.067],"D_604":["d6",6.3,1.621],"D_605":["d6",8.221,1.088],"D_606":["d6",9.609,1.387],"D_607":["d6",11.296,0.875],"D_608":["d6",12.471,0.832],"D_609":["d6",13.603,1.749],"D_610":["d6",15.652,1.472],"D_611":["d6",17.424,1.323],"D_612":["d6",19.047,1.749],"D_613":["d6",21.096,1.216],"D_614":["d6",22.612,1.749],"D_615":["d6",24.661,1.877],"D_616":["d6",26.839,1.643],"D_617":["d6",28.781,2.261],"D_618":["d6",31.343,1.856],"D_619":["d6",33.499,1.749],"D_620":["d6",35.548,2.069],"D_621":["d6",37.917,0.96],"D_622":["d6",39.177,1.045],"D_623":["d6",40.523,1.664],"D_624":["d6",42.487,1.237],"D_625":["d6",44.024,1.941],"D_626":["d6",46.265,1.045],"D_627":["d6",47.611,1.877],"D_628":["d6",49.788,0.832],"D_629":["d6",50.92,1.643],"D_630":["d6",52.863,1.749],"D_631":["d6",54.912,1.237],"D_632":["d6",56.449,2.048],"D_633":["d6",58.797,1.131],"D_634":["d6",60.228,1.323],"D_635":["d6",61.851,1.664],"D_636":["d6",63.815,2.261],"D_637":["d6",66.376,2.048],"D_638":["d6",68.724,1.237],"D_639":["d6",70.261,1.067],"D_640":["d6",71.628,1.813],"D_641":["d6",73.741,1.536],"D_642":["d6",75.577,1.28],"D_643":["d6",77.157,0.789],"D_644":["d6",78.247,2.133],"D_645":["d6",80.68,0.917],"D_646":["d6",81.897,1.408],"D_647":["d6",83.605,2.176],"D_648":["d6",86.081,1.216],"D_649":["d6",87.597,1.941],"D_650":["d6",89.839,1.941],"D_651":["d6",92.08,2.987],"D_652":["d6",95.367,1.365],"D_653":["d6",97.032,0.917],"D_654":["d6",98.249,1.451],"D_655":["d6",100.0,1.408],"D_656":["d6",101.708,1.6],"D_657":["d6",103.608,2.325],"D_658":["d6",106.233,1.088],"D_659":["d6",107.621,2.133],"D_660":["d6",110.055,1.344],"D_661":["d6",111.699,1.771],"D_662":["d6",113.769,0.896],"D_663":["d6",114.965,1.195],"D_664":["d6",116.46,1.237],"D_665":["d6",117.997,1.451],"D_666":["d6",119.748,2.069],"D_667":["d6",122.117,1.643],"D_668":["d6",124.06,1.813],"D_669":["d6",126.173,1.195],"D_670":["d6",127.668,1.856],"D_671":["d6",129.824,1.493],"E_000":["e0",0.3,2.347],"E_001":["e0",2.947,2.603],"E_002":["e0",5.849,2.475],"E_003":["e0",8.624,2.283],"E_004":["e0",11.207,2.197],"E_005":["e0",13.704,2.091],"E_006":["e0",16.095,3.157],"E_007":["e0",19.552,2.987],"E_008":["e0",22.839,2.176],"E_009":["e0",25.315,2.389],"E_010":["e0",28.004,1.877],"E_011":["e0",30.181,2.453],"E_012":["e0",32.935,1.771],"E_013":["e0",35.005,2.347],"E_014":["e0",37.652,1.899],"E_015":["e0",39.851,1.493],"E_016":["e0",41.644,1.792],"E_017":["e0",43.736,2.347],"E_018":["e0",46.383,1.941],"E_019":["e0",48.624,2.432],"E_020":["e0",51.356,1.835],"E_021":["e0",53.491,2.325],"E_022":["e0",56.116,2.453],"E_023":["e0",58.869,2.069],"E_024":["e0",61.239,1.92],"E_025":["e0",63.459,1.515],"E_026":["e0",65.273,2.304],"E_027":["e0",67.877,2.283],"E_028":["e0",70.46,1.707],"E_029":["e0",72.467,2.069],"E_030":["e0",74.836,1.728],"E_031":["e0",76.864,1.899],"E_032":["e0",79.063,2.069],"E_033":["e0",81.432,2.048],"E_034":["e0",83.78,1.877],"E_035":["e0",85.957,2.005],"E_036":["e0",88.263,2.176],"E_037":["e0",90.739,1.515],"E_038":["e0",92.553,1.728],"E_039":["e0",94.581,1.771],"E_040":["e0",96.652,1.6],"E_041":["e0",98.552,1.707],"E_042":["e0",100.559,1.771],"E_043":["e0",102.629,1.856],"E_044":["e0",104.785,1.557],"E_045":["e0",106.643,1.707],"E_046":["e0",108.649,2.027],"E_047":["e0",110.976,1.963],"E_048":["e0",113.239,1.344],"E_049":["e0",114.883,2.987],"E_050":["e0",118.169,1.6],"E_051":["e0",120.069,2.496],"E_052":["e0",122.865,1.771],"E_053":["e0",124.936,1.749],"E_054":["e0",126.985,1.835],"E_055":["e0",129.12,2.197],"E_056":["e0",131.617,1.92],"E_057":["e0",133.837,1.429],"E_058":["e0",135.567,1.579],"E_059":["e0",137.445,2.027],"E_060":["e0",139.772,1.472],"E_061":["e0",141.544,1.963],"E_062":["e0",143.807,1.621],"E_063":["e0",145.728,1.877],"E_064":["e0",147.905,2.091],"E_065":["e0",150.296,1.472],"E_066":["e0",152.068,2.027],"E_067":["e0",154.395,2.176],"E_068":["e0",156.871,1.088],"E_069":["e0",158.259,1.557],"E_070":["e0",160.116,1.643],"E_071":["e0",162.059,1.877],"E_072":["e0",164.236,1.813],"E_073":["e0",166.349,2.197],"E_074":["e0",168.847,1.707],"E_075":["e0",170.853,2.112],"E_076":["e0",173.265,1.621],"E_077":["e0",175.187,2.219],"E_078":["e0",177.705,1.621],"E_079":["e0",179.627,1.963],"E_080":["e0",181.889,2.091],"E_081":["e0",184.28,1.643],"E_082":["e0",186.223,2.091],"E_083":["e0",188.613,2.197],"E_084":["e0",191.111,1.621],"E_085":["e0",193.032,2.027],"E_086":["e0",195.359,1.387],"E_087":["e0",197.045,2.048],"E_088":["e0",199.393,1.6],"E_089":["e0",201.293,1.536],"E_090":["e0",203.129,1.92],"E_091":["e0",205.349,1.941],"E_092":["e0",207.591,2.283],"E_093":["e0",210.173,1.899],"E_094":["e0",212.372,1.173],"E_095":["e0",213.845,1.984],"E_096":["e0",216.129,1.408],"E_097":["e0",217.837,1.963],"E_098":["e0",220.1,1.515],"E_099":["e0",221.915,1.579],"E_100":["e1",0.3,2.453],"E_101":["e1",3.053,1.728],"E_102":["e1",5.081,2.133],"E_103":["e1",7.515,1.685],"E_104":["e1",9.5,1.579],"E_105":["e1",11.379,1.835],"E_106":["e1",13.513,2.112],"E_107":["e1",15.925,1.792],"E_108":["e1",18.017,1.472],"E_109":["e1",19.789,1.451],"E_110":["e1",21.54,1.579],"E_111":["e1",23.419,1.792],"E_112":["e1",25.511,1.579],"E_113":["e1",27.389,1.536],"E_114":["e1",29.225,1.579],"E_115":["e1",31.104,2.069],"E_116":["e1",33.473,2.155],"E_117":["e1",35.928,1.835],"E_118":["e1",38.063,1.92],"E_119":["e1",40.283,1.728],"E_120":["e1",42.311,1.813],"E_121":["e1",44.424,2.304],"E_122":["e1",47.028,1.707],"E_123":["e1",49.035,2.283],"E_124":["e1",51.617,1.771],"E_125":["e1",53.688,2.133],"E_126":["e1",56.121,1.984],"E_127":["e1",58.405,1.6],"E_128":["e1",60.305,2.496],"E_129":["e1",63.101,1.792],"E_130":["e1",65.193,2.219],"E_131":["e1",67.712,1.579],"E_132":["e1",69.591,1.515],"E_133":["e1",71.405,2.24],"E_134":["e1",73.945,1.643],"E_135":["e1",75.888,1.941],"E_136":["e1",78.129,1.963],"E_137":["e1",80.392,1.92],"E_138":["e1",82.612,2.091],"E_139":["e1",85.003,2.005],"E_140":["e1",87.308,1.835],"E_141":["e1",89.443,1.643],"E_142":["e1",91.385,1.579],"E_143":["e1",93.264,1.749],"E_144":["e1",95.313,1.621],"E_145":["e1",97.235,1.984],"E_146":["e1",99.519,1.984],"E_147":["e1",101.803,1.92],"E_148":["e1",104.023,1.984],"E_149":["e1",106.307,2.368],"E_150":["e1",108.975,2.368],"E_151":["e1",111.643,1.685],"E_152":["e1",113.628,1.984],"E_153":["e1",115.912,1.813],"E_154":["e1",118.025,1.877],"E_155":["e1",120.203,1.963],"E_156":["e1",122.465,1.472],"E_157":["e1",124.237,1.835],"E_158":["e1",126.372,1.835],"E_159":["e1",128.507,1.856],"E_160":["e1",130.663,2.048],"E_161":["e1",133.011,1.515],"E_162":["e1",134.825,1.643],"E_163":["e1",136.768,1.984],"E_164":["e1",139.052,1.899],"E_165":["e1",141.251,1.813],"E_166":["e1",143.364,1.749],"E_167":["e1",145.413,1.749],"E_168":["e1",147.463,1.621],"E_169":["e1",149.384,1.643],"E_170":["e1",151.327,2.347],"E_171":["e1",153.973,1.771],"E_172":["e1",156.044,1.899],"E_173":["e1",158.243,1.963],"E_174":["e1",160.505,1.899],"E_175":["e1",162.704,1.685],"E_176":["e1",164.689,1.92],"E_177":["e1",166.909,1.771],"E_178":["e1",168.98,1.6],"E_179":["e1",170.88,1.344],"E_180":["e1",172.524,1.707],"E_181":["e1",174.531,2.197],"E_182":["e1",177.028,1.984],"E_183":["e1",179.312,2.048],"E_184":["e1",181.66,1.387],"E_185":["e1",183.347,1.899],"E_186":["e1",185.545,1.728],"E_187":["e1",187.573,2.027],"E_188":["e1",189.9,1.792],"E_189":["e1",191.992,2.027],"E_190":["e1",194.319,2.069],"E_191":["e1",196.688,2.005],"E_192":["e1",198.993,1.536],"E_193":["e1",200.829,1.984],"E_194":["e1",203.113,1.813],"E_195":["e1",205.227,1.365],"E_196":["e1",206.892,1.579],"E_197":["e1",208.771,1.536],"E_198":["e1",210.607,2.027],"E_199":["e1",212.933,1.877],"E_200":["e2",0.3,1.877],"E_201":["e2",2.477,1.771],"E_202":["e2",4.548,1.472],"E_203":["e2",6.32,1.877],"E_204":["e2",8.497,1.728],"E_205":["e2",10.525,1.664],"E_206":["e2",12.489,1.749],"E_207":["e2",14.539,1.707],"E_208":["e2",16.545,1.429],"E_209":["e2",18.275,1.877],"E_210":["e2",20.452,1.92],"E_211":["e2",22.672,1.835],"E_212":["e2",24.807,1.152],"E_213":["e2",26.259,1.301],"E_214":["e2",27.86,1.685],"E_215":["e2",29.845,1.899],"E_216":["e2",32.044,2.368],"E_217":["e2",34.712,2.048],"E_218":["e2",37.06,1.984],"E_219":["e2",39.344,1.813],"E_220":["e2",41.457,1.813],"E_221":["e2",43.571,2.709],"E_222":["e2",46.58,2.091],"E_223":["e2",48.971,1.536],"E_224":["e2",50.807,1.6],"E_225":["e2",52.707,1.792],"E_226":["e2",54.799,2.347],"E_227":["e2",57.445,2.027],"E_228":["e2",59.772,2.155],"E_229":["e2",62.227,1.685],"E_230":["e2",64.212,1.493],"E_231":["e2",66.005,1.621],"E_232":["e2",67.927,1.557],"E_233":["e2",69.784,2.155],"E_234":["e2",72.239,1.749],"E_235":["e2",74.288,1.728],"E_236":["e2",76.316,1.621],"E_237":["e2",78.237,1.899],"E_238":["e2",80.436,2.197],"E_239":["e2",82.933,2.176],"E_240":["e2",85.409,2.325],"E_241":["e2",88.035,1.6],"E_242":["e2",89.935,1.6],"E_243":["e2",91.835,2.112],"E_244":["e2",94.247,2.005],"E_245":["e2",96.552,1.899],"E_246":["e2",98.751,1.707],"E_247":["e2",100.757,1.493],"E_248":["e2",102.551,2.304],"E_249":["e2",105.155,2.048],"E_250":["e2",107.503,2.197],"E_251":["e2",110.0,1.685],"E_252":["e2",111.985,1.6],"E_253":["e2",113.885,2.411],"E_254":["e2",116.596,1.685],"E_255":["e2",118.581,1.301],"E_256":["e2",120.183,1.749],"E_257":["e2",122.232,1.557],"E_258":["e2",124.089,1.685],"E_259":["e2",126.075,1.813],"E_260":["e2",128.188,1.813],"E_261":["e2",130.301,2.517],"E_262":["e2",133.119,1.856],"E_263":["e2",135.275,2.027],"E_264":["e2",137.601,1.557],"E_265":["e2",139.459,1.813],"E_266":["e2",141.572,1.749],"E_267":["e2",143.621,2.432],"E_268":["e2",146.353,1.792],"E_269":["e2",148.445,1.728],"E_270":["e2",150.473,1.771],"E_271":["e2",152.544,1.984],"E_272":["e2",154.828,1.984],"E_273":["e2",157.112,1.749],"E_274":["e2",159.161,1.472],"E_275":["e2",160.933,2.133],"E_276":["e2",163.367,1.557],"E_277":["e2",165.224,1.856],"E_278":["e2",167.38,1.835],"E_279":["e2",169.515,1.579],"E_280":["e2",171.393,2.027],"E_281":["e2",173.72,1.621],"E_282":["e2",175.641,1.536],"E_283":["e2",177.477,1.813],"E_284":["e2",179.591,1.685],"E_285":["e2",181.576,1.515],"E_286":["e2",183.391,1.984],"E_287":["e2",185.675,1.323],"E_288":["e2",187.297,2.176],"E_289":["e2",189.773,2.389],"E_290":["e2",192.463,1.707],"E_291":["e2",194.469,1.515],"E_292":["e2",196.284,2.56],"E_293":["e2",199.144,1.963],"E_294":["e2",201.407,2.048],"E_295":["e2",203.755,1.707],"E_296":["e2",205.761,1.813],"E_297":["e2",207.875,2.176],"E_298":["e2",210.351,1.941],"E_299":["e2",212.592,2.005],"E_300":["e3",0.3,1.6],"E_301":["e3",2.2,1.749],"E_302":["e3",4.249,2.219],"E_303":["e3",6.768,1.685],"E_304":["e3",8.753,1.835],"E_305":["e3",10.888,1.813],"E_306":["e3",13.001,1.408],"E_307":["e3",14.709,1.707],"E_308":["e3",16.716,1.472],"E_309":["e3",18.488,1.963],"E_310":["e3",20.751,1.792],"E_311":["e3",22.843,1.557],"E_312":["e3",24.7,1.728],"E_313":["e3",26.728,1.643],"E_314":["e3",28.671,1.643],"E_315":["e3",30.613,1.621],"E_316":["e3",32.535,1.707],"E_317":["e3",34.541,1.856],"E_318":["e3",36.697,1.963],"E_319":["e3",38.96,1.749],"E_320":["e3",41.009,1.6],"E_321":["e3",42.909,1.856],"E_322":["e3",45.065,1.451],"E_323":["e3",46.816,1.557],"E_324":["e3",48.673,1.557],"E_325":["e3",50.531,1.536],"E_326":["e3",52.367,1.451],"E_327":["e3",54.117,1.771],"E_328":["e3",56.188,1.835],"E_329":["e3",58.323,2.048],"E_330":["e3",60.671,1.899],"E_331":["e3",62.869,1.643],"E_332":["e3",64.812,1.963],"E_333":["e3",67.075,1.472],"E_334":["e3",68.847,1.344],"E_335":["e3",70.491,1.451],"E_336":["e3",72.241,1.6],"E_337":["e3",74.141,1.963],"E_338":["e3",76.404,1.835],"E_339":["e3",78.539,1.813],"E_340":["e3",80.652,2.24],"E_341":["e3",83.192,1.536],"E_342":["e3",85.028,1.643],"E_343":["e3",86.971,1.813],"E_344":["e3",89.084,2.432],"E_345":["e3",91.816,1.728],"E_346":["e3",93.844,1.664],"E_347":["e3",95.808,2.219],"E_348":["e3",98.327,1.472],"E_349":["e3",100.099,1.664],"E_350":["e3",102.063,1.707],"E_351":["e3",104.069,1.472],"E_352":["e3",105.841,1.515],"E_353":["e3",107.656,1.728],"E_354":["e3",109.684,2.005],"E_355":["e3",111.989,1.835],"E_356":["e3",114.124,1.685],"E_357":["e3",116.109,1.877],"E_358":["e3",118.287,2.176],"E_359":["e3",120.763,1.963],"E_360":["e3",123.025,1.92],"E_361":["e3",125.245,1.963],"E_362":["e3",127.508,1.323],"E_363":["e3",129.131,1.685],"E_364":["e3",131.116,1.344],"E_365":["e3",132.76,1.451],"E_366":["e3",134.511,2.24],"E_367":["e3",137.051,2.155],"E_368":["e3",139.505,1.451],"E_369":["e3",141.256,1.771],"E_370":["e3",143.327,1.728],"E_371":["e3",145.355,1.557],"E_372":["e3",147.212,1.451],"E_373":["e3",148.963,2.325],"E_374":["e3",151.588,1.813],"E_375":["e3",153.701,1.899],"E_376":["e3",155.9,2.005],"E_377":["e3",158.205,1.899],"E_378":["e3",160.404,1.728],"E_379":["e3",162.432,1.856],"E_380":["e3",164.588,1.749],"E_381":["e3",166.637,1.621],"E_382":["e3",168.559,1.408],"E_383":["e3",170.267,2.005],"E_384":["e3",172.572,1.941],"E_385":["e3",174.813,2.261],"E_386":["e3",177.375,1.664],"E_387":["e3",179.339,1.664],"E_388":["e3",181.303,1.6],"E_389":["e3",183.203,1.771],"E_390":["e3",185.273,1.728],"E_391":["e3",187.301,1.621],"E_392":["e3",189.223,1.579],"E_393":["e3",191.101,1.301],"E_394":["e3",192.703,1.536],"E_395":["e3",194.539,1.621],"E_396":["e3",196.46,1.941],"E_397":["e3",198.701,2.261],"E_398":["e3",201.263,1.664],"E_399":["e3",203.227,2.005],"E_400":["e4",0.3,1.941],"E_401":["e4",2.541,1.92],"E_402":["e4",4.761,1.92],"E_403":["e4",6.981,1.771],"E_404":["e4",9.052,2.24],"E_405":["e4",11.592,1.963],"E_406":["e4",13.855,1.6],"E_407":["e4",15.755,2.069],"E_408":["e4",18.124,1.813],"E_409":["e4",20.237,1.749],"E_410":["e4",22.287,1.771],"E_411":["e4",24.357,1.877],"E_412":["e4",26.535,1.877],"E_413":["e4",28.712,1.877],"E_414":["e4",30.889,1.877],"E_415":["e4",33.067,1.408],"E_416":["e4",34.775,1.365],"E_417":["e4",36.44,2.411],"E_418":["e4",39.151,2.069],"E_419":["e4",41.52,2.325],"E_420":["e4",44.145,1.963],"E_421":["e4",46.408,2.112],"E_422":["e4",48.82,1.813],"E_423":["e4",50.933,1.493],"E_424":["e4",52.727,2.517],"E_425":["e4",55.544,2.133],"E_426":["e4",57.977,1.6],"E_427":["e4",59.877,1.536],"E_428":["e4",61.713,2.005],"E_429":["e4",64.019,2.005],"E_430":["e4",66.324,1.877],"E_431":["e4",68.501,1.579],"E_432":["e4",70.38,1.749],"E_433":["e4",72.429,2.24],"E_434":["e4",74.969,1.728],"E_435":["e4",76.997,1.92],"E_436":["e4",79.217,1.877],"E_437":["e4",81.395,1.515],"E_438":["e4",83.209,2.389],"E_439":["e4",85.899,1.387],"E_440":["e4",87.585,2.069],"E_441":["e4",89.955,1.749],"E_442":["e4",92.004,1.685],"E_443":["e4",93.989,1.643],"E_444":["e4",95.932,1.792],"E_445":["e4",98.024,2.155],"E_446":["e4",100.479,1.792],"E_447":["e4",102.571,2.325],"E_448":["e4",105.196,1.408],"E_449":["e4",106.904,1.643],"E_450":["e4",108.847,1.579],"E_451":["e4",110.725,2.432],"E_452":["e4",113.457,1.749],"E_453":["e4",115.507,1.536],"E_454":["e4",117.343,1.984],"E_455":["e4",119.627,1.771],"E_456":["e4",121.697,1.707],"E_457":["e4",123.704,1.6],"E_458":["e4",125.604,1.344],"E_459":["e4",127.248,1.856],"E_460":["e4",129.404,2.027],"E_461":["e4",131.731,1.493],"E_462":["e4",133.524,2.112],"E_463":["e4",135.936,2.027],"E_464":["e4",138.263,1.856],"E_465":["e4",140.419,1.451],"E_466":["e4",142.169,2.112],"E_467":["e4",144.581,2.645],"E_468":["e4",147.527,1.877],"E_469":["e4",149.704,2.005],"E_470":["e4",152.009,1.493],"E_471":["e4",153.803,1.707],"E_472":["e4",155.809,1.643],"E_473":["e4",157.752,2.432],"E_474":["e4",160.484,2.261],"E_475":["e4",163.045,1.749],"E_476":["e4",165.095,1.472],"E_477":["e4",166.867,1.771],"E_478":["e4",168.937,1.152],"E_479":["e4",170.389,1.835],"E_480":["e4",172.524,1.643],"E_481":["e4",174.467,1.685],"E_482":["e4",176.452,1.749],"E_483":["e4",178.501,1.451],"E_484":["e4",180.252,2.304],"E_485":["e4",182.856,1.6],"E_486":["e4",184.756,1.813],"E_487":["e4",186.869,1.621],"E_488":["e4",188.791,1.963],"E_489":["e4",191.053,1.557],"E_490":["e4",192.911,2.453],"E_491":["e4",195.664,1.813],"E_492":["e4",197.777,1.707],"E_493":["e4",199.784,1.771],"E_494":["e4",201.855,1.152],"E_495":["e4",203.307,1.237],"E_496":["e4",204.844,1.557],"E_497":["e4",206.701,1.899],"E_498":["e4",208.9,4.565],"E_499":["e4",213.765,2.197],"E_500":["e5",0.3,1.771],"E_501":["e5",2.371,1.707],"E_502":["e5",4.377,2.048],"E_503":["e5",6.725,1.728],"E_504":["e5",8.753,2.453],"E_505":["e5",11.507,1.472],"E_506":["e5",13.279,2.133],"E_507":["e5",15.712,2.453],"E_508":["e5",18.465,2.176],"E_509":["e5",20.941,1.472],"E_510":["e5",22.713,1.536],"E_511":["e5",24.549,1.429],"E_512":["e5",26.279,1.685],"E_513":["e5",28.264,1.664],"E_514":["e5",30.228,1.621],"E_515":["e5",32.149,1.408],"E_516":["e5",33.857,1.6],"E_517":["e5",35.757,1.899],"E_518":["e5",37.956,1.813],"E_519":["e5",40.069,1.941],"E_520":["e5",42.311,1.6],"E_521":["e5",44.211,1.792],"E_522":["e5",46.303,1.877],"E_523":["e5",48.48,1.749],"E_524":["e5",50.529,1.728],"E_525":["e5",52.557,1.493],"E_526":["e5",54.351,1.429],"E_527":["e5",56.08,1.664],"E_528":["e5",58.044,1.877],"E_529":["e5",60.221,1.707],"E_530":["e5",62.228,1.472],"E_531":["e5",64.0,1.877],"E_532":["e5",66.177,1.771],"E_533":["e5",68.248,1.344],"E_534":["e5",69.892,1.621],"E_535":["e5",71.813,1.813],"E_536":["e5",73.927,1.323],"E_537":["e5",75.549,1.536],"E_538":["e5",77.385,1.643],"E_539":["e5",79.328,1.941],"E_540":["e5",81.569,1.707],"E_541":["e5",83.576,2.069],"E_542":["e5",85.945,1.877],"E_543":["e5",88.123,1.92],"E_544":["e5",90.343,2.112],"E_545":["e5",92.755,1.6],"E_546":["e5",94.655,2.197],"E_547":["e5",97.152,2.261],"E_548":["e5",99.713,2.005],"E_549":["e5",102.019,1.643],"E_550":["e5",103.961,1.493],"E_551":["e5",105.755,2.091],"E_552":["e5",108.145,1.515],"E_553":["e5",109.96,1.707],"E_554":["e5",111.967,1.387],"E_555":["e5",113.653,1.557],"E_556":["e5",115.511,1.685],"E_557":["e5",117.496,1.408],"E_558":["e5",119.204,1.6],"E_559":["e5",121.104,1.621],"E_560":["e5",123.025,1.664],"E_561":["e5",124.989,1.92],"E_562":["e5",127.209,1.813],"E_563":["e5",129.323,1.557],"E_564":["e5",131.18,1.728],"E_565":["e5",133.208,1.813],"E_566":["e5",135.321,1.941],"E_567":["e5",137.563,1.941],"E_568":["e5",139.804,2.091],"E_569":["e5",142.195,2.283],"E_570":["e5",144.777,1.536],"E_571":["e5",146.613,1.536],"E_572":["e5",148.449,2.155],"E_573":["e5",150.904,1.877],"E_574":["e5",153.081,1.643],"E_575":["e5",155.024,1.451],"E_576":["e5",156.775,2.027],"E_577":["e5",159.101,1.92],"E_578":["e5",161.321,2.133],"E_579":["e5",163.755,1.557],"E_580":["e5",165.612,2.005],"E_581":["e5",167.917,1.557],"E_582":["e5",169.775,1.643],"E_583":["e5",171.717,1.984],"E_584":["e5",174.001,1.408],"E_585":["e5",175.709,1.899],"E_586":["e5",177.908,1.216],"E_587":["e5",179.424,1.664],"E_588":["e5",181.388,1.621],"E_589":["e5",183.309,1.685],"E_590":["e5",185.295,1.835],"E_591":["e5",187.429,2.027],"E_592":["e5",189.756,1.173],"E_593":["e5",191.229,1.771],"E_594":["e5",193.3,1.728],"E_595":["e5",195.328,1.643],"E_596":["e5",197.271,2.005],"E_597":["e5",199.576,1.728],"E_598":["e5",201.604,1.387],"E_599":["e5",203.291,1.6],"E_600":["e6",0.3,1.92],"E_601":["e6",2.52,1.792],"E_602":["e6",4.612,1.515],"E_603":["e6",6.427,1.856],"E_604":["e6",8.583,1.6],"E_605":["e6",10.483,2.069],"E_606":["e6",12.852,2.091],"E_607":["e6",15.243,2.176],"E_608":["e6",17.719,1.92],"E_609":["e6",19.939,1.472],"E_610":["e6",21.711,1.472],"E_611":["e6",23.483,1.6],"E_612":["e6",25.383,1.323],"E_613":["e6",27.005,1.429],"E_614":["e6",28.735,1.429],"E_615":["e6",30.464,1.771],"E_616":["e6",32.535,1.323],"E_617":["e6",34.157,1.835],"E_618":["e6",36.292,1.643],"E_619":["e6",38.235,2.389],"E_620":["e6",40.924,1.429],"E_621":["e6",42.653,1.557],"E_622":["e6",44.511,1.621],"E_623":["e6",46.432,1.685],"E_624":["e6",48.417,1.493],"E_625":["e6",50.211,1.408],"E_626":["e6",51.919,1.408],"E_627":["e6",53.627,1.643],"E_628":["e6",55.569,1.771],"E_629":["e6",57.64,1.579],"E_630":["e6",59.519,1.515],"E_631":["e6",61.333,1.728],"E_632":["e6",63.361,1.685],"E_633":["e6",65.347,1.771],"E_634":["e6",67.417,1.472],"E_635":["e6",69.189,1.621],"E_636":["e6",71.111,1.536],"E_637":["e6",72.947,1.685],"E_638":["e6",74.932,1.493],"E_639":["e6",76.725,1.216],"E_640":["e6",78.241,1.429],"E_641":["e6",79.971,1.472],"E_642":["e6",81.743,1.557],"E_643":["e6",83.6,1.664],"E_644":["e6",85.564,2.091],"E_645":["e6",87.955,1.408],"E_646":["e6",89.663,1.173],"E_647":["e6",91.136,1.728],"E_648":["e6",93.164,1.792],"E_649":["e6",95.256,1.664],"E_650":["e6",97.22,2.219],"E_651":["e6",99.739,2.027],"E_652":["e6",102.065,1.28],"E_653":["e6",103.645,1.472],"E_654":["e6",105.417,1.408],"E_655":["e6",107.125,1.493],"E_656":["e6",108.919,1.941],"E_657":["e6",111.16,1.515],"E_658":["e6",112.975,1.536],"E_659":["e6",114.811,1.963],"E_660":["e6",117.073,1.941],"E_661":["e6",119.315,1.771],"E_662":["e6",121.385,1.344],"E_663":["e6",123.029,1.301],"E_664":["e6",124.631,1.365],"E_665":["e6",126.296,1.856],"E_666":["e6",128.452,2.005],"E_667":["e6",130.757,1.771],"E_668":["e6",132.828,1.984],"E_669":["e6",135.112,1.856],"E_670":["e6",137.268,2.752],"E_671":["e6",140.32,1.344],"L_a":["base",0.3,0.747],"L_b":["base",1.347,0.832],"L_c":["base",2.479,0.768],"L_d":["base",3.547,0.789],"L_e":["base",4.636,0.725],"L_f":["base",5.661,0.917],"L_g":["base",6.879,0.853],"L_h":["base",8.032,0.768],"L_hyphen":["base",9.1,0.832],"L_i":["base",10.232,0.747],"L_j":["base",11.279,0.811],"L_k":["base",12.389,0.768],"L_l":["base",13.457,0.661],"L_m":["base",14.419,0.704],"L_n":["base",15.423,0.683],"L_o":["base",16.405,0.683],"L_p":["base",17.388,0.811],"L_q":["base",18.499,0.811],"L_r":["base",19.609,0.811],"L_s":["base",20.72,0.768],"L_space":["base",21.788,0.896],"L_t":["base",22.984,0.832],"L_u":["base",24.116,0.704],"L_v":["base",25.12,0.768],"L_w":["base",26.188,0.875],"L_x":["base",27.363,0.768],"L_y":["base",28.431,0.725],"L_z":["base",29.456,0.811],"X_correct":["base",30.567,0.875],"X_intro":["base",31.741,1.045],"X_wrong":["base",33.087,1.6],"S_000":["s0",0.3,1.6],"S_001":["s0",2.2,1.92],"S_002":["s0",4.42,1.579],"S_003":["s0",6.299,1.557],"S_004":["s0",8.156,1.429],"S_005":["s0",9.885,1.493],"S_006":["s0",11.679,1.685],"S_007":["s0",13.664,1.6],"S_008":["s0",15.564,1.728],"S_009":["s0",17.592,1.579],"S_010":["s0",19.471,1.493],"S_011":["s0",21.264,1.472],"S_012":["s0",23.036,1.259],"S_013":["s0",24.595,1.771],"S_014":["s0",26.665,1.835],"S_015":["s0",28.8,1.579],"S_016":["s0",30.679,1.493],"S_017":["s0",32.472,1.643],"S_018":["s0",34.415,1.664],"S_019":["s0",36.379,1.429],"S_020":["s0",38.108,1.643],"S_021":["s0",40.051,1.429],"S_022":["s0",41.78,1.771],"S_023":["s0",43.851,1.451],"S_024":["s0",45.601,1.664],"S_025":["s0",47.565,1.344],"S_026":["s0",49.209,1.643],"S_027":["s0",51.152,1.621],"S_028":["s0",53.073,1.472],"S_029":["s0",54.845,1.365],"S_030":["s0",56.511,1.579],"S_031":["s0",58.389,1.237],"S_032":["s0",59.927,1.749],"S_033":["s0",61.976,1.387],"S_034":["s0",63.663,1.451],"S_035":["s0",65.413,1.344],"S_036":["s0",67.057,1.408],"S_037":["s0",68.765,1.429],"S_038":["s0",70.495,1.28],"S_039":["s0",72.075,1.387],"S_040":["s0",73.761,1.429],"S_041":["s0",75.491,1.493],"S_042":["s0",77.284,1.408],"S_043":["s0",78.992,1.387],"S_044":["s0",80.679,1.301],"S_045":["s0",82.28,1.557],"S_046":["s0",84.137,1.472],"S_047":["s0",85.909,1.387],"S_048":["s0",87.596,1.387],"S_049":["s0",89.283,1.813],"S_050":["s0",91.396,1.301],"S_051":["s0",92.997,1.472],"S_052":["s0",94.769,1.344],"S_053":["s0",96.413,1.429],"S_054":["s0",98.143,1.792],"S_055":["s0",100.235,1.536],"S_056":["s0",102.071,1.344],"S_057":["s0",103.715,1.387],"S_058":["s0",105.401,1.344],"S_059":["s0",107.045,1.173],"S_060":["s0",108.519,1.515],"S_061":["s0",110.333,1.429],"S_062":["s0",112.063,1.472],"S_063":["s0",113.835,1.28],"S_064":["s0",115.415,1.451],"S_065":["s0",117.165,1.301],"S_066":["s0",118.767,1.408],"S_067":["s0",120.475,1.579],"S_068":["s0",122.353,1.429],"S_069":["s0",124.083,1.451],"S_070":["s0",125.833,1.323],"S_071":["s0",127.456,1.365],"S_072":["s0",129.121,1.451],"S_073":["s0",130.872,1.365],"S_074":["s0",132.537,1.365],"S_075":["s0",134.203,1.365],"S_076":["s0",135.868,1.237],"S_077":["s0",137.405,1.493],"S_078":["s0",139.199,1.515],"S_079":["s0",141.013,1.515],"S_080":["s0",142.828,1.429],"S_081":["s0",144.557,1.365],"S_082":["s0",146.223,1.493],"S_083":["s0",148.016,1.472],"S_084":["s0",149.788,1.451],"S_085":["s0",151.539,1.387],"S_086":["s0",153.225,1.323],"S_087":["s0",154.848,1.493],"S_088":["s0",156.641,1.472],"S_089":["s0",158.413,1.621],"S_090":["s0",160.335,1.6],"S_091":["s0",162.235,1.344],"S_092":["s0",163.879,1.536],"S_093":["s0",165.715,1.301],"S_094":["s0",167.316,1.301],"S_095":["s0",168.917,1.429],"S_096":["s0",170.647,1.323],"S_097":["s0",172.269,1.6],"S_098":["s0",174.169,1.387],"S_099":["s0",175.856,1.429],"S_100":["s1",0.3,1.579],"S_101":["s1",2.179,1.728],"S_102":["s1",4.207,1.664],"S_103":["s1",6.171,1.323],"S_104":["s1",7.793,1.579],"S_105":["s1",9.672,1.579],"S_106":["s1",11.551,1.6],"S_107":["s1",13.451,1.365],"S_108":["s1",15.116,1.365],"S_109":["s1",16.781,1.536],"S_110":["s1",18.617,1.237],"S_111":["s1",20.155,1.259],"S_112":["s1",21.713,1.493],"S_113":["s1",23.507,1.451],"S_114":["s1",25.257,1.6],"S_115":["s1",27.157,1.749],"S_116":["s1",29.207,1.621],"S_117":["s1",31.128,1.344],"S_118":["s1",32.772,1.323],"S_119":["s1",34.395,1.728],"S_120":["s1",36.423,1.493],"S_121":["s1",38.216,1.685],"S_122":["s1",40.201,1.728],"S_123":["s1",42.229,1.536],"S_124":["s1",44.065,1.472],"S_125":["s1",45.837,1.707],"S_126":["s1",47.844,1.536],"S_127":["s1",49.68,1.579],"S_128":["s1",51.559,2.197],"S_129":["s1",54.056,1.6],"S_130":["s1",55.956,1.856],"S_131":["s1",58.112,1.536],"S_132":["s1",59.948,1.344],"S_133":["s1",61.592,1.536],"S_134":["s1",63.428,1.771],"S_135":["s1",65.499,1.28],"S_136":["s1",67.079,1.6],"S_137":["s1",68.979,1.365],"S_138":["s1",70.644,1.557],"S_139":["s1",72.501,1.451],"S_140":["s1",74.252,1.643],"S_141":["s1",76.195,1.579],"S_142":["s1",78.073,1.728],"S_143":["s1",80.101,1.6],"S_144":["s1",82.001,1.451],"S_145":["s1",83.752,1.387],"S_146":["s1",85.439,1.941],"S_147":["s1",87.68,1.323],"S_148":["s1",89.303,1.515],"S_149":["s1",91.117,1.344],"S_150":["s1",92.761,1.323],"S_151":["s1",94.384,1.472],"S_152":["s1",96.156,1.323],"S_153":["s1",97.779,1.472],"S_154":["s1",99.551,1.451],"S_155":["s1",101.301,1.387],"S_156":["s1",102.988,1.429],"S_157":["s1",104.717,1.536],"S_158":["s1",106.553,1.451],"S_159":["s1",108.304,1.621],"S_160":["s1",110.225,1.557],"S_161":["s1",112.083,1.643],"S_162":["s1",114.025,1.344],"S_163":["s1",115.669,1.429],"S_164":["s1",117.399,1.6],"S_165":["s1",119.299,1.259],"S_166":["s1",120.857,1.451],"S_167":["s1",122.608,1.451],"S_168":["s1",124.359,1.451],"S_169":["s1",126.109,1.429],"S_170":["s1",127.839,1.643],"S_171":["s1",129.781,1.536],"S_172":["s1",131.617,1.579],"S_173":["s1",133.496,1.643],"S_174":["s1",135.439,1.579],"S_175":["s1",137.317,1.493],"S_176":["s1",139.111,1.579],"S_177":["s1",140.989,1.472],"S_178":["s1",142.761,1.6],"S_179":["s1",144.661,1.323],"S_180":["s1",146.284,1.451],"S_181":["s1",148.035,1.451],"S_182":["s1",149.785,1.493],"S_183":["s1",151.579,1.323],"S_184":["s1",153.201,1.429],"S_185":["s1",154.931,1.365],"S_186":["s1",156.596,1.429],"S_187":["s1",158.325,1.6],"S_188":["s1",160.225,1.28],"S_189":["s1",161.805,1.557],"S_190":["s1",163.663,1.365],"S_191":["s1",165.328,1.493],"S_192":["s1",167.121,1.365],"S_193":["s1",168.787,1.536],"S_194":["s1",170.623,1.323],"S_195":["s1",172.245,1.451],"S_196":["s1",173.996,1.387],"S_197":["s1",175.683,1.387],"S_198":["s1",177.369,1.301],"S_199":["s1",178.971,1.515],"S_200":["s2",0.3,1.408],"S_201":["s2",2.008,1.408],"S_202":["s2",3.716,1.429],"S_203":["s2",5.445,1.28],"S_204":["s2",7.025,1.579],"S_205":["s2",8.904,1.323],"S_206":["s2",10.527,1.408],"S_207":["s2",12.235,1.408],"S_208":["s2",13.943,1.451],"S_209":["s2",15.693,1.685],"S_210":["s2",17.679,1.536],"S_211":["s2",19.515,1.515],"S_212":["s2",21.329,1.195],"S_213":["s2",22.824,1.088],"S_214":["s2",24.212,1.472],"S_215":["s2",25.984,1.963],"S_216":["s2",28.247,1.451],"S_217":["s2",29.997,1.621],"S_218":["s2",31.919,1.643],"S_219":["s2",33.861,1.28],"S_220":["s2",35.441,1.216],"S_221":["s2",36.957,1.301],"S_222":["s2",38.559,1.365],"S_223":["s2",40.224,1.28],"S_224":["s2",41.804,1.429],"S_225":["s2",43.533,1.579],"S_226":["s2",45.412,1.344],"S_227":["s2",47.056,1.579],"S_228":["s2",48.935,1.387],"S_229":["s2",50.621,1.301],"S_230":["s2",52.223,1.323],"S_231":["s2",53.845,1.195],"S_232":["s2",55.34,1.216],"S_233":["s2",56.856,1.579],"S_234":["s2",58.735,1.557],"S_235":["s2",60.592,1.472],"S_236":["s2",62.364,1.685],"S_237":["s2",64.349,1.237],"S_238":["s2",65.887,1.515],"S_239":["s2",67.701,1.557],"S_240":["s2",69.559,1.387],"S_241":["s2",71.245,1.387],"S_242":["s2",72.932,1.429],"S_243":["s2",74.661,1.749],"S_244":["s2",76.711,1.515],"S_245":["s2",78.525,1.408],"S_246":["s2",80.233,1.451],"S_247":["s2",81.984,1.515],"S_248":["s2",83.799,2.069],"S_249":["s2",86.168,1.557],"S_250":["s2",88.025,1.621],"S_251":["s2",89.947,1.515],"S_252":["s2",91.761,1.472],"S_253":["s2",93.533,1.771],"S_254":["s2",95.604,1.472],"S_255":["s2",97.376,1.557],"S_256":["s2",99.233,1.387],"S_257":["s2",100.92,1.515],"S_258":["s2",102.735,1.408],"S_259":["s2",104.443,1.493],"S_260":["s2",106.236,1.387],"S_261":["s2",107.923,1.365],"S_262":["s2",109.588,1.387],"S_263":["s2",111.275,1.493],"S_264":["s2",113.068,1.28],"S_265":["s2",114.648,1.557],"S_266":["s2",116.505,1.472],"S_267":["s2",118.277,1.643],"S_268":["s2",120.22,1.451],"S_269":["s2",121.971,1.344],"S_270":["s2",123.615,1.216],"S_271":["s2",125.131,1.493],"S_272":["s2",126.924,1.472],"S_273":["s2",128.696,1.472],"S_274":["s2",130.468,1.131],"S_275":["s2",131.899,1.515],"S_276":["s2",133.713,1.387],"S_277":["s2",135.4,1.429],"S_278":["s2",137.129,1.408],"S_279":["s2",138.837,1.429],"S_280":["s2",140.567,1.365],"S_281":["s2",142.232,1.472],"S_282":["s2",144.004,1.728],"S_283":["s2",146.032,1.557],"S_284":["s2",147.889,1.707],"S_285":["s2",149.896,1.493],"S_286":["s2",151.689,1.344],"S_287":["s2",153.333,1.579],"S_288":["s2",155.212,1.365],"S_289":["s2",156.877,1.579],"S_290":["s2",158.756,1.429],"S_291":["s2",160.485,1.451],"S_292":["s2",162.236,1.408],"S_293":["s2",163.944,1.515],"S_294":["s2",165.759,1.472],"S_295":["s2",167.531,1.323],"S_296":["s2",169.153,1.365],"S_297":["s2",170.819,1.301],"S_298":["s2",172.42,1.301],"S_299":["s2",174.021,1.813],"S_300":["s3",0.3,1.301],"S_301":["s3",1.901,1.429],"S_302":["s3",3.631,1.6],"S_303":["s3",5.531,1.323],"S_304":["s3",7.153,1.323],"S_305":["s3",8.776,1.472],"S_306":["s3",10.548,1.259],"S_307":["s3",12.107,1.323],"S_308":["s3",13.729,1.408],"S_309":["s3",15.437,1.728],"S_310":["s3",17.465,1.408],"S_311":["s3",19.173,1.301],"S_312":["s3",20.775,1.493],"S_313":["s3",22.568,1.387],"S_314":["s3",24.255,1.728],"S_315":["s3",26.283,1.685],"S_316":["s3",28.268,1.472],"S_317":["s3",30.04,1.472],"S_318":["s3",31.812,1.536],"S_319":["s3",33.648,1.429],"S_320":["s3",35.377,1.323],"S_321":["s3",37.0,1.429],"S_322":["s3",38.729,1.408],"S_323":["s3",40.437,1.173],"S_324":["s3",41.911,1.387],"S_325":["s3",43.597,1.408],"S_326":["s3",45.305,1.28],"S_327":["s3",46.885,1.195],"S_328":["s3",48.38,1.557],"S_329":["s3",50.237,1.557],"S_330":["s3",52.095,1.451],"S_331":["s3",53.845,1.6],"S_332":["s3",55.745,1.557],"S_333":["s3",57.603,1.323],"S_334":["s3",59.225,1.323],"S_335":["s3",60.848,1.365],"S_336":["s3",62.513,1.621],"S_337":["s3",64.435,1.643],"S_338":["s3",66.377,1.728],"S_339":["s3",68.405,1.579],"S_340":["s3",70.284,1.344],"S_341":["s3",71.928,1.344],"S_342":["s3",73.572,1.536],"S_343":["s3",75.408,1.685],"S_344":["s3",77.393,1.792],"S_345":["s3",79.485,1.323],"S_346":["s3",81.108,1.472],"S_347":["s3",82.88,1.472],"S_348":["s3",84.652,1.408],"S_349":["s3",86.36,1.664],"S_350":["s3",88.324,1.493],"S_351":["s3",90.117,1.301],"S_352":["s3",91.719,1.493],"S_353":["s3",93.512,1.643],"S_354":["s3",95.455,1.557],"S_355":["s3",97.312,1.429],"S_356":["s3",99.041,1.387],"S_357":["s3",100.728,1.664],"S_358":["s3",102.692,1.515],"S_359":["s3",104.507,1.856],"S_360":["s3",106.663,1.365],"S_361":["s3",108.328,1.429],"S_362":["s3",110.057,1.344],"S_363":["s3",111.701,1.536],"S_364":["s3",113.537,1.301],"S_365":["s3",115.139,1.387],"S_366":["s3",116.825,1.707],"S_367":["s3",118.832,1.707],"S_368":["s3",120.839,1.557],"S_369":["s3",122.696,1.792],"S_370":["s3",124.788,1.451],"S_371":["s3",126.539,1.579],"S_372":["s3",128.417,1.685],"S_373":["s3",130.403,1.515],"S_374":["s3",132.217,1.621],"S_375":["s3",134.139,1.685],"S_376":["s3",136.124,1.451],"S_377":["s3",137.875,1.451],"S_378":["s3",139.625,1.429],"S_379":["s3",141.355,1.557],"S_380":["s3",143.212,1.6],"S_381":["s3",145.112,1.28],"S_382":["s3",146.692,1.429],"S_383":["s3",148.421,1.621],"S_384":["s3",150.343,1.707],"S_385":["s3",152.349,1.493],"S_386":["s3",154.143,1.28],"S_387":["s3",155.723,1.365],"S_388":["s3",157.388,1.515],"S_389":["s3",159.203,1.557],"S_390":["s3",161.06,1.387],"S_391":["s3",162.747,1.493],"S_392":["s3",164.54,1.365],"S_393":["s3",166.205,1.472],"S_394":["s3",167.977,1.536],"S_395":["s3",169.813,1.344],"S_396":["s3",171.457,1.408],"S_397":["s3",173.165,1.6],"S_398":["s3",175.065,1.728],"S_399":["s3",177.093,1.259],"S_400":["s4",0.3,1.173],"S_401":["s4",1.773,1.579],"S_402":["s4",3.652,1.472],"S_403":["s4",5.424,1.365],"S_404":["s4",7.089,1.451],"S_405":["s4",8.84,1.557],"S_406":["s4",10.697,1.493],"S_407":["s4",12.491,1.707],"S_408":["s4",14.497,1.6],"S_409":["s4",16.397,1.387],"S_410":["s4",18.084,1.664],"S_411":["s4",20.048,1.536],"S_412":["s4",21.884,1.536],"S_413":["s4",23.72,1.728],"S_414":["s4",25.748,1.664],"S_415":["s4",27.712,1.323],"S_416":["s4",29.335,1.557],"S_417":["s4",31.192,1.515],"S_418":["s4",33.007,1.579],"S_419":["s4",34.885,1.472],"S_420":["s4",36.657,1.557],"S_421":["s4",38.515,1.749],"S_422":["s4",40.564,1.451],"S_423":["s4",42.315,1.6],"S_424":["s4",44.215,2.027],"S_425":["s4",46.541,1.771],"S_426":["s4",48.612,1.557],"S_427":["s4",50.469,1.429],"S_428":["s4",52.199,1.707],"S_429":["s4",54.205,1.621],"S_430":["s4",56.127,1.515],"S_431":["s4",57.941,1.707],"S_432":["s4",59.948,1.493],"S_433":["s4",61.741,1.707],"S_434":["s4",63.748,1.472],"S_435":["s4",65.52,1.493],"S_436":["s4",67.313,1.749],"S_437":["s4",69.363,1.408],"S_438":["s4",71.071,1.536],"S_439":["s4",72.907,1.408],"S_440":["s4",74.615,1.813],"S_441":["s4",76.728,1.472],"S_442":["s4",78.5,1.515],"S_443":["s4",80.315,1.429],"S_444":["s4",82.044,1.472],"S_445":["s4",83.816,1.493],"S_446":["s4",85.609,1.621],"S_447":["s4",87.531,1.792],"S_448":["s4",89.623,1.408],"S_449":["s4",91.331,1.6],"S_450":["s4",93.231,1.451],"S_451":["s4",94.981,1.472],"S_452":["s4",96.753,1.387],"S_453":["s4",98.44,1.387],"S_454":["s4",100.127,1.685],"S_455":["s4",102.112,1.621],"S_456":["s4",104.033,1.472],"S_457":["s4",105.805,1.536],"S_458":["s4",107.641,1.493],"S_459":["s4",109.435,1.429],"S_460":["s4",111.164,1.621],"S_461":["s4",113.085,1.536],"S_462":["s4",114.921,1.749],"S_463":["s4",116.971,1.6],"S_464":["s4",118.871,1.856],"S_465":["s4",121.027,1.365],"S_466":["s4",122.692,1.6],"S_467":["s4",124.592,1.408],"S_468":["s4",126.3,1.579],"S_469":["s4",128.179,1.557],"S_470":["s4",130.036,1.387],"S_471":["s4",131.723,1.344],"S_472":["s4",133.367,1.408],"S_473":["s4",135.075,1.429],"S_474":["s4",136.804,1.429],"S_475":["s4",138.533,1.536],"S_476":["s4",140.369,1.408],"S_477":["s4",142.077,1.323],"S_478":["s4",143.7,1.387],"S_479":["s4",145.387,1.387],"S_480":["s4",147.073,1.28],"S_481":["s4",148.653,1.408],"S_482":["s4",150.361,1.301],"S_483":["s4",151.963,1.408],"S_484":["s4",153.671,1.984],"S_485":["s4",155.955,1.301],"S_486":["s4",157.556,1.323],"S_487":["s4",159.179,1.621],"S_488":["s4",161.1,1.621],"S_489":["s4",163.021,1.301],"S_490":["s4",164.623,1.451],"S_491":["s4",166.373,1.835],"S_492":["s4",168.508,1.131],"S_493":["s4",169.939,1.408],"S_494":["s4",171.647,1.28],"S_495":["s4",173.227,1.493],"S_496":["s4",175.02,1.472],"S_497":["s4",176.792,1.365],"S_498":["s4",178.457,1.707],"S_499":["s4",180.464,1.771],"S_500":["s5",0.3,1.579],"S_501":["s5",2.179,1.728],"S_502":["s5",4.207,1.323],"S_503":["s5",5.829,1.429],"S_504":["s5",7.559,1.387],"S_505":["s5",9.245,1.429],"S_506":["s5",10.975,1.365],"S_507":["s5",12.64,1.536],"S_508":["s5",14.476,1.408],"S_509":["s5",16.184,1.387],"S_510":["s5",17.871,1.493],"S_511":["s5",19.664,1.536],"S_512":["s5",21.5,1.429],"S_513":["s5",23.229,1.557],"S_514":["s5",25.087,1.707],"S_515":["s5",27.093,1.323],"S_516":["s5",28.716,1.515],"S_517":["s5",30.531,1.621],"S_518":["s5",32.452,1.557],"S_519":["s5",34.309,1.877],"S_520":["s5",36.487,1.451],"S_521":["s5",38.237,1.792],"S_522":["s5",40.329,1.6],"S_523":["s5",42.229,1.621],"S_524":["s5",44.151,1.429],"S_525":["s5",45.88,1.472],"S_526":["s5",47.652,1.387],"S_527":["s5",49.339,1.6],"S_528":["s5",51.239,1.472],"S_529":["s5",53.011,1.664],"S_530":["s5",54.975,1.344],"S_531":["s5",56.619,1.6],"S_532":["s5",58.519,1.728],"S_533":["s5",60.547,1.323],"S_534":["s5",62.169,1.6],"S_535":["s5",64.069,1.536],"S_536":["s5",65.905,1.344],"S_537":["s5",67.549,1.301],"S_538":["s5",69.151,1.408],"S_539":["s5",70.859,1.429],"S_540":["s5",72.588,1.493],"S_541":["s5",74.381,1.408],"S_542":["s5",76.089,1.451],"S_543":["s5",77.84,1.6],"S_544":["s5",79.74,1.536],"S_545":["s5",81.576,1.323],"S_546":["s5",83.199,1.323],"S_547":["s5",84.821,1.643],"S_548":["s5",86.764,1.536],"S_549":["s5",88.6,1.301],"S_550":["s5",90.201,1.579],"S_551":["s5",92.08,1.301],"S_552":["s5",93.681,1.515],"S_553":["s5",95.496,1.792],"S_554":["s5",97.588,1.301],"S_555":["s5",99.189,1.387],"S_556":["s5",100.876,1.451],"S_557":["s5",102.627,1.429],"S_558":["s5",104.356,1.472],"S_559":["s5",106.128,1.536],"S_560":["s5",107.964,1.429],"S_561":["s5",109.693,1.728],"S_562":["s5",111.721,1.301],"S_563":["s5",113.323,1.365],"S_564":["s5",114.988,1.344],"S_565":["s5",116.632,1.451],"S_566":["s5",118.383,1.856],"S_567":["s5",120.539,1.429],"S_568":["s5",122.268,1.749],"S_569":["s5",124.317,1.92],"S_570":["s5",126.537,1.515],"S_571":["s5",128.352,1.579],"S_572":["s5",130.231,1.749],"S_573":["s5",132.28,1.813],"S_574":["s5",134.393,1.728],"S_575":["s5",136.421,1.408],"S_576":["s5",138.129,1.728],"S_577":["s5",140.157,1.749],"S_578":["s5",142.207,1.749],"S_579":["s5",144.256,1.344],"S_580":["s5",145.9,1.963],"S_581":["s5",148.163,1.579],"S_582":["s5",150.041,1.387],"S_583":["s5",151.728,1.579],"S_584":["s5",153.607,1.408],"S_585":["s5",155.315,1.643],"S_586":["s5",157.257,1.472],"S_587":["s5",159.029,1.835],"S_588":["s5",161.164,1.6],"S_589":["s5",163.064,1.685],"S_590":["s5",165.049,1.856],"S_591":["s5",167.205,1.557],"S_592":["s5",169.063,1.557],"S_593":["s5",170.92,1.493],"S_594":["s5",172.713,1.579],"S_595":["s5",174.592,1.664],"S_596":["s5",176.556,1.749],"S_597":["s5",178.605,1.6],"S_598":["s5",180.505,1.408],"S_599":["s5",182.213,1.621],"S_600":["s6",0.3,1.365],"S_601":["s6",1.965,1.707],"S_602":["s6",3.972,1.28],"S_603":["s6",5.552,1.493],"S_604":["s6",7.345,1.707],"S_605":["s6",9.352,1.323],"S_606":["s6",10.975,1.472],"S_607":["s6",12.747,1.856],"S_608":["s6",14.903,1.451],"S_609":["s6",16.653,1.344],"S_610":["s6",18.297,1.515],"S_611":["s6",20.112,1.685],"S_612":["s6",22.097,1.536],"S_613":["s6",23.933,1.579],"S_614":["s6",25.812,1.387],"S_615":["s6",27.499,1.557],"S_616":["s6",29.356,1.237],"S_617":["s6",30.893,1.536],"S_618":["s6",32.729,1.557],"S_619":["s6",34.587,1.92],"S_620":["s6",36.807,1.621],"S_621":["s6",38.728,1.579],"S_622":["s6",40.607,1.387],"S_623":["s6",42.293,1.472],"S_624":["s6",44.065,1.429],"S_625":["s6",45.795,1.301],"S_626":["s6",47.396,1.451],"S_627":["s6",49.147,1.344],"S_628":["s6",50.791,1.557],"S_629":["s6",52.648,1.472],"S_630":["s6",54.42,1.387],"S_631":["s6",56.107,1.472],"S_632":["s6",57.879,1.451],"S_633":["s6",59.629,1.451],"S_634":["s6",61.38,1.323],"S_635":["s6",63.003,1.771],"S_636":["s6",65.073,1.536],"S_637":["s6",66.909,1.451],"S_638":["s6",68.66,1.387],"S_639":["s6",70.347,1.408],"S_640":["s6",72.055,1.429],"S_641":["s6",73.784,1.387],"S_642":["s6",75.471,1.28],"S_643":["s6",77.051,1.429],"S_644":["s6",78.78,1.643],"S_645":["s6",80.723,1.451],"S_646":["s6",82.473,1.387],"S_647":["s6",84.16,1.387],"S_648":["s6",85.847,1.579],"S_649":["s6",87.725,1.323],"S_650":["s6",89.348,1.728],"S_651":["s6",91.376,1.472],"S_652":["s6",93.148,1.344],"S_653":["s6",94.792,1.323],"S_654":["s6",96.415,1.301],"S_655":["s6",98.016,1.429],"S_656":["s6",99.745,1.643],"S_657":["s6",101.688,1.387],"S_658":["s6",103.375,1.515],"S_659":["s6",105.189,1.387],"S_660":["s6",106.876,1.408],"S_661":["s6",108.584,1.429],"S_662":["s6",110.313,1.365],"S_663":["s6",111.979,1.323],"S_664":["s6",113.601,1.152],"S_665":["s6",115.053,1.685],"S_666":["s6",117.039,1.429],"S_667":["s6",118.768,1.664],"S_668":["s6",120.732,1.472],"S_669":["s6",122.504,1.387],"S_670":["s6",124.191,1.493],"S_671":["s6",125.984,1.515],"W_000":["w0",0.3,0.939],"W_001":["w0",1.539,1.131],"W_002":["w0",2.969,0.875],"W_003":["w0",4.144,0.96],"W_004":["w0",5.404,0.811],"W_005":["w0",6.515,0.896],"W_006":["w0",7.711,1.003],"W_007":["w0",9.013,0.981],"W_008":["w0",10.295,1.067],"W_009":["w0",11.661,0.981],"W_010":["w0",12.943,0.917],"W_011":["w0",14.16,0.939],"W_012":["w0",15.399,0.725],"W_013":["w0",16.424,1.109],"W_014":["w0",17.833,1.109],"W_015":["w0",19.243,0.917],"W_016":["w0",20.46,0.939],"W_017":["w0",21.699,1.024],"W_018":["w0",23.023,1.003],"W_019":["w0",24.325,0.917],"W_020":["w0",25.543,1.003],"W_021":["w0",26.845,0.896],"W_022":["w0",28.041,1.045],"W_023":["w0",29.387,0.853],"W_024":["w0",30.54,1.003],"W_025":["w0",31.843,0.768],"W_026":["w0",32.911,1.045],"W_027":["w0",34.256,0.981],"W_028":["w0",35.537,0.896],"W_029":["w0",36.733,0.875],"W_030":["w0",37.908,0.981],"W_031":["w0",39.189,0.704],"W_032":["w0",40.193,1.045],"W_033":["w0",41.539,0.853],"W_034":["w0",42.692,0.896],"W_035":["w0",43.888,0.832],"W_036":["w0",45.02,0.875],"W_037":["w0",46.195,0.875],"W_038":["w0",47.369,0.917],"W_039":["w0",48.587,0.832],"W_040":["w0",49.719,0.875],"W_041":["w0",50.893,0.811],"W_042":["w0",52.004,0.875],"W_043":["w0",53.179,0.875],"W_044":["w0",54.353,0.832],"W_045":["w0",55.485,0.981],"W_046":["w0",56.767,0.939],"W_047":["w0",58.005,0.811],"W_048":["w0",59.116,0.853],"W_049":["w0",60.269,1.045],"W_050":["w0",61.615,0.725],"W_051":["w0",62.64,0.96],"W_052":["w0",63.9,0.917],"W_053":["w0",65.117,0.875],"W_054":["w0",66.292,1.045],"W_055":["w0",67.637,0.896],"W_056":["w0",68.833,0.832],"W_057":["w0",69.965,0.832],"W_058":["w0",71.097,0.832],"W_059":["w0",72.229,0.789],"W_060":["w0",73.319,0.875],"W_061":["w0",74.493,0.917],"W_062":["w0",75.711,0.853],"W_063":["w0",76.864,0.811],"W_064":["w0",77.975,0.917],"W_065":["w0",79.192,0.747],"W_066":["w0",80.239,0.939],"W_067":["w0",81.477,1.003],"W_068":["w0",82.78,0.811],"W_069":["w0",83.891,0.896],"W_070":["w0",85.087,0.789],"W_071":["w0",86.176,0.832],"W_072":["w0",87.308,0.896],"W_073":["w0",88.504,0.811],"W_074":["w0",89.615,0.789],"W_075":["w0",90.704,0.811],"W_076":["w0",91.815,0.853],"W_077":["w0",92.968,0.896],"W_078":["w0",94.164,0.875],"W_079":["w0",95.339,0.896],"W_080":["w0",96.535,0.896],"W_081":["w0",97.731,0.853],"W_082":["w0",98.884,0.939],"W_083":["w0",100.123,0.896],"W_084":["w0",101.319,0.875],"W_085":["w0",102.493,0.789],"W_086":["w0",103.583,0.811],"W_087":["w0",104.693,0.939],"W_088":["w0",105.932,0.917],"W_089":["w0",107.149,1.024],"W_090":["w0",108.473,1.003],"W_091":["w0",109.776,0.96],"W_092":["w0",111.036,0.981],"W_093":["w0",112.317,0.811],"W_094":["w0",113.428,0.811],"W_095":["w0",114.539,0.981],"W_096":["w0",115.82,0.896],"W_097":["w0",117.016,0.939],"W_098":["w0",118.255,0.96],"W_099":["w0",119.515,0.832],"W_100":["w1",0.3,0.96],"W_101":["w1",1.56,1.045],"W_102":["w1",2.905,1.024],"W_103":["w1",4.229,0.768],"W_104":["w1",5.297,1.067],"W_105":["w1",6.664,0.96],"W_106":["w1",7.924,0.96],"W_107":["w1",9.184,0.896],"W_108":["w1",10.38,0.811],"W_109":["w1",11.491,0.96],"W_110":["w1",12.751,0.747],"W_111":["w1",13.797,0.853],"W_112":["w1",14.951,0.96],"W_113":["w1",16.211,0.853],"W_114":["w1",17.364,0.981],"W_115":["w1",18.645,1.003],"W_116":["w1",19.948,1.003],"W_117":["w1",21.251,0.811],"W_118":["w1",22.361,0.896],"W_119":["w1",23.557,1.003],"W_120":["w1",24.86,0.875],"W_121":["w1",26.035,1.003],"W_122":["w1",27.337,1.088],"W_123":["w1",28.725,0.939],"W_124":["w1",29.964,0.896],"W_125":["w1",31.16,1.024],"W_126":["w1",32.484,0.939],"W_127":["w1",33.723,0.917],"W_128":["w1",34.94,1.301],"W_129":["w1",36.541,0.981],"W_130":["w1",37.823,1.109],"W_131":["w1",39.232,0.939],"W_132":["w1",40.471,0.811],"W_133":["w1",41.581,0.939],"W_134":["w1",42.82,1.067],"W_135":["w1",44.187,0.747],"W_136":["w1",45.233,0.981],"W_137":["w1",46.515,0.832],"W_138":["w1",47.647,0.96],"W_139":["w1",48.907,0.939],"W_140":["w1",50.145,0.981],"W_141":["w1",51.427,0.917],"W_142":["w1",52.644,1.003],"W_143":["w1",53.947,0.96],"W_144":["w1",55.207,0.939],"W_145":["w1",56.445,0.811],"W_146":["w1",57.556,1.195],"W_147":["w1",59.051,0.832],"W_148":["w1",60.183,0.896],"W_149":["w1",61.379,0.875],"W_150":["w1",62.553,0.875],"W_151":["w1",63.728,0.875],"W_152":["w1",64.903,0.832],"W_153":["w1",66.035,0.875],"W_154":["w1",67.209,0.875],"W_155":["w1",68.384,0.811],"W_156":["w1",69.495,0.896],"W_157":["w1",70.691,0.896],"W_158":["w1",71.887,0.896],"W_159":["w1",73.083,1.003],"W_160":["w1",74.385,0.896],"W_161":["w1",75.581,1.003],"W_162":["w1",76.884,0.789],"W_163":["w1",77.973,0.875],"W_164":["w1",79.148,1.003],"W_165":["w1",80.451,0.853],"W_166":["w1",81.604,0.875],"W_167":["w1",82.779,0.917],"W_168":["w1",83.996,0.853],"W_169":["w1",85.149,0.853],"W_170":["w1",86.303,1.045],"W_171":["w1",87.648,0.896],"W_172":["w1",88.844,0.917],"W_173":["w1",90.061,0.917],"W_174":["w1",91.279,0.981],"W_175":["w1",92.56,0.853],"W_176":["w1",93.713,0.917],"W_177":["w1",94.931,0.896],"W_178":["w1",96.127,0.981],"W_179":["w1",97.408,0.917],"W_180":["w1",98.625,0.875],"W_181":["w1",99.8,0.853],"W_182":["w1",100.953,0.981],"W_183":["w1",102.235,0.853],"W_184":["w1",103.388,0.875],"W_185":["w1",104.563,0.832],"W_186":["w1",105.695,0.981],"W_187":["w1",106.976,1.003],"W_188":["w1",108.279,0.875],"W_189":["w1",109.453,0.939],"W_190":["w1",110.692,0.832],"W_191":["w1",111.824,0.875],"W_192":["w1",112.999,0.832],"W_193":["w1",114.131,0.939],"W_194":["w1",115.369,0.811],"W_195":["w1",116.48,0.917],"W_196":["w1",117.697,0.832],"W_197":["w1",118.829,0.896],"W_198":["w1",120.025,0.811],"W_199":["w1",121.136,0.896],"W_200":["w2",0.3,0.811],"W_201":["w2",1.411,0.853],"W_202":["w2",2.564,0.853],"W_203":["w2",3.717,0.811],"W_204":["w2",4.828,1.003],"W_205":["w2",6.131,0.832],"W_206":["w2",7.263,0.832],"W_207":["w2",8.395,0.789],"W_208":["w2",9.484,0.875],"W_209":["w2",10.659,0.981],"W_210":["w2",11.94,0.981],"W_211":["w2",13.221,0.875],"W_212":["w2",14.396,0.704],"W_213":["w2",15.4,0.704],"W_214":["w2",16.404,0.853],"W_215":["w2",17.557,1.195],"W_216":["w2",19.052,0.896],"W_217":["w2",20.248,0.917],"W_218":["w2",21.465,1.003],"W_219":["w2",22.768,0.789],"W_220":["w2",23.857,0.747],"W_221":["w2",24.904,0.811],"W_222":["w2",26.015,0.875],"W_223":["w2",27.189,0.725],"W_224":["w2",28.215,0.789],"W_225":["w2",29.304,0.96],"W_226":["w2",30.564,0.747],"W_227":["w2",31.611,0.896],"W_228":["w2",32.807,0.832],"W_229":["w2",33.939,0.768],"W_230":["w2",35.007,0.811],"W_231":["w2",36.117,0.789],"W_232":["w2",37.207,0.768],"W_233":["w2",38.275,0.981],"W_234":["w2",39.556,0.939],"W_235":["w2",40.795,0.832],"W_236":["w2",41.927,1.003],"W_237":["w2",43.229,0.832],"W_238":["w2",44.361,0.875],"W_239":["w2",45.536,0.917],"W_240":["w2",46.753,0.832],"W_241":["w2",47.885,0.875],"W_242":["w2",49.06,0.853],"W_243":["w2",50.213,1.088],"W_244":["w2",51.601,0.939],"W_245":["w2",52.84,0.853],"W_246":["w2",53.993,0.875],"W_247":["w2",55.168,0.917],"W_248":["w2",56.385,1.216],"W_249":["w2",57.901,0.96],"W_250":["w2",59.161,1.024],"W_251":["w2",60.485,0.853],"W_252":["w2",61.639,0.917],"W_253":["w2",62.856,1.152],"W_254":["w2",64.308,0.939],"W_255":["w2",65.547,0.981],"W_256":["w2",66.828,0.832],"W_257":["w2",67.96,0.917],"W_258":["w2",69.177,0.832],"W_259":["w2",70.309,0.939],"W_260":["w2",71.548,0.875],"W_261":["w2",72.723,0.875],"W_262":["w2",73.897,0.875],"W_263":["w2",75.072,0.832],"W_264":["w2",76.204,0.747],"W_265":["w2",77.251,0.981],"W_266":["w2",78.532,0.896],"W_267":["w2",79.728,1.003],"W_268":["w2",81.031,0.896],"W_269":["w2",82.227,0.747],"W_270":["w2",83.273,0.811],"W_271":["w2",84.384,0.981],"W_272":["w2",85.665,0.832],"W_273":["w2",86.797,0.875],"W_274":["w2",87.972,0.768],"W_275":["w2",89.04,0.917],"W_276":["w2",90.257,0.853],"W_277":["w2",91.411,0.896],"W_278":["w2",92.607,0.853],"W_279":["w2",93.76,0.832],"W_280":["w2",94.892,0.896],"W_281":["w2",96.088,0.875],"W_282":["w2",97.263,1.003],"W_283":["w2",98.565,0.939],"W_284":["w2",99.804,1.024],"W_285":["w2",101.128,0.896],"W_286":["w2",102.324,0.853],"W_287":["w2",103.477,0.875],"W_288":["w2",104.652,0.875],"W_289":["w2",105.827,0.981],"W_290":["w2",107.108,0.896],"W_291":["w2",108.304,0.853],"W_292":["w2",109.457,0.896],"W_293":["w2",110.653,0.96],"W_294":["w2",111.913,0.896],"W_295":["w2",113.109,0.811],"W_296":["w2",114.22,0.811],"W_297":["w2",115.331,0.768],"W_298":["w2",116.399,0.811],"W_299":["w2",117.509,1.088],"W_300":["w3",0.3,0.789],"W_301":["w3",1.389,0.939],"W_302":["w3",2.628,0.896],"W_303":["w3",3.824,0.789],"W_304":["w3",4.913,0.853],"W_305":["w3",6.067,0.917],"W_306":["w3",7.284,0.832],"W_307":["w3",8.416,0.747],"W_308":["w3",9.463,0.768],"W_309":["w3",10.531,1.003],"W_310":["w3",11.833,0.875],"W_311":["w3",13.008,0.811],"W_312":["w3",14.119,0.853],"W_313":["w3",15.272,0.853],"W_314":["w3",16.425,1.003],"W_315":["w3",17.728,0.939],"W_316":["w3",18.967,0.853],"W_317":["w3",20.12,0.875],"W_318":["w3",21.295,0.917],"W_319":["w3",22.512,0.789],"W_320":["w3",23.601,0.811],"W_321":["w3",24.712,0.853],"W_322":["w3",25.865,0.875],"W_323":["w3",27.04,0.853],"W_324":["w3",28.193,0.853],"W_325":["w3",29.347,0.896],"W_326":["w3",30.543,0.768],"W_327":["w3",31.611,0.853],"W_328":["w3",32.764,0.896],"W_329":["w3",33.96,0.875],"W_330":["w3",35.135,0.853],"W_331":["w3",36.288,0.939],"W_332":["w3",37.527,0.875],"W_333":["w3",38.701,0.789],"W_334":["w3",39.791,0.789],"W_335":["w3",40.88,0.747],"W_336":["w3",41.927,0.939],"W_337":["w3",43.165,0.981],"W_338":["w3",44.447,1.024],"W_339":["w3",45.771,0.981],"W_340":["w3",47.052,0.832],"W_341":["w3",48.184,0.811],"W_342":["w3",49.295,0.896],"W_343":["w3",50.491,1.003],"W_344":["w3",51.793,1.109],"W_345":["w3",53.203,0.875],"W_346":["w3",54.377,0.917],"W_347":["w3",55.595,0.939],"W_348":["w3",56.833,0.832],"W_349":["w3",57.965,0.96],"W_350":["w3",59.225,0.875],"W_351":["w3",60.4,0.811],"W_352":["w3",61.511,0.875],"W_353":["w3",62.685,0.981],"W_354":["w3",63.967,0.939],"W_355":["w3",65.205,0.832],"W_356":["w3",66.337,0.768],"W_357":["w3",67.405,1.003],"W_358":["w3",68.708,0.96],"W_359":["w3",69.968,1.109],"W_360":["w3",71.377,0.811],"W_361":["w3",72.488,0.896],"W_362":["w3",73.684,0.768],"W_363":["w3",74.752,0.896],"W_364":["w3",75.948,0.725],"W_365":["w3",76.973,0.832],"W_366":["w3",78.105,1.045],"W_367":["w3",79.451,1.024],"W_368":["w3",80.775,0.939],"W_369":["w3",82.013,1.067],"W_370":["w3",83.38,0.789],"W_371":["w3",84.469,0.875],"W_372":["w3",85.644,1.003],"W_373":["w3",86.947,0.832],"W_374":["w3",88.079,0.917],"W_375":["w3",89.296,1.024],"W_376":["w3",90.62,0.875],"W_377":["w3",91.795,0.96],"W_378":["w3",93.055,0.917],"W_379":["w3",94.272,0.896],"W_380":["w3",95.468,1.024],"W_381":["w3",96.792,0.789],"W_382":["w3",97.881,0.875],"W_383":["w3",99.056,0.96],"W_384":["w3",100.316,1.067],"W_385":["w3",101.683,0.939],"W_386":["w3",102.921,0.832],"W_387":["w3",104.053,0.811],"W_388":["w3",105.164,0.896],"W_389":["w3",106.36,0.875],"W_390":["w3",107.535,0.875],"W_391":["w3",108.709,0.96],"W_392":["w3",109.969,0.832],"W_393":["w3",111.101,0.832],"W_394":["w3",112.233,0.896],"W_395":["w3",113.429,0.832],"W_396":["w3",114.561,0.875],"W_397":["w3",115.736,0.981],"W_398":["w3",117.017,1.024],"W_399":["w3",118.341,0.789],"W_400":["w4",0.3,0.725],"W_401":["w4",1.325,0.939],"W_402":["w4",2.564,0.896],"W_403":["w4",3.76,0.811],"W_404":["w4",4.871,0.832],"W_405":["w4",6.003,1.003],"W_406":["w4",7.305,0.896],"W_407":["w4",8.501,1.045],"W_408":["w4",9.847,0.96],"W_409":["w4",11.107,0.853],"W_410":["w4",12.26,0.96],"W_411":["w4",13.52,0.939],"W_412":["w4",14.759,0.96],"W_413":["w4",16.019,1.045],"W_414":["w4",17.364,0.981],"W_415":["w4",18.645,0.811],"W_416":["w4",19.756,0.96],"W_417":["w4",21.016,0.939],"W_418":["w4",22.255,0.96],"W_419":["w4",23.515,0.875],"W_420":["w4",24.689,0.917],"W_421":["w4",25.907,1.045],"W_422":["w4",27.252,0.917],"W_423":["w4",28.469,0.939],"W_424":["w4",29.708,1.152],"W_425":["w4",31.16,1.088],"W_426":["w4",32.548,1.003],"W_427":["w4",33.851,0.875],"W_428":["w4",35.025,1.067],"W_429":["w4",36.392,0.981],"W_430":["w4",37.673,0.939],"W_431":["w4",38.912,0.96],"W_432":["w4",40.172,0.875],"W_433":["w4",41.347,0.981],"W_434":["w4",42.628,0.853],"W_435":["w4",43.781,0.981],"W_436":["w4",45.063,1.109],"W_437":["w4",46.472,0.939],"W_438":["w4",47.711,1.003],"W_439":["w4",49.013,0.853],"W_440":["w4",50.167,1.045],"W_441":["w4",51.512,0.875],"W_442":["w4",52.687,0.896],"W_443":["w4",53.883,0.853],"W_444":["w4",55.036,0.896],"W_445":["w4",56.232,0.981],"W_446":["w4",57.513,0.96],"W_447":["w4",58.773,1.088],"W_448":["w4",60.161,0.853],"W_449":["w4",61.315,0.981],"W_450":["w4",62.596,0.875],"W_451":["w4",63.771,0.981],"W_452":["w4",65.052,0.875],"W_453":["w4",66.227,0.875],"W_454":["w4",67.401,0.939],"W_455":["w4",68.64,0.981],"W_456":["w4",69.921,0.896],"W_457":["w4",71.117,0.896],"W_458":["w4",72.313,0.896],"W_459":["w4",73.509,0.875],"W_460":["w4",74.684,0.96],"W_461":["w4",75.944,0.939],"W_462":["w4",77.183,1.067],"W_463":["w4",78.549,1.045],"W_464":["w4",79.895,1.088],"W_465":["w4",81.283,0.832],"W_466":["w4",82.415,1.003],"W_467":["w4",83.717,0.917],"W_468":["w4",84.935,0.96],"W_469":["w4",86.195,0.939],"W_470":["w4",87.433,0.832],"W_471":["w4",88.565,0.811],"W_472":["w4",89.676,0.875],"W_473":["w4",90.851,0.896],"W_474":["w4",92.047,0.853],"W_475":["w4",93.2,0.96],"W_476":["w4",94.46,0.875],"W_477":["w4",95.635,0.811],"W_478":["w4",96.745,0.853],"W_479":["w4",97.899,0.917],"W_480":["w4",99.116,0.747],"W_481":["w4",100.163,0.811],"W_482":["w4",101.273,0.853],"W_483":["w4",102.427,0.811],"W_484":["w4",103.537,1.152],"W_485":["w4",104.989,0.811],"W_486":["w4",106.1,0.768],"W_487":["w4",107.168,1.003],"W_488":["w4",108.471,1.003],"W_489":["w4",109.773,0.747],"W_490":["w4",110.82,0.896],"W_491":["w4",112.016,1.067],"W_492":["w4",113.383,0.725],"W_493":["w4",114.408,0.875],"W_494":["w4",115.583,0.768],"W_495":["w4",116.651,0.811],"W_496":["w4",117.761,0.96],"W_497":["w4",119.021,0.896],"W_498":["w4",120.217,1.045],"W_499":["w4",121.563,1.045],"W_500":["w5",0.3,0.96],"W_501":["w5",1.56,1.045],"W_502":["w5",2.905,0.896],"W_503":["w5",4.101,0.896],"W_504":["w5",5.297,0.811],"W_505":["w5",6.408,0.875],"W_506":["w5",7.583,0.832],"W_507":["w5",8.715,0.939],"W_508":["w5",9.953,0.853],"W_509":["w5",11.107,0.811],"W_510":["w5",12.217,0.853],"W_511":["w5",13.371,0.896],"W_512":["w5",14.567,0.832],"W_513":["w5",15.699,0.939],"W_514":["w5",16.937,1.003],"W_515":["w5",18.24,0.789],"W_516":["w5",19.329,0.896],"W_517":["w5",20.525,1.003],"W_518":["w5",21.828,0.875],"W_519":["w5",23.003,1.152],"W_520":["w5",24.455,0.853],"W_521":["w5",25.608,1.088],"W_522":["w5",26.996,0.939],"W_523":["w5",28.235,0.96],"W_524":["w5",29.495,0.875],"W_525":["w5",30.669,0.832],"W_526":["w5",31.801,0.811],"W_527":["w5",32.912,0.96],"W_528":["w5",34.172,0.875],"W_529":["w5",35.347,1.003],"W_530":["w5",36.649,0.832],"W_531":["w5",37.781,1.024],"W_532":["w5",39.105,1.024],"W_533":["w5",40.429,0.811],"W_534":["w5",41.54,1.003],"W_535":["w5",42.843,0.853],"W_536":["w5",43.996,0.811],"W_537":["w5",45.107,0.789],"W_538":["w5",46.196,0.853],"W_539":["w5",47.349,0.875],"W_540":["w5",48.524,0.853],"W_541":["w5",49.677,0.832],"W_542":["w5",50.809,0.917],"W_543":["w5",52.027,1.024],"W_544":["w5",53.351,0.96],"W_545":["w5",54.611,0.832],"W_546":["w5",55.743,0.917],"W_547":["w5",56.96,1.024],"W_548":["w5",58.284,0.96],"W_549":["w5",59.544,0.768],"W_550":["w5",60.612,0.939],"W_551":["w5",61.851,0.811],"W_552":["w5",62.961,0.917],"W_553":["w5",64.179,1.045],"W_554":["w5",65.524,0.832],"W_555":["w5",66.656,0.875],"W_556":["w5",67.831,0.875],"W_557":["w5",69.005,0.875],"W_558":["w5",70.18,0.917],"W_559":["w5",71.397,0.939],"W_560":["w5",72.636,0.811],"W_561":["w5",73.747,0.981],"W_562":["w5",75.028,0.768],"W_563":["w5",76.096,0.853],"W_564":["w5",77.249,0.832],"W_565":["w5",78.381,0.896],"W_566":["w5",79.577,1.152],"W_567":["w5",81.029,0.875],"W_568":["w5",82.204,1.045],"W_569":["w5",83.549,1.152],"W_570":["w5",85.001,0.917],"W_571":["w5",86.219,1.045],"W_572":["w5",87.564,1.045],"W_573":["w5",88.909,1.067],"W_574":["w5",90.276,1.088],"W_575":["w5",91.664,0.875],"W_576":["w5",92.839,1.024],"W_577":["w5",94.163,1.109],"W_578":["w5",95.572,1.024],"W_579":["w5",96.896,0.832],"W_580":["w5",98.028,1.131],"W_581":["w5",99.459,0.981],"W_582":["w5",100.74,0.789],"W_583":["w5",101.829,1.003],"W_584":["w5",103.132,0.917],"W_585":["w5",104.349,0.981],"W_586":["w5",105.631,0.917],"W_587":["w5",106.848,1.109],"W_588":["w5",108.257,0.981],"W_589":["w5",109.539,1.024],"W_590":["w5",110.863,1.152],"W_591":["w5",112.315,0.896],"W_592":["w5",113.511,0.96],"W_593":["w5",114.771,0.939],"W_594":["w5",116.009,1.003],"W_595":["w5",117.312,1.003],"W_596":["w5",118.615,1.088],"W_597":["w5",120.003,0.981],"W_598":["w5",121.284,0.875],"W_599":["w5",122.459,1.024],"W_600":["w6",0.3,0.875],"W_601":["w6",1.475,0.96],"W_602":["w6",2.735,0.832],"W_603":["w6",3.867,0.853],"W_604":["w6",5.02,0.981],"W_605":["w6",6.301,0.832],"W_606":["w6",7.433,0.896],"W_607":["w6",8.629,1.109],"W_608":["w6",10.039,0.875],"W_609":["w6",11.213,0.811],"W_610":["w6",12.324,0.896],"W_611":["w6",13.52,1.045],"W_612":["w6",14.865,0.939],"W_613":["w6",16.104,0.896],"W_614":["w6",17.3,0.832],"W_615":["w6",18.432,0.917],"W_616":["w6",19.649,0.832],"W_617":["w6",20.781,0.875],"W_618":["w6",21.956,0.96],"W_619":["w6",23.216,1.195],"W_620":["w6",24.711,0.875],"W_621":["w6",25.885,0.939],"W_622":["w6",27.124,0.789],"W_623":["w6",28.213,0.853],"W_624":["w6",29.367,0.811],"W_625":["w6",30.477,0.789],"W_626":["w6",31.567,0.789],"W_627":["w6",32.656,0.789],"W_628":["w6",33.745,0.896],"W_629":["w6",34.941,0.939],"W_630":["w6",36.18,0.811],"W_631":["w6",37.291,0.853],"W_632":["w6",38.444,0.875],"W_633":["w6",39.619,0.811],"W_634":["w6",40.729,0.747],"W_635":["w6",41.776,1.003],"W_636":["w6",43.079,0.853],"W_637":["w6",44.232,0.832],"W_638":["w6",45.364,0.853],"W_639":["w6",46.517,0.832],"W_640":["w6",47.649,0.789],"W_641":["w6",48.739,0.853],"W_642":["w6",49.892,0.768],"W_643":["w6",50.96,0.832],"W_644":["w6",52.092,0.96],"W_645":["w6",53.352,0.853],"W_646":["w6",54.505,0.768],"W_647":["w6",55.573,0.789],"W_648":["w6",56.663,0.981],"W_649":["w6",57.944,0.768],"W_650":["w6",59.012,1.024],"W_651":["w6",60.336,0.896],"W_652":["w6",61.532,0.789],"W_653":["w6",62.621,0.768],"W_654":["w6",63.689,0.789],"W_655":["w6",64.779,0.832],"W_656":["w6",65.911,0.981],"W_657":["w6",67.192,0.832],"W_658":["w6",68.324,0.896],"W_659":["w6",69.52,0.811],"W_660":["w6",70.631,0.853],"W_661":["w6",71.784,0.811],"W_662":["w6",72.895,0.811],"W_663":["w6",74.005,0.811],"W_664":["w6",75.116,0.704],"W_665":["w6",76.12,1.003],"W_666":["w6",77.423,0.875],"W_667":["w6",78.597,0.96],"W_668":["w6",79.857,0.875],"W_669":["w6",81.032,0.832],"W_670":["w6",82.164,0.832],"W_671":["w6",83.296,0.896]}; // id -> [sprite, inicio, duración]
+const IDX = Object.fromEntries(WORDS.map((x,i) => [x.w, String(i).padStart(3,'0')]));
+let actx = null;
+const ctx = () => actx || (actx = new (window.AudioContext || window.webkitAudioContext)());
+const bufs = {}, loading = {};
+let playTok = 0, curSrc = null;
+['pointerdown','keydown','touchend'].forEach(e => addEventListener(e, () => { try { if (ctx().state !== 'running') ctx().resume(); } catch(_){} }, { passive:true }));
+function getBuf(sp){
+  if (bufs[sp]) return Promise.resolve(bufs[sp]);
+  return loading[sp] || (loading[sp] = fetch('audio/' + sp + '.mp3').then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+    .then(a => new Promise((res, rej) => ctx().decodeAudioData(a, res, rej))).then(b => (bufs[sp] = b)).catch(e => { delete loading[sp]; throw e; }));
+}
+function playOne(id, tok){
+  const c = CLIPS[id]; if (!c) return Promise.resolve();
+  return getBuf(c[0]).then(b => new Promise(res => {
+    if (tok !== playTok) return res();
+    const s = ctx().createBufferSource(); s.buffer = b; s.connect(ctx().destination);
+    s.onended = res; curSrc = s; s.start(0, Math.max(0, c[1] - 0.02), c[2] + 0.08);
+  }));
+}
+function stopAudio(){ playTok++; try { curSrc && curSrc.stop(); } catch(_){} try { speechSynthesis.cancel(); } catch(_){} }
+// ids: lista de clips; fb: texto para la voz del navegador si el audio no carga
+async function play(ids, fb, onend){
+  stopAudio(); const tok = playTok;
+  const btn = document.querySelector('.listen'); if (btn) btn.classList.add('speaking');
+  try { for (const id of ids){ if (tok !== playTok) break; await playOne(id, tok); } }
+  catch(e){ if (tok === playTok) await ttsFallback(fb); }
+  const b = document.querySelector('.listen'); if (b && tok === playTok) b.classList.remove('speaking');
+  if (tok === playTok && onend) onend();
+}
+function ttsFallback(text){ return new Promise(res => { try { const u = new SpeechSynthesisUtterance(text); u.lang = 'en-US'; u.rate = .85; u.onend = u.onerror = res; speechSynthesis.speak(u); } catch(e){ toast('No se pudo cargar el audio. Revisa la conexión a internet.'); res(); } }); }
+const letterId = c => 'L_' + (c === '-' ? 'hyphen' : c === ' ' ? 'space' : c.toLowerCase());
+const spellOut = w => w.split('').map(c => c === '-' ? 'hyphen' : c === ' ' ? 'space' : c.toUpperCase()).join(', ');
+const A = {
+  word: (x, slow) => play([(slow ? 'S_' : 'W_') + IDX[x.w]], x.w),
+  ask: x => play(S.settings.intro ? ['X_intro', 'W_' + IDX[x.w]] : ['W_' + IDX[x.w]], 'Your word is ' + x.w),
+  def: x => play(['D_' + IDX[x.w]], x.def),
+  sent: x => play(['E_' + IDX[x.w]], x.s),
+  spell: x => play(['W_' + IDX[x.w], ...x.w.split('').map(letterId), 'W_' + IDX[x.w]], x.w + '. ' + spellOut(x.w) + '. ' + x.w),
+  letter: c => { const id = letterId(c); if (CLIPS[id]) play([id], c); },
+};
+function preloadWords(){ [...new Set(Object.keys(CLIPS).filter(k => /^(W_|L_|X_)/.test(k)).map(k => CLIPS[k][0]))].forEach(sp => getBuf(sp).catch(() => {})); }
+
+/* ---------- micrófono (solo en la versión web fuera de Claude) ---------- */
+// Reconocimiento sin internet con Vosk, limitado a nombres de letras para que sea más preciso.
+const MIC_HOST = location.hostname.endsWith('github.io') || location.protocol === 'file:' || /[?&]mic=1/.test(location.search);
+const micOn = () => MIC_HOST && S.settings.mic !== false && !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) && MIC.state !== 'off';
+const ICON_MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+const LN = { a:'a',ay:'a',eh:'a',b:'b',be:'b',bee:'b',c:'c',see:'c',sea:'c',si:'c',d:'d',dee:'d',e:'e',ee:'e',f:'f',ef:'f',eff:'f',g:'g',gee:'g',h:'h',aitch:'h',i:'i',eye:'i',aye:'i',j:'j',jay:'j',k:'k',kay:'k',l:'l',el:'l',ell:'l',m:'m',em:'m',n:'n',en:'n',o:'o',oh:'o',owe:'o',p:'p',pee:'p',pea:'p',q:'q',queue:'q',cue:'q',r:'r',are:'r',ar:'r',s:'s',es:'s',ess:'s',t:'t',tee:'t',tea:'t',u:'u',you:'u',yew:'u',v:'v',vee:'v',w:'w',x:'x',ex:'x',y:'y',why:'y',z:'z',zee:'z',zed:'z' };
+const MIC = { state:'idle', model:null, rec:null, stream:null, ac:null, node:null, text:'', msg:'' };
+function micEnsure(){
+  if (MIC.model || MIC.state === 'loading' || MIC.state === 'off') return;
+  MIC.state = 'loading'; MIC.msg = '(solo la primera vez tarda, unos 40 MB)'; if (G) render();
+  const fail = () => { if (MIC.model) return; MIC.state = 'off'; toast('No se pudo preparar el micrófono. Puedes escribir las palabras.'); if (G) render(); };
+  setTimeout(fail, 120000);
+  const go = () => window.Vosk.createModel('model.tar.gz').then(m => { MIC.model = m; MIC.state = 'idle'; if (G) render(); })
+    .catch(() => { MIC.state = 'off'; toast('No se pudo preparar el micrófono. Puedes escribir las palabras.'); if (G) render(); });
+  if (window.Vosk) return go();
+  const s = document.createElement('script'); s.src = 'vosk.js'; s.onload = go;
+  s.onerror = () => { MIC.state = 'off'; if (G) render(); }; document.head.appendChild(s);
+}
+async function micStart(){
+  stopAudio();
+  try {
+    MIC.stream = MIC.stream || await navigator.mediaDevices.getUserMedia({ video:false, audio:{ echoCancellation:true, noiseSuppression:true, channelCount:1 } });
+  } catch(e){ toast('Permite el micrófono para deletrear con la voz.'); G.typeOnly = true; render(); return; }
+  MIC.ac = MIC.ac || new (window.AudioContext || window.webkitAudioContext)();
+  if (MIC.ac.state !== 'running') await MIC.ac.resume();
+  const w = G.cur.w.toLowerCase();
+  const grammar = [...Object.keys(LN), 'double', 'hyphen', 'dash', 'space', 'capital', ...w.split(/[\s-]+/), '[unk]'];
+  MIC.rec = new MIC.model.KaldiRecognizer(MIC.ac.sampleRate, JSON.stringify([...new Set(grammar)]));
+  MIC.text = '';
+  MIC.rec.on('partialresult', m => { const h = $('#heard'); if (h && m.result.partial) h.textContent = parseSpelling((MIC.text + ' ' + m.result.partial), w).toUpperCase().split('').join(' ') || 'Te estoy escuchando…'; });
+  MIC.rec.on('result', m => { MIC.text += ' ' + (m.result.text || ''); if (MIC.finishing){ MIC.finishing = false; micDone(); } });
+  const src = MIC.ac.createMediaStreamSource(MIC.stream);
+  MIC.node = MIC.ac.createScriptProcessor(4096, 1, 1);
+  MIC.node.onaudioprocess = ev => { try { MIC.rec && MIC.rec.acceptWaveform(ev.inputBuffer); } catch(_){} };
+  src.connect(MIC.node); MIC.node.connect(MIC.ac.destination); MIC.src = src;
+  MIC.state = 'rec'; render();
+}
+function micDisconnect(){ try { MIC.src && MIC.src.disconnect(); MIC.node && MIC.node.disconnect(); } catch(_){} MIC.node = MIC.src = null; }
+function micStop(){
+  if (MIC.state !== 'rec') return;
+  micDisconnect(); MIC.state = 'idle'; MIC.finishing = true;
+  const h = $('#heard'); if (h) h.textContent = 'Revisando…';
+  try { MIC.rec.retrieveFinalResult(); } catch(_){ MIC.finishing = false; micDone(); }
+  setTimeout(() => { if (MIC.finishing){ MIC.finishing = false; micDone(); } }, 2500);
+}
+function micAbort(){ micDisconnect(); MIC.finishing = false; try { MIC.rec && MIC.rec.remove(); } catch(_){} MIC.rec = null; if (MIC.state === 'rec') MIC.state = 'idle'; }
+function micDone(){
+  if (!G) return;
+  const heard = parseSpelling(MIC.text, G.cur.w.toLowerCase());
+  try { MIC.rec && MIC.rec.remove(); } catch(_){} MIC.rec = null;
+  if (G.phase === 'wrong'){
+    if (heard === norm(G.cur.w).replace(/ /g, '')){ sndOk(); toast('¡Ahora sí!'); nextWord(); }
+    else { G.relearnTries = (G.relearnTries || 0) + 1; render(); const h = $('#heard'); if (h) h.textContent = 'Escuché: ' + (heard.toUpperCase().split('').join(' ') || '(nada)'); A.spell(G.cur); }
+    return;
+  }
+  if (G.phase !== 'ask') return;
+  if (heard === norm(G.cur.w).replace(/ /g, '')) submit(G.cur.w);
+  else { G.heard = heard; G.phase = 'oral'; render(); }
+}
+// Convierte "balloon b a l l o o n balloon" en "balloon"
+function parseSpelling(text, word){
+  const wt = word.split(/[\s-]+/), n = wt.length;
+  let t = text.toLowerCase().split(/\s+/).filter(Boolean);
+  const at = i => wt.every((w, j) => t[i + j] === w);
+  while (t.length >= n && at(0)) t = t.slice(n);
+  while (t.length >= n && at(t.length - n)) t = t.slice(0, t.length - n);
+  let out = '';
+  for (let i = 0; i < t.length; i++){
+    const k = t[i];
+    if (k === 'double'){ const n = t[i+1]; if (n === 'you' || n === 'u' || n === 'yew'){ out += 'w'; i++; } else if (LN[n]){ out += LN[n] + LN[n]; i++; } continue; }
+    if (k === 'hyphen' || k === 'dash'){ out += '-'; continue; }
+    if (LN[k]) out += LN[k];
+  }
+  return out;
+}
+
+/* ---------- sonidos ---------- */
+function tone(seq){ try { let t = ctx().currentTime; const actx = ctx();
+  seq.forEach(([f,d,type]) => { const o = actx.createOscillator(), g = actx.createGain(); o.type = type||'sine'; o.frequency.value = f; g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.18,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+d); o.connect(g).connect(actx.destination); o.start(t); o.stop(t+d+.02); t += d*.8; }); } catch(e){} }
+const sndOk = () => tone([[660,.12],[880,.18]]);
+const sndBad = () => tone([[220,.22,'triangle'],[185,.28,'triangle']]);
+const sndWin = () => tone([[523,.14],[659,.14],[784,.14],[1047,.4]]);
+
+/* ---------- tiempo ---------- */
+let lastAct = Date.now(), sessionSec = 0, breakShown = 0;
+['pointerdown','keydown'].forEach(e => addEventListener(e, () => lastAct = Date.now(), { passive:true }));
+setInterval(() => {
+  if (document.hidden || !G || Date.now() - lastAct > 90000) return;
+  D().sec++; sessionSec++;
+  if (sessionSec % 30 === 0) save();
+  paintTimer();
+  const mins = Math.floor(D().sec/60);
+  if (D().sec === S.settings.goal*60) { celebrate(); showOverlay('¡Meta del día cumplida!', `Practicaste ${S.settings.goal} minutos hoy. ¡Eres una abeja trabajadora! Puedes seguir o descansar.`, 'Seguir jugando'); }
+  else if (sessionSec >= 1200 && Math.floor(sessionSec/1200) > breakShown) { breakShown = Math.floor(sessionSec/1200); showOverlay('Pausa de abeja', 'Llevas 20 minutos. Levántate, estírate y toma agua por 2 minutos. Tu cerebro guarda mejor las palabras con pausas.', 'Ya descansé'); }
+}, 1000);
+function paintTimer(){ const el = document.getElementById('tmin'); if (el) el.textContent = Math.floor(D().sec/60) + ' / ' + S.settings.goal + ' min'; }
+
+/* ---------- utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const shuffle = a => { a = [...a]; for (let i = a.length-1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; } return a; };
+const norm = s => s.trim().toLowerCase().replace(/\s+/g,' ').replace(/[‐-–—]/g,'-');
+const ICON_SPK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+function pronHTML(p){ return '<div class="pron" aria-label="Pronunciación fácil">' + p.split(/[-\s]+/).map(s => `<span class="syl${s === s.toUpperCase() && /[A-Z]/.test(s) ? ' st' : ''}">${esc(s.toLowerCase())}</span>`).join('') + '</div>'; }
+function pronText(p){ return p.split(/([-\s]+)/).map(s => /[A-Z]{1}/.test(s) && s === s.toUpperCase() ? `<b>${esc(s)}</b>` : esc(s.toLowerCase())).join(''); }
+function mask(s, w){ const stem = w.length > 4 ? w.slice(0, w.length - (/e$/.test(w) ? 1 : 0)) : w; return esc(s).replace(new RegExp(stem.replace(/[.*+?^${}()|[\]\\-]/g,'\\$&') + '[a-z]*','gi'), '_____'); }
+function toast(t){ const el = document.createElement('div'); el.className = 'toast'; el.textContent = t; el.setAttribute('role','status'); document.body.appendChild(el); setTimeout(() => el.remove(), 2600); }
+function showOverlay(title, text, btn){
+  const o = document.createElement('div'); o.className = 'overlay';
+  o.innerHTML = `<div class="card" role="dialog" aria-modal="true"><h2>${esc(title)}</h2><p>${esc(text)}</p><button class="btn primary big" id="ovok">${esc(btn)}</button></div>`;
+  document.body.appendChild(o); o.querySelector('#ovok').onclick = () => o.remove(); o.querySelector('#ovok').focus();
+}
+function align(a, b){
+  const n = a.length, m = b.length, T = Array.from({length:n+1}, (_,i) => Array.from({length:m+1}, (_,j) => i ? (j ? 0 : i) : j));
+  for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) T[i][j] = Math.min(T[i-1][j]+1, T[i][j-1]+1, T[i-1][j-1] + (a[i-1]===b[j-1]?0:1));
+  let i = n, j = m; const A = [], B = [];
+  while (i > 0 || j > 0){
+    if (i > 0 && j > 0 && T[i][j] === T[i-1][j-1] + (a[i-1]===b[j-1]?0:1)){ const ok = a[i-1]===b[j-1]; A.unshift([a[i-1],ok]); B.unshift([b[j-1],ok]); i--; j--; }
+    else if (i > 0 && T[i][j] === T[i-1][j]+1){ A.unshift([a[i-1],false]); i--; }
+    else { B.unshift([b[j-1],false]); j--; }
+  }
+  return { A, B };
+}
+
+/* ---------- confeti ---------- */
+function celebrate(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c = $('#confetti'); c.hidden = false; const x = c.getContext('2d'); c.width = innerWidth; c.height = innerHeight;
+  const cols = ['#F2A900','#1F9D63','#3A62D6','#D9483B','#FFE7A3'];
+  const ps = Array.from({length:140}, () => ({ x:Math.random()*c.width, y:-20-Math.random()*c.height*.5, vx:(Math.random()-.5)*3, vy:2+Math.random()*3, r:4+Math.random()*5, c:cols[Math.floor(Math.random()*cols.length)], a:Math.random()*6 }));
+  let t = 0; (function f(){ x.clearRect(0,0,c.width,c.height); ps.forEach(p => { p.x += p.vx; p.y += p.vy; p.a += .1; x.fillStyle = p.c; x.save(); x.translate(p.x,p.y); x.rotate(p.a); x.fillRect(-p.r,-p.r/2,p.r*2,p.r); x.restore(); }); if (++t < 170) requestAnimationFrame(f); else c.hidden = true; })();
+}
+
+/* ---------- juego ---------- */
+let G = null; // sesión activa
+let tab = 'home';
+function startGame(mode, opt = {}){
+  const lv = opt.level ?? S.sel;
+  let list;
+  if (mode === 'practice') list = LEVELS[lv];
+  else if (mode === 'letter') list = WORDS.filter(x => x.w[0].toLowerCase() === opt.letter).map(x => x.w);
+  else if (mode === 'errors') list = Object.entries(S.words).filter(([w,s]) => s.x > 0 && BYW[w]).sort((a,b) => (b[1].x - b[1].c*0.5) - (a[1].x - a[1].c*0.5)).slice(0, 25).map(([w]) => w);
+  else if (mode === 'exam') list = shuffle(LEVELS[lv]).slice(0, EXAM_LEN);
+  else if (mode === 'final') list = shuffle(WORDS.map(x => x.w)).slice(0, FINAL_LEN);
+  if (!list || !list.length){ toast(mode === 'errors' ? 'Todavía no hay errores para repasar. ¡Bien!' : 'No hay palabras aquí.'); return; }
+  G = { mode, level:lv, letter:opt.letter, list, order: shuffle(list), idx:0, turn:0, recent:[], retry:[], cur:null, phase:'ask', hints:{}, streak:0, examOk:0 };
+  sessionSec = sessionSec || 0;
+  nextWord();
+}
+function pickPractice(){
+  G.turn++;
+  const r = G.retry.findIndex(q => q.at <= G.turn && !G.recent.slice(-1).includes(q.w));
+  if (r >= 0) return G.retry.splice(r,1)[0].w;
+  const td = dayNum();
+  // repaso espaciado de palabras ya dominadas de otros niveles
+  if (G.mode === 'practice' && Math.random() < 0.18){
+    const due = WORDS.filter(x => LEVEL_OF[x.w] !== G.level && S.words[x.w]?.s && (S.words[x.w].due||0) <= td && !G.recent.includes(x.w));
+    if (due.length) return due[Math.floor(Math.random()*due.length)].w;
+  }
+  const notRecent = w => !G.recent.includes(w);
+  const active = G.list.filter(w => S.words[w]?.s && !mastered(w) && notRecent(w));
+  const unseen = G.order.filter(w => !S.words[w]?.s);
+  if (active.length < POOL && unseen.length) return unseen[0];
+  if (active.length){ const wts = active.map(w => 1 + (MASTER_BOX - (S.words[w].b||0)) * 2 + (S.words[w].x||0)); let t = Math.random()*wts.reduce((a,b)=>a+b,0); for (let i = 0; i < active.length; i++){ t -= wts[i]; if (t <= 0) return active[i]; } return active[0]; }
+  const dueHere = G.list.filter(w => (S.words[w]?.due||0) <= td && notRecent(w));
+  const pool = dueHere.length ? dueHere : G.list.filter(notRecent);
+  return (pool.length ? pool : G.list)[Math.floor(Math.random()*(pool.length||G.list.length))];
+}
+function nextWord(){
+  if (!G) return;
+  let w;
+  if (G.mode === 'exam' || G.mode === 'final'){ if (G.idx >= G.list.length) return finishExam(true); w = G.list[G.idx]; }
+  else w = pickPractice();
+  G.cur = BYW[w]; G.hints = {}; G.recent.push(w); if (G.recent.length > 3) G.recent.shift();
+  G.isNew = !S.words[w]?.s && G.mode !== 'exam' && G.mode !== 'final';
+  G.phase = 'ask'; G.typeOnly = false; G.relearnTries = 0;
+  if (micOn()) micEnsure();
+  render();
+  A.ask(G.cur);
+}
+function submit(val){
+  const x = G.cur, ans = norm(val), ok = ans === norm(x.w);
+  if (!ans) return;
+  const st = W(x.w), day = D(), exam = G.mode === 'exam' || G.mode === 'final';
+  st.s++; day.a++;
+  if (ok){
+    st.c++; day.o++;
+    const helped = G.hints.pron;
+    if (!helped) st.b = Math.min(st.b + 1, INTERVAL.length - 1);
+    st.due = dayNum() + INTERVAL[st.b];
+    if (st.b >= MASTER_BOX && !st.m){ st.m = 1; day.n++; G.newMaster = true; }
+    const pts = 10; S.points += pts; G.streak++; S.best = Math.max(S.best, G.streak);
+    G.phase = 'right'; G.gain = pts;
+    if (exam) G.examOk++;
+    sndOk();
+    setTimeout(() => A.word(x), 400);
+  } else {
+    st.x++; st.b = 0; st.due = dayNum(); G.streak = 0;
+    if (!exam) G.retry.push({ w:x.w, at:G.turn + 3 });
+    G.phase = 'wrong'; G.attempt = ans;
+    sndBad();
+    setTimeout(() => A.spell(x), 500);
+  }
+  save(); render();
+}
+function finishExam(passed){
+  const day = D(); day.e++;
+  if (passed){
+    day.p++;
+    if (G.mode === 'final'){ S.champion = true; }
+    else { S.passed[G.level] = true; if (G.level + 1 < NLEV){ S.unlocked = Math.max(S.unlocked, G.level + 1); S.sel = G.level + 1; } }
+    save(); sndWin(); celebrate();
+    const t = G.mode === 'final' ? '¡CAMPEONA DE LA COLMENA!' : `¡Nivel ${G.level+1} superado!`;
+    const msg = G.mode === 'final' ? `${FINAL_LEN} palabras seguidas, todas perfectas. Estás lista para el Spelling Bee.` : (G.level + 1 < NLEV ? `${EXAM_LEN} de ${EXAM_LEN} perfectas. Ahora eres ${LEVEL_NAMES[G.level+1]}.` : `Completaste los 8 niveles. Te espera la Gran Final.`);
+    G = null; tab = 'home'; render(); showOverlay(t, msg, '¡Sí!');
+  }
+}
+
+/* ---------- vistas ---------- */
+function ring(sec, goal){
+  const R = 40, C = 2*Math.PI*R, f = Math.min(1, sec/(goal*60));
+  return `<svg class="ring" viewBox="0 0 96 96" role="img" aria-label="${Math.floor(sec/60)} de ${goal} minutos hoy"><circle class="bgc" cx="48" cy="48" r="${R}"/><circle class="fg" cx="48" cy="48" r="${R}" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-f)}" transform="rotate(-90 48 48)"/><text x="48" y="50" text-anchor="middle" font-size="22">${Math.floor(sec/60)}</text><text x="48" y="66" text-anchor="middle" font-size="10">de ${goal} min</text></svg>`;
+}
+function vHome(){
+  const ls = levelStats(S.sel), canExam = ls.seen === ls.total && ls.m >= Math.ceil(ls.total*0.85);
+  const allPassed = S.passed.every(Boolean);
+  const cells = LEVELS.map((_,i) => { const st = levelStats(i), lock = i > S.unlocked; const cls = ['cell', S.passed[i] ? 'done' : '', i === S.unlocked && !S.passed[i] ? 'cur' : '', i === S.sel ? 'sel' : '', lock ? 'locked' : ''].join(' ');
+    return `<button class="${cls}" data-lv="${i}" ${lock ? 'aria-disabled="true"' : ''} aria-label="Nivel ${i+1} ${LEVEL_NAMES[i]}, ${st.pct}% dominado${lock ? ', bloqueado' : ''}"><div class="fill" style="height:${S.passed[i]?0:st.pct}%"></div><span><span class="n">${lock ? '🔒' : i+1}</span><span class="t">${LEVEL_NAMES[i]}</span><span class="p">${S.passed[i] ? 'superado' : st.m + '/' + st.total}</span></span></button>`; }).join('')
+    + `<button class="cell ${S.champion ? 'done' : ''} ${allPassed ? '' : 'locked'}" data-final="1" aria-label="Gran Final${allPassed ? '' : ', bloqueada'}"><span><span class="n">${S.champion ? '👑' : allPassed ? '★' : '🔒'}</span><span class="t">Gran Final</span><span class="p">${FINAL_LEN} seguidas</span></span></button>`;
+  const d = D(), acc = d.a ? Math.round(100*d.o/d.a) : 0;
+  return `
+  <section class="card" style="display:grid;gap:14px">
+    <div class="row" style="justify-content:space-between">
+      <div><div class="eyebrow">${S.name ? 'Hola, ' + esc(S.name) : 'Hola, abejita'}</div><h1 style="font-size:clamp(1.6rem,5vw,2.2rem)">Nivel ${S.sel+1}: ${LEVEL_NAMES[S.sel]}</h1>
+      <p class="muted" style="margin:4px 0 0">${ls.m} de ${ls.total} palabras dominadas. Para pasar de nivel: examen de ${EXAM_LEN} palabras seguidas sin un solo error.</p></div>
+    </div>
+    <div class="hive" role="group" aria-label="Niveles">${cells}</div>
+    <div class="row" style="justify-content:center">
+      <button class="btn primary big" data-go="practice">Practicar nivel ${S.sel+1}</button>
+      <button class="btn big ${canExam ? 'ok' : ''}" data-go="exam" ${canExam ? '' : 'disabled'}>Examen perfecto (${EXAM_LEN})</button>
+      ${allPassed ? `<button class="btn big ok" data-go="final">Gran Final</button>` : ''}
+    </div>
+    ${canExam ? '' : `<p class="muted" style="text-align:center;margin:0;font-size:.9rem">El examen se abre al dominar el 85% del nivel (${Math.ceil(ls.total*0.85)} palabras). Una palabra queda dominada al escribirla bien 3 veces seguidas.</p>`}
+  </section>
+  <div class="grid2">
+    <section class="card ringbox">${ring(d.sec, S.settings.goal)}<div><div class="eyebrow">Hoy</div><h3>${d.o} correctas de ${d.a}</h3><p class="muted" style="margin:2px 0 0">Precisión ${acc}% · ${d.n} palabras nuevas dominadas</p></div></section>
+    <section class="card" style="display:grid;gap:10px"><div class="eyebrow">Otras formas de practicar</div>
+      <div class="row"><button class="btn" data-go="errors">Repasar mis errores</button><button class="btn" data-tab="list">Practicar por letra</button></div>
+      <p class="muted" style="margin:0;font-size:.9rem">Puntos: <b>${S.points}</b> · Mejor racha: <b>${S.best}</b></p></section>
+  </div>`;
+}
+function vPlay(){
+  const x = G.cur, exam = G.mode === 'exam' || G.mode === 'final';
+  const title = G.mode === 'exam' ? `Examen nivel ${G.level+1}` : G.mode === 'final' ? 'Gran Final' : G.mode === 'letter' ? `Letra ${G.letter.toUpperCase()}` : G.mode === 'errors' ? 'Repaso de errores' : `Nivel ${G.level+1} · ${LEVEL_NAMES[G.level]}`;
+  const dots = exam ? `<div class="dots" aria-label="${G.idx} de ${G.list.length}">${G.list.map((_,i) => `<i class="${i < G.idx ? 'on' : i === G.idx ? 'now' : ''}"></i>`).join('')}</div>` : '';
+  const head = `<div class="row" style="justify-content:space-between"><button class="btn ghost" data-act="quit">← Salir</button><div class="chips"><span class="chip">Racha <b>${G.streak}</b></span><span class="chip">Puntos <b>${S.points}</b></span><span class="chip" id="tmin">${Math.floor(D().sec/60)} / ${S.settings.goal} min</span></div></div>
+  <div><div class="eyebrow">${esc(title)}</div>${dots}</div>`;
+  let body = '';
+  const hintRow = `<div class="hints"><button class="btn" data-act="hear">Repeat, please</button><button class="btn" data-act="slow">Slowly</button><button class="btn" data-act="def">Definition</button><button class="btn" data-act="sent">Sentence</button></div>`;
+  if (G.phase === 'ask' && micOn() && !G.typeOnly){
+    const st = MIC.state;
+    body = `${G.isNew ? '<div><span class="newtag">PALABRA NUEVA</span></div>' : ''}
+      <button class="listen" data-act="hear" aria-label="Escuchar la palabra otra vez">${ICON_SPK}</button>
+      ${hintRow}
+      <ol class="ritual"><li>Di la palabra.</li><li>Deletréala letra por letra, despacio y claro.</li><li>Vuelve a decir la palabra.</li></ol>
+      ${st === 'loading' ? `<p class="muted" style="margin:0">Preparando el oído de la abeja… ${MIC.msg || ''}</p>`
+        : `<button class="mic ${st === 'rec' ? 'on' : ''}" data-act="${st === 'rec' ? 'micstop' : 'micstart'}" aria-label="${st === 'rec' ? 'Terminé de deletrear' : 'Tocar para deletrear con la voz'}">${ICON_MIC}<span>${st === 'rec' ? 'Terminé' : 'Tocar y deletrear'}</span></button>`}
+      <div class="heard" id="heard" aria-live="polite">${st === 'rec' ? 'Te estoy escuchando…' : ''}</div>
+      `;
+  } else if (G.phase === 'oral'){
+    body = `<div class="fb bad" role="status"><h3>Escuché esto:</h3><div class="diff">${esc(G.heard.toUpperCase().split('').join(' ') || '(nada)')}</div>
+      <p style="margin:0">¿Eso fue lo que dijiste?</p></div>
+      <div class="row" style="justify-content:center"><button class="btn primary big" data-act="oralyes">Sí, eso dije</button><button class="btn big" data-act="oralno">No, repetir con el micrófono</button></div>`;
+  } else if (G.phase === 'ask'){
+    body = `${G.isNew ? '<div><span class="newtag">PALABRA NUEVA</span></div>' : ''}
+      <button class="listen" data-act="hear" aria-label="Escuchar la palabra otra vez">${ICON_SPK}</button>
+      ${hintRow}
+      <ol class="ritual"><li>Escucha bien.</li><li>Di la palabra en voz alta.</li><li>Deletréala en voz alta mientras la escribes.</li><li>Vuelve a decir la palabra.</li></ol>
+      <form id="f" autocomplete="off"><input class="spell" id="ans" aria-label="Escribe la palabra que escuchaste" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" placeholder="deletrea aquí"></form>
+      <button class="btn primary big" data-act="check">Revisar</button>`;
+  } else if (G.phase === 'right'){
+    body = `<div class="fb ok" role="status"><h3>${G.newMaster ? '¡Palabra dominada!' : ['¡Perfecto!','¡Excelente!','¡Así se hace!','¡Muy bien!'][G.turn % 4]} +${G.gain}</h3>
+      <div class="word">${esc(x.w)}</div>${pronHTML(x.p)}
+      ${/[A-Z]/.test(x.w[0]) ? '<p style="margin:0">Se escribe con mayúscula al inicio.</p>' : ''}${x.w.includes(' ') ? '<p style="margin:0">Son dos palabras separadas.</p>' : ''}</div>
+      <div class="row" style="justify-content:center"><button class="btn" data-act="hear">Escuchar</button><button class="btn" data-act="spell">Deletrear</button><button class="btn primary big" data-act="next">Siguiente →</button></div>`;
+    G.newMaster = false;
+  } else if (G.phase === 'wrong'){
+    const { A, B } = align(G.attempt, norm(x.w));
+    const mine = A.map(([c,ok]) => `<span class="${ok ? 'g' : 'x'}">${esc(c)}</span>`).join('');
+    const right = B.map(([c,ok]) => `<span class="${ok ? 'g' : 'm'}">${esc(c)}</span>`).join('');
+    body = `<div class="fb bad" role="status"><h3>${exam ? `Racha rota en ${G.examOk} de ${G.list.length}` : 'Casi. ¡Vamos a aprenderla!'}</h3>
+      <div><div class="eyebrow" style="color:var(--muted)">Tu respuesta</div><div class="diff">${mine}</div></div>
+      <div><div class="eyebrow" style="color:var(--muted)">Se escribe</div><div class="diff">${right}</div></div>
+      ${pronHTML(x.p)}<p style="margin:0" class="muted">${esc(x.def)}</p></div>
+      <div class="row" style="justify-content:center"><button class="btn" data-act="hear">Escuchar</button><button class="btn" data-act="spell">Deletrear</button></div>
+      ${exam ? `<p style="margin:0">El examen pide ${G.list.length} perfectas seguidas. ¡Tú puedes! Vuelve a intentarlo con palabras nuevas.</p><div class="row" style="justify-content:center"><button class="btn primary big" data-act="retryexam">Intentar de nuevo</button><button class="btn" data-act="quit">Practicar más</button></div>`
+             : micOn() ? `<p style="margin:0">Escúchala y deletréala tú en voz alta para continuar:</p>
+               <button class="mic ${MIC.state === 'rec' ? 'on' : ''}" data-act="${MIC.state === 'rec' ? 'micstop' : 'micstart'}">${ICON_MIC}<span>${MIC.state === 'rec' ? 'Terminé' : 'Tocar y deletrear'}</span></button>
+               <div class="heard" id="heard" aria-live="polite"></div>
+               ${G.relearnTries ? '<button class="btn ghost" data-act="next">Continuar</button>' : ''}`
+             : `<p style="margin:0">Escríbela bien una vez para continuar:</p><form id="f" autocomplete="off"><input class="spell" id="copy" aria-label="Escribe la palabra correcta" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></form>`}`;
+  }
+  return `<section class="card stage">${head}${body}</section>`;
+}
+function vList(){
+  const L = listLetter;
+  const ws = WORDS.filter(x => x.w[0].toLowerCase() === L);
+  const btns = 'abcdefghijklmnopqrstuvwxyz'.split('').map(c => `<button data-letter="${c}" aria-pressed="${c===L}" ${WORDS.some(x=>x.w[0].toLowerCase()===c)?'':'disabled'}>${c.toUpperCase()}</button>`).join('');
+  const items = ws.map(x => { const s = S.words[x.w]; const st = !s?.s ? ['n','nueva'] : mastered(x.w) ? ['m','dominada'] : (s.x > s.c ? ['h','difícil'] : ['l','aprendiendo']);
+    return `<div class="wi"><button class="say" data-say="${esc(x.w)}" aria-label="Escuchar ${esc(x.w)}">${ICON_SPK}</button><div style="min-width:0"><div class="w">${esc(x.w)}</div><div class="pp">${pronText(x.p)}</div><div class="d">${esc(x.def)} · nivel ${LEVEL_OF[x.w]+1}</div></div><div style="display:grid;gap:6px;justify-items:end"><span class="state ${st[0]}">${st[1]}</span><button class="btn" style="padding:4px 10px;font-size:.8rem" data-spell="${esc(x.w)}">Deletrear</button></div></div>`; }).join('');
+  return `<section class="card" style="display:grid;gap:14px">
+    <div><div class="eyebrow">${WORDS.length} palabras de la lista de 4.º grado</div><h2>Escucha y aprende</h2><p class="muted" style="margin:4px 0 0">Toca la bocina para oír cada palabra. Las sílabas en <b style="color:var(--honey-deep)">MAYÚSCULA</b> se dicen más fuerte.</p></div>
+    <div class="letters" role="group" aria-label="Letra">${btns}</div>
+    <div class="row"><button class="btn primary" data-go="letter">Practicar la letra ${L.toUpperCase()} (${ws.length})</button><button class="btn" data-act="sayall">Escuchar todas</button></div>
+    <div class="wl">${items}</div></section>`;
+}
+let listLetter = 'a', sayAll = false;
+function last14(){ const out = []; for (let i = 13; i >= 0; i--){ const d = new Date(); d.setDate(d.getDate()-i); const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); out.push([k, S.days[k] || {sec:0,a:0,o:0,n:0,e:0,p:0}]); } return out; }
+function streakDays(){ let n = 0; const d = new Date(); for (;;){ const k = d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); const v = S.days[k]; if (v && v.sec >= 60) n++; else if (n || k !== today()) break; d.setDate(d.getDate()-1); if (n > 400) break; } return n; }
+function reportData(){
+  const days = Object.values(S.days), totSec = days.reduce((a,d)=>a+d.sec,0), totA = days.reduce((a,d)=>a+d.a,0), totO = days.reduce((a,d)=>a+d.o,0);
+  const mast = WORDS.filter(x => mastered(x.w)).length, seen = WORDS.filter(x => S.words[x.w]?.s).length;
+  const played = days.filter(d => d.sec >= 60).length;
+  const hard = Object.entries(S.words).filter(([w,s]) => s.x > 0 && BYW[w]).sort((a,b) => b[1].x - a[1].x || a[1].c - b[1].c).slice(0, 15);
+  const l14 = last14(), recentMast = l14.slice(-7).reduce((a,[,d])=>a+d.n,0);
+  const left = WORDS.length - mast, eta = recentMast ? Math.ceil(left / (recentMast/7)) : null;
+  return { totSec, totA, totO, mast, seen, played, hard, l14, eta, acc: totA ? Math.round(100*totO/totA) : 0, streak: streakDays() };
+}
+function vReport(){
+  const r = reportData(), goal = S.settings.goal;
+  const H = 150, bw = 26, gap = 10, maxM = Math.max(goal, ...r.l14.map(([,d]) => d.sec/60)), sx = i => 34 + i*(bw+gap), sy = m => 10 + (H - 10) * (1 - m/maxM);
+  const ticks = [0, Math.round(maxM/2), Math.round(maxM)];
+  const bars = r.l14.map(([k,d],i) => { const m = d.sec/60; return `<rect class="b ${m >= goal ? 'full' : ''}" x="${sx(i)}" y="${sy(m)}" width="${bw}" height="${Math.max(0, H - sy(m))}" rx="4"><title>${k}: ${Math.round(m)} min, ${d.o}/${d.a} correctas</title></rect><text x="${sx(i)+bw/2}" y="${H+16}" text-anchor="middle">${k.slice(8)}</text>${d.a ? `<text x="${sx(i)+bw/2}" y="${sy(m)-4}" text-anchor="middle">${Math.round(m)}</text>` : ''}`; }).join('');
+  const chart = `<svg class="bars" width="${34 + 14*(bw+gap)}" height="${H+24}" viewBox="0 0 ${34 + 14*(bw+gap)} ${H+24}" role="img" aria-label="Minutos por día, últimos 14 días">${ticks.map(t => `<line class="grid" x1="30" x2="${34+14*(bw+gap)}" y1="${sy(t)}" y2="${sy(t)}"/><text x="26" y="${sy(t)+4}" text-anchor="end">${t}</text>`).join('')}<line class="goal" x1="30" x2="${34+14*(bw+gap)}" y1="${sy(goal)}" y2="${sy(goal)}"/>${bars}</svg>`;
+  const lv = LEVELS.map((_,i) => { const s = levelStats(i); return `<div class="lvlbar"><span><b>${i+1}</b> ${LEVEL_NAMES[i]}</span><div class="track"><i class="${S.passed[i]?'ok':''}" style="width:${S.passed[i]?100:s.pct}%"></i></div><span class="muted" style="text-align:right;font-variant-numeric:tabular-nums">${S.passed[i] ? 'superado' : s.pct + '%'}</span></div>`; }).join('');
+  const az = 'abcdefghijklmnopqrstuvwxyz'.split('').filter(c => WORDS.some(x => x.w[0].toLowerCase() === c)).map(c => { const ws = WORDS.filter(x => x.w[0].toLowerCase() === c), m = ws.filter(x => mastered(x.w)).length, p = m/ws.length; return `<div style="background:color-mix(in srgb,var(--ok) ${Math.round(p*70)}%,var(--sunk))">${c.toUpperCase()}<small>${m}/${ws.length}</small></div>`; }).join('');
+  const hard = r.hard.length ? `<div class="tbl"><table class="t"><thead><tr><th>Palabra</th><th>Así la escribe mal</th><th style="text-align:right">Errores</th><th style="text-align:right">Aciertos</th></tr></thead><tbody>${r.hard.map(([w,s]) => `<tr><td><b style="font-family:var(--letter)">${esc(w)}</b></td><td class="muted">${esc(BYW[w].p.toLowerCase())}</td><td class="n">${s.x}</td><td class="n">${s.c}</td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">Aún no hay errores registrados.</p>';
+  return `<section class="card" style="display:grid;gap:16px">
+    <div class="row" style="justify-content:space-between"><div><div class="eyebrow">Para papá y mamá</div><h2>Reporte de avance${S.name ? ' de ' + esc(S.name) : ''}</h2></div><button class="btn" data-act="copyrep">Copiar resumen</button></div>
+    <div class="kpis">
+      <div class="kpi"><div class="v">${r.mast}<span class="muted" style="font-size:1rem">/${WORDS.length}</span></div><div class="k">palabras dominadas</div></div>
+      <div class="kpi"><div class="v">${S.passed.filter(Boolean).length}<span class="muted" style="font-size:1rem">/${NLEV}</span></div><div class="k">niveles superados${S.champion ? ' · Campeona' : ''}</div></div>
+      <div class="kpi"><div class="v">${r.acc}%</div><div class="k">precisión total (${r.totO}/${r.totA})</div></div>
+      <div class="kpi"><div class="v">${Math.round(r.totSec/60)}</div><div class="k">minutos en total · ${r.played} días</div></div>
+      <div class="kpi"><div class="v">${r.streak}</div><div class="k">días seguidos jugando</div></div>
+      <div class="kpi"><div class="v">${r.eta ?? '—'}</div><div class="k">días estimados para dominar todo (ritmo de 7 días)</div></div>
+    </div>
+    <div><h3>Minutos por día</h3><p class="muted" style="margin:2px 0 8px;font-size:.9rem">Últimos 14 días. Línea roja: meta de ${goal} min. Verde: meta cumplida.</p><div class="chart">${chart}</div></div>
+    <div style="display:grid;gap:8px"><h3>Niveles</h3>${lv}</div>
+    <div style="display:grid;gap:8px"><h3>Por letra</h3><p class="muted" style="margin:0;font-size:.9rem">Más verde = más palabras dominadas de esa letra.</p><div class="az">${az}</div></div>
+    <div style="display:grid;gap:8px"><h3>Palabras más difíciles</h3><p class="muted" style="margin:0;font-size:.9rem">Practíquenlas juntos en voz alta: digan la palabra, deletréenla y vuelvan a decirla, como en el concurso.</p>${hard}</div>
+    <p class="sync" id="sync"></p>
+  </section>`;
+}
+function summaryText(){
+  const r = reportData(), l7 = r.l14.slice(-7);
+  return `Reporte Spelling Bee${S.name ? ' – ' + S.name : ''} (${today()})
+Palabras dominadas: ${r.mast} de ${WORDS.length}
+Niveles superados: ${S.passed.filter(Boolean).length} de ${NLEV}${S.champion ? ' + Gran Final' : ''} (nivel actual: ${S.unlocked+1} ${LEVEL_NAMES[S.unlocked]})
+Precisión total: ${r.acc}% (${r.totO}/${r.totA})
+Tiempo total: ${Math.round(r.totSec/60)} min en ${r.played} días; racha de ${r.streak} días
+Últimos 7 días: ${l7.map(([k,d]) => k.slice(5) + ' ' + Math.round(d.sec/60) + 'min').join(', ')}
+Más difíciles: ${r.hard.slice(0,10).map(([w,s]) => w + ' (' + s.x + ')').join(', ') || 'ninguna'}`;
+}
+function vSettings(){
+  return `<section class="card" style="display:grid;gap:16px;max-width:560px">
+    <h2>Ajustes</h2>
+    <label class="f">Nombre de la jugadora<input id="sname" value="${esc(S.name)}" placeholder="Ej. Sofía" maxlength="30"></label>
+    <div style="display:grid;gap:6px"><b>Sonido</b><p class="muted" style="margin:0;font-size:.9rem">Las palabras, definiciones y oraciones vienen grabadas con voz en inglés de Estados Unidos. Si no se oye, sube el volumen de la tablet.</p>
+    <div class="row"><button class="btn" data-act="testvoice">Probar sonido</button></div></div>
+    <label class="f" style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="sintro" ${S.settings.intro ? 'checked' : ''} style="width:22px;height:22px"> Decir "Your word is…" como en el concurso</label>
+    ${MIC_HOST ? `<label class="f" style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="smic" ${S.settings.mic !== false ? 'checked' : ''} style="width:22px;height:22px"> Deletrear con la voz (micrófono)</label>` : ''}
+    <label class="f" style="display:flex;gap:10px;align-items:center"><input type="checkbox" id="secho" ${S.settings.echo !== false ? 'checked' : ''} style="width:22px;height:22px"> Decir cada letra en voz alta mientras escribe</label>
+    <label class="f">Meta diaria (minutos)<input type="number" id="sgoal" min="10" max="120" step="5" value="${S.settings.goal}"></label>
+    <div style="display:grid;gap:8px;border-top:2px solid var(--line);padding-top:14px"><b>Borrar progreso</b><p class="muted" style="margin:0;font-size:.9rem">Borra niveles, palabras dominadas y el historial de días. No se puede deshacer.</p>
+      <div class="row"><button class="btn" data-act="reset1">Borrar todo…</button><span id="resetc" hidden><button class="btn" style="background:var(--bad);color:#fff" data-act="reset2">Sí, borrar todo</button></span></div></div>
+    <p class="sync" id="sync"></p>
+  </section>`;
+}
+function render(){
+  document.querySelectorAll('nav.tabs button').forEach(b => b.setAttribute('aria-current', !G && b.dataset.tab === tab ? 'page' : 'false'));
+  const app = $('#app');
+  app.innerHTML = G ? vPlay() : tab === 'list' ? vList() : tab === 'report' ? vReport() : tab === 'settings' ? vSettings() : vHome();
+  paintSync();
+  const inp = $('#ans') || $('#copy'); if (inp) setTimeout(() => inp.focus(), 30);
+  if (G && (G.phase === 'right')) setTimeout(() => $('[data-act="next"]')?.focus(), 30);
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', e => {
+  const t = e.target.closest('button'); if (!t || t.disabled) return;
+  if (t.dataset.tab){ G = null; stopAudio(); tab = t.dataset.tab; render(); scrollTo(0,0); return; }
+  if (t.dataset.lv !== undefined){ const i = +t.dataset.lv; if (i <= S.unlocked){ S.sel = i; save(); render(); } else toast('Supera el examen del nivel anterior para abrir este.'); return; }
+  if (t.dataset.final){ if (S.passed.every(Boolean)) startGame('final'); else toast('La Gran Final se abre al superar los 8 niveles.'); return; }
+  if (t.dataset.go){ startGame(t.dataset.go, { letter:listLetter }); scrollTo(0,0); return; }
+  if (t.dataset.letter){ listLetter = t.dataset.letter; sayAll = false; render(); return; }
+  if (t.dataset.say){ sayAll = false; A.word(BYW[t.dataset.say]); return; }
+  if (t.dataset.spell){ sayAll = false; A.spell(BYW[t.dataset.spell]); return; }
+  const a = t.dataset.act, x = G?.cur;
+  if (a === 'quit'){ G = null; stopAudio(); tab = 'home'; render(); }
+  else if (a === 'hear') A.word(x);
+  else if (a === 'slow') A.word(x, true);
+  else if (a === 'spell') A.spell(x);
+  else if (a === 'def') A.def(x);
+  else if (a === 'sent') A.sent(x);
+  else if (a === 'micstart') micStart();
+  else if (a === 'micstop') micStop();
+  else if (a === 'typeinstead'){ micAbort(); G.typeOnly = true; render(); }
+  else if (a === 'oralyes') submit(G.heard || '?');
+  else if (a === 'oralno'){ G.phase = 'ask'; render(); toast('Habla despacio y claro, una letra a la vez'); }
+  else if (a === 'check'){ const v = $('#ans')?.value || ''; if (v.trim()) submit(v); else $('#ans')?.focus(); }
+  else if (a === 'next'){ if (G.mode === 'exam' || G.mode === 'final') G.idx++; nextWord(); }
+  else if (a === 'retryexam'){ startGame(G.mode, { level:G.level }); }
+  else if (a === 'sayall'){ const ws = WORDS.filter(w => w.w[0].toLowerCase() === listLetter); let i = 0; sayAll = true; const go = () => { if (!sayAll || i >= ws.length || tab !== 'list' || G) return; const x = ws[i++]; play(['W_' + IDX[x.w]], x.w, () => setTimeout(go, 600)); }; go(); }
+  else if (a === 'testvoice') play(['X_intro', 'W_' + IDX['encyclopedia']], 'Your word is encyclopedia');
+  else if (a === 'copyrep'){ const txt = summaryText(); navigator.clipboard?.writeText(txt).then(() => toast('Resumen copiado'), () => fallbackCopy(txt)) ?? fallbackCopy(txt); }
+  else if (a === 'reset1'){ $('#resetc').hidden = false; }
+  else if (a === 'reset2'){ const keep = S.settings, name = S.name; S = blank(); S.settings = keep; S.name = name; save(); pushRemote(); toast('Progreso borrado'); render(); }
+});
+function fallbackCopy(txt){ const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'width:100%;min-height:160px'; $('#app').prepend(ta); ta.select(); toast('Selecciona y copia el texto'); }
+document.addEventListener('submit', e => {
+  e.preventDefault();
+  if (!G) return;
+  if (G.phase === 'ask'){ const v = $('#ans').value; if (v.trim()) submit(v); }
+  else if (G.phase === 'wrong'){ const c = $('#copy'); if (norm(c.value) === norm(G.cur.w)){ sndOk(); nextWord(); } else { c.value = ''; c.placeholder = 'mira arriba y cópiala'; A.word(G.cur); } }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && G && G.phase === 'right' && e.target.tagName !== 'BUTTON'){ e.preventDefault(); $('[data-act="next"]')?.click(); } });
+document.addEventListener('input', e => {
+  const id = e.target.id;
+  if (id === 'ans' && S.settings.echo !== false && e.data && e.data.length === 1 && /[a-z\- ]/i.test(e.data)) A.letter(e.data);
+  else if (id === 'sname'){ S.name = e.target.value.trim(); save(); }
+  else if (id === 'sgoal'){ const g = Math.max(10, Math.min(120, +e.target.value || 60)); S.settings.goal = g; save(); }
+});
+document.addEventListener('change', e => {
+  if (e.target.id === 'sintro'){ S.settings.intro = e.target.checked; save(); }
+  else if (e.target.id === 'secho'){ S.settings.echo = e.target.checked; save(); }
+  else if (e.target.id === 'smic'){ S.settings.mic = e.target.checked; if (MIC.state === 'off') MIC.state = 'idle'; save(); }
+});
+document.addEventListener('visibilitychange', () => { if (document.hidden){ try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch(e){} pushRemote(); } });
+
+/* ---------- arranque ---------- */
+(async function boot(){
+  const local = loadLocal(); if (local) S = merge(local);
+  render(); preloadWords();
+  try {
+    db = await window.claude?.use?.('db');
+    if (db){
+      const snap = await db.doc('progreso/principal').get();
+      if (snap.exists){ const remote = snap.data(); if (remote && (remote.updatedAt||0) > (S.updatedAt||0)){ S = merge(remote); if (!G) render(); } }
+      syncState = 'nube'; paintSync();
+      if (!snap.exists && S.updatedAt) pushRemote();
+    }
+  } catch(e){ db = null; syncState = 'local'; paintSync(); }
+})();
+</script>
+</body></html>
