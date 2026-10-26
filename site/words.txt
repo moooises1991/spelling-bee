@@ -1,0 +1,672 @@
+anxiety|4|ang-ZY-ih-tee|a worried, nervous feeling|She felt anxiety before her big test.
+agriculture|5|AG-rih-kul-chur|farming; growing crops and raising animals|Agriculture feeds people all over the world.
+apply|2|uh-PLY|to put on, or to ask for something in writing|Apply sunscreen before you go outside.
+absorb|3|ub-ZORB|to soak up|A sponge can absorb a lot of water.
+alien|3|AY-lee-un|a creature from another planet|The movie was about a friendly alien.
+appoint|3|uh-POINT|to choose someone for a job|The teacher will appoint a class helper.
+abstract|4|AB-strakt|an idea you cannot touch; art made of shapes and colors|The painting was abstract, with only colors and shapes.
+analyze|4|AN-uh-lyze|to study something closely|Scientists analyze the water to see if it is clean.
+appreciate|5|uh-PREE-shee-ayt|to be thankful for|I appreciate your help with my homework.
+argument|4|AR-gyoo-ment|a disagreement, or reasons for an idea|The brothers had an argument about the game.
+announce|4|uh-NOUNSS|to tell everyone|The principal will announce the winner.
+approach|4|uh-PROHCH|to come closer|The cat began to approach the bird slowly.
+add|1|AD|to put together; to join numbers|Add two and three to get five.
+anticipate|5|an-TISS-ih-payt|to expect something to happen|We anticipate a lot of snow tomorrow.
+appropriate|5|uh-PROH-pree-it|right for the situation|Wear appropriate shoes for the hike.
+accept|3|ak-SEPT|to take something that is offered|Please accept this gift.
+agreement|4|uh-GREE-ment|when people think the same way|The friends came to an agreement.
+accomplish|5|uh-KOM-plish|to finish something successfully|You can accomplish anything if you practice.
+apology|4|uh-POL-uh-jee|saying you are sorry|He gave his sister an apology.
+arise|3|uh-RIZE|to come up or happen|Problems may arise if we do not plan.
+advocate|5|AD-vuh-kayt|to speak up in support of someone|She will advocate for animals.
+apparent|5|uh-PAIR-ent|easy to see or understand|It was apparent that the dog was hungry.
+artificial|5|ar-tih-FISH-ul|made by people, not by nature|The flowers on the table are artificial.
+appeal|4|uh-PEEL|to be attractive or interesting|Sweet treats appeal to most kids.
+appliance|5|uh-PLY-unss|a machine used in the home|A toaster is a kitchen appliance.
+annoy|3|uh-NOY|to bother someone|Buzzing flies annoy me.
+articulate|6|ar-TIK-yoo-lit|able to speak clearly and well|She is articulate when she gives a speech.
+assignment|5|uh-SINE-ment|a job or task given to you|Our reading assignment is due Friday.
+avenue|4|AV-uh-noo|a wide street|We live on Maple Avenue.
+balloon|3|buh-LOON|a rubber bag filled with air|The red balloon floated into the sky.
+beautiful|4|BYOO-tih-ful|very pretty|The sunset was beautiful.
+bunny|2|BUN-ee|a rabbit|The bunny hopped across the grass.
+butterfly|3|BUT-er-fly|an insect with colorful wings|A butterfly landed on the flower.
+bored|2|BORD|tired of something that is not interesting|I was bored on the long car ride.
+blizzard|4|BLIZ-erd|a big snowstorm with strong wind|The blizzard closed all the schools.
+beauty|3|BYOO-tee|the quality of being beautiful|We admired the beauty of the mountains.
+bless|2|BLESS|to wish good things for someone|Bless you, she said after I sneezed.
+bridge|3|BRIJ|something built to cross over water or a road|We walked across the bridge.
+balance|4|BAL-unss|to stay steady without falling|She can balance on one foot.
+bingo|2|BING-goh|a game with numbered cards|Grandma yelled bingo and won.
+brilliant|5|BRIL-yunt|very bright or very smart|That was a brilliant idea.
+bamboo|3|bam-BOO|a tall plant with hollow stems|Pandas love to eat bamboo.
+bounce|3|BOUNSS|to spring back up after hitting something|The ball will bounce on the floor.
+brass|2|BRASS|a yellow metal|The trumpet is made of brass.
+build|3|BILD|to make something by putting parts together|Let's build a sandcastle.
+bracelet|4|BRAYSS-lit|jewelry worn around the wrist|She wore a silver bracelet.
+beetle|3|BEE-tul|an insect with a hard shell|A shiny beetle crawled on the leaf.
+brother|2|BRUTH-er|a boy who has the same parents as you|My brother is two years older than me.
+battle|3|BAT-ul|a fight between groups|The knights fought a battle.
+biology|4|by-OL-uh-jee|the study of living things|In biology we learn about plants and animals.
+book|1|BUK|pages with words bound together|I read a book every night.
+boyfriend|3|BOY-frend|a boy someone is dating|In the story, the princess had a boyfriend.
+backpack|2|BAK-pak|a bag you carry on your back|I put my lunch in my backpack.
+banana|2|buh-NAN-uh|a long yellow fruit|Monkeys like to eat a banana.
+basketball|3|BASS-kit-bawl|a game where you throw a ball through a hoop|We play basketball at recess.
+browse|3|BROWZ|to look around casually|We like to browse the library shelves.
+boulder|4|BOHL-der|a very large rock|A huge boulder blocked the path.
+bargain|4|BAR-gin|something bought for a low price|The shoes were a bargain.
+brought|4|BRAWT|past of bring; carried here|She brought cookies to school.
+calf|3|KAF|a baby cow|The calf stayed close to its mother.
+chicken|2|CHIK-in|a farm bird that lays eggs|The chicken laid an egg.
+concern|3|kun-SURN|a worry|My mom showed concern when I was sick.
+caring|2|KAIR-ing|kind and helpful|The nurse was very caring.
+cousin|4|KUZ-in|the child of your aunt or uncle|My cousin is visiting this summer.
+condition|4|kun-DISH-un|the state something is in|The old bike is in good condition.
+carry|2|KAIR-ee|to hold and take somewhere|Can you carry this box?
+choice|3|CHOISS|something you choose|You have a choice of apple or orange.
+conclusion|5|kun-KLOO-zhun|the end, or a final decision|The conclusion of the story was happy.
+catch|2|KACH|to grab something moving|Catch the ball!
+choose|3|CHOOZ|to pick|Choose your favorite color.
+couple|3|KUP-ul|two of something|I need a couple of pencils.
+certain|4|SUR-tin|sure|I am certain that I locked the door.
+concert|3|KON-surt|a music show|We went to a concert in the park.
+clumsy|3|KLUM-zee|moving in an awkward way, often dropping things|The clumsy puppy tripped over its paws.
+cavern|3|KAV-ern|a large cave|Bats live in the dark cavern.
+column|5|KOL-um|a tall post, or a line going up and down|Write your answers in the first column.
+crowd|2|KROWD|a large group of people|A crowd cheered at the game.
+creature|4|KREE-chur|a living animal|A strange creature lived in the pond.
+castle|4|KASS-ul|a large stone building where kings lived|The queen lived in a castle.
+culture|4|KUL-chur|the way of life of a group of people|Music is part of every culture.
+classy|2|KLASS-ee|stylish and elegant|She wore a classy dress to the party.
+collar|3|KOL-er|the part of a shirt around the neck; a band on a pet's neck|The dog has a blue collar.
+curious|4|KYUR-ee-us|wanting to learn or know|The curious kitten explored the box.
+charge|3|CHARJ|to ask a price, or to rush forward|They charge five dollars for a ticket.
+consider|4|kun-SID-er|to think carefully about|Consider all your choices.
+curtain|4|KUR-tin|cloth that hangs over a window or stage|Close the curtain to keep out the sun.
+cheer|1|CHEER|to shout for joy or support|We cheer for our team.
+consumer|4|kun-SOO-mer|a person who buys and uses things|A consumer buys food at the store.
+cylinder|5|SIL-in-der|a shape like a can|A soup can is a cylinder.
+describe|3|dih-SKRIBE|to tell what something is like|Describe your best friend.
+decrease|3|dih-KREESS|to make or become smaller|The temperature will decrease tonight.
+decide|3|dih-SIDE|to make up your mind|I can't decide which book to read.
+disappear|4|diss-uh-PEER|to go out of sight|The magician made the coin disappear.
+dental|2|DEN-tul|about the teeth|I have a dental checkup today.
+daughter|4|DAW-ter|a girl child of a parent|She is my daughter.
+dialogue|5|DY-uh-log|a talk between people, as in a story|The play has a lot of dialogue.
+depend|2|dih-PEND|to rely on|You can depend on me.
+daydream|2|DAY-dreem|to think pleasant thoughts while awake|I like to daydream about the beach.
+discuss|3|dih-SKUSS|to talk about|Let's discuss the plan.
+drain|2|DRAYN|a pipe that carries water away|Water went down the drain.
+discovery|4|dih-SKUV-er-ee|finding something new|The discovery of the fossil was exciting.
+dishwasher|3|DISH-wosh-er|a machine that washes dishes|Put the plates in the dishwasher.
+dispersal|5|dih-SPUR-sul|spreading out in many directions|Wind helps the dispersal of seeds.
+doubt|4|DOWT|to not be sure|I doubt it will rain today.
+downstairs|3|down-STAIRZ|on a lower floor|Breakfast is downstairs.
+determine|4|dih-TUR-min|to find out or decide|We need to determine the answer.
+detail|3|DEE-tayl|a small part or fact|Look at every detail in the picture.
+direct|3|dih-REKT|straight, or to show the way|Can you direct me to the library?
+dwelling|3|DWEL-ing|a home; a place to live|A tent can be a dwelling.
+decision|4|dih-SIZH-un|a choice you make|It was a hard decision.
+draw|1|DRAW|to make a picture with a pencil|I like to draw horses.
+demand|3|dih-MAND|to ask for strongly|The kids demand more recess.
+difficult|4|DIF-ih-kult|hard to do|The puzzle was difficult.
+during|2|DUR-ing|while something is happening|Don't talk during the movie.
+departure|4|dih-PAR-chur|leaving|Our departure is at noon.
+dangerous|4|DAYN-jer-us|not safe|It is dangerous to play in the street.
+deposit|4|dih-POZ-it|to put in, like money in a bank|I deposit my allowance in the bank.
+dimple|2|DIM-pul|a small dent in the cheek|She has a dimple when she smiles.
+delight|4|dih-LITE|great joy|The children squealed with delight.
+expense|4|ik-SPENSS|the cost of something|The trip was a big expense.
+excel|4|ik-SEL|to be very good at something|She works hard to excel at math.
+evaluate|5|ih-VAL-yoo-ayt|to judge how good something is|The teacher will evaluate our projects.
+education|4|ej-uh-KAY-shun|learning and teaching|Education helps us grow.
+efficient|6|ih-FISH-ent|working well without wasting time or energy|A bike is an efficient way to travel.
+eggplant|2|EG-plant|a purple vegetable|Mom cooked eggplant for dinner.
+economic|5|ek-uh-NOM-ik|about money and business|The town had economic problems.
+evidence|4|EV-ih-denss|facts that prove something|The muddy paw prints were evidence.
+emotion|4|ih-MOH-shun|a feeling, like happy or sad|Joy is a happy emotion.
+encyclopedia|6|en-sy-kluh-PEE-dee-uh|a book with facts about many topics|I looked up sharks in the encyclopedia.
+educate|4|EJ-uh-kayt|to teach|Schools educate children.
+electricity|5|ih-lek-TRISS-ih-tee|energy that powers lights and machines|The storm knocked out the electricity.
+excellent|5|EK-suh-lent|very, very good|You did an excellent job.
+early|2|UR-lee|before the usual time|I woke up early today.
+elephant|3|EL-uh-fant|a huge gray animal with a trunk|The elephant sprayed water with its trunk.
+expressive|4|ik-SPRESS-iv|showing feelings clearly|She has an expressive face.
+earn|2|URN|to get by working|I earn money by walking dogs.
+eliminate|5|ih-LIM-ih-nayt|to get rid of|We need to eliminate the mistakes.
+eighty|3|AY-tee|the number 80|My grandpa is eighty years old.
+elevator|4|EL-uh-vay-ter|a moving room that goes up and down|We took the elevator to the tenth floor.
+encourage|5|en-KUR-ij|to give someone hope or support|My coach will encourage me to try.
+express|3|ik-SPRESS|to show or tell your feelings|Art helps me express myself.
+except|4|ik-SEPT|leaving out; but not|Everyone came except Sam.
+exchange|4|iks-CHAYNJ|to trade one thing for another|Let's exchange stickers.
+extreme|4|ik-STREEM|very great or very far|The desert has extreme heat.
+evening|2|EEV-ning|the time between afternoon and night|We eat dinner in the evening.
+engage|3|en-GAYJ|to take part, or hold attention|Games engage students in learning.
+examination|5|ig-zam-ih-NAY-shun|a test or a close look|The doctor did an examination.
+either|4|EE-ther|one or the other|You can have either juice or milk.
+fabric|3|FAB-rik|cloth|The dress is made of soft fabric.
+function|4|FUNGK-shun|the job something does|The function of the heart is to pump blood.
+faction|4|FAK-shun|a small group inside a larger group|One faction of the club wanted a new name.
+festival|3|FESS-tih-vul|a big celebration|We went to the music festival.
+falling|2|FAWL-ing|dropping down|The leaves are falling from the trees.
+fishery|4|FISH-er-ee|a place where fish are caught or raised|The fishery sells fresh salmon.
+follower|3|FOL-oh-er|someone who follows|The leader had a loyal follower.
+fertile|4|FUR-tul|good for growing plants|Fertile soil grows big crops.
+focus|3|FOH-kus|to pay close attention|Focus on your reading.
+fountain|4|FOWN-tin|water shooting up into the air|We threw coins into the fountain.
+freedom|3|FREE-dum|being free|Birds have the freedom to fly.
+fortify|4|FOR-tih-fy|to make stronger|They fortify the castle walls.
+fragile|4|FRAJ-ul|easy to break|Be careful, the glass is fragile.
+formulate|5|FOR-myoo-layt|to plan or put together carefully|Let's formulate a plan.
+foil|2|FOIL|a thin sheet of metal|Wrap the sandwich in foil.
+forehead|4|FOR-hed|the part of the face above the eyebrows|Mom felt my forehead for a fever.
+firefly|3|FIRE-fly|a bug that glows at night|A firefly blinked in the dark.
+finesse|6|fih-NESS|skill and grace|She played the piano with finesse.
+famous|3|FAY-mus|known by many people|He wants to be a famous singer.
+flourish|5|FLUR-ish|to grow well and be healthy|Plants flourish in the sunlight.
+flounder|4|FLOWN-der|a flat fish, or to struggle|The flounder hid in the sand.
+fulfill|5|ful-FIL|to make something come true|I will fulfill my promise.
+fabricate|5|FAB-rih-kayt|to make or build; or to make up a lie|They fabricate car parts in the factory.
+fixture|4|FIKS-chur|something fixed in place, like a light|The new light fixture is bright.
+fortress|4|FOR-triss|a strong building that protects people|Soldiers guarded the fortress.
+frantic|4|FRAN-tik|wild with worry or hurry|The frantic mom looked for her keys.
+facility|5|fuh-SIL-ih-tee|a building made for a purpose|The sports facility has a pool.
+factor|3|FAK-ter|one thing that causes a result|Rain was a factor in the game.
+frequent|4|FREE-kwent|happening often|We make frequent trips to the park.
+folklore|4|FOHK-lor|old stories passed down by people|Dragons are part of folklore.
+genius|4|JEEN-yus|a very smart person|Einstein was a genius.
+garbage|3|GAR-bij|trash|Take out the garbage.
+ginger|3|JIN-jer|a spicy root used in cooking|Ginger cookies smell great.
+genre|6|ZHAHN-ruh|a kind or type of art, music, or book|Mystery is my favorite genre.
+glasses|2|GLASS-iz|lenses you wear to see better|Grandpa wears glasses to read.
+gazette|5|guh-ZET|a newspaper|The town gazette comes out on Sunday.
+gobble|3|GOB-ul|to eat quickly|Don't gobble your food.
+greedy|3|GREE-dee|wanting more than you need|The greedy king took all the gold.
+glorious|4|GLOR-ee-us|wonderful and beautiful|It was a glorious sunny day.
+galaxy|4|GAL-uk-see|a huge group of stars|We live in the Milky Way galaxy.
+gathered|3|GATH-erd|brought together|We gathered around the campfire.
+gentlemen|4|JEN-tul-men|polite men|Ladies and gentlemen, welcome!
+germ|2|JURM|a tiny living thing that can make you sick|Wash your hands to kill every germ.
+grocer|4|GROH-ser|a person who sells food|The grocer sold us fresh apples.
+glimpse|5|GLIMPS|a quick look|I caught a glimpse of the deer.
+gesture|5|JESS-chur|a movement of the hands to show meaning|A wave is a friendly gesture.
+gloomy|3|GLOO-mee|dark or sad|It was a gloomy, rainy day.
+greeting|2|GREE-ting|a hello|She waved a greeting.
+grumble|3|GRUM-bul|to complain in a low voice|Don't grumble about chores.
+gargle|3|GAR-gul|to rinse your throat with liquid|Gargle with salt water.
+glimmer|3|GLIM-er|a faint light|A glimmer of light came through the door.
+grateful|4|GRAYT-ful|thankful|I am grateful for my family.
+griddle|3|GRID-ul|a flat pan for cooking|Dad made pancakes on the griddle.
+gamble|3|GAM-bul|to take a risk|Don't gamble with your safety.
+gander|3|GAN-der|a male goose, or a look|Take a gander at this!
+grit|1|GRIT|tiny bits of sand; courage to keep going|She showed grit and kept going.
+guideline|4|GIDE-line|a rule that helps you|Follow the safety guideline.
+growth|3|GROHTH|getting bigger|The plant had a growth spurt.
+glider|3|GLY-der|an aircraft with no engine|The glider soared over the hills.
+grammar|5|GRAM-er|the rules of a language|Good grammar helps your writing.
+handsome|4|HAN-sum|good-looking|The prince was handsome.
+hotdog|2|HOT-dog|a sausage in a bun|I ate a hotdog at the game.
+hesitate|4|HEZ-ih-tayt|to pause before acting|Don't hesitate to ask for help.
+handful|2|HAND-ful|as much as a hand can hold|He took a handful of popcorn.
+honey|2|HUN-ee|sweet food made by bees|Bees make honey.
+hump|1|HUMP|a round bump|A camel has a hump.
+hardly|2|HARD-lee|almost not|I could hardly see in the fog.
+hospitality|6|hoss-pih-TAL-ih-tee|being friendly and welcoming to guests|Thank you for your hospitality.
+heroic|4|hih-ROH-ik|brave like a hero|The firefighter made a heroic rescue.
+happiest|4|HAP-ee-ist|the most happy|This is the happiest day of my life.
+humanity|4|hyoo-MAN-ih-tee|all people; kindness|Helping others shows humanity.
+humble|3|HUM-bul|not proud or bragging|She is humble about her talent.
+hunt|1|HUNT|to search for|We hunt for eggs in the garden.
+however|3|how-EV-er|but; in whatever way|I like cats; however, I like dogs more.
+homeless|3|HOME-liss|having no home|We gave food to a homeless family.
+hurry|2|HUR-ee|to move fast|Hurry, or we'll be late!
+howl|2|HOWL|a long, loud cry|The wolf let out a howl.
+humility|5|hyoo-MIL-ih-tee|being humble|The champion showed humility.
+health|3|HELTH|how well your body is|Eating vegetables is good for your health.
+hostel|4|HOSS-tul|a cheap place to stay for travelers|We stayed in a hostel in the city.
+heat|1|HEET|warmth|The heat from the fire kept us warm.
+heaven|3|HEV-un|the sky; a wonderful place|This cake tastes like heaven.
+hungry|2|HUNG-gree|wanting food|I am hungry for lunch.
+heave|3|HEEV|to lift or throw with effort|Heave the bag over the fence.
+heard|4|HURD|past of hear|I heard a noise outside.
+habitat|4|HAB-ih-tat|the natural home of an animal or plant|The ocean is a whale's habitat.
+hibernate|4|HY-ber-nayt|to sleep all winter|Bears hibernate in caves.
+hiking|2|HIKE-ing|taking a long walk in nature|We went hiking in the mountains.
+hardworking|3|hard-WUR-king|always working hard|She is a hardworking student.
+hoist|3|HOIST|to lift up, often with ropes|They hoist the flag every morning.
+ideal|3|eye-DEEL|perfect|Today is ideal weather for a picnic.
+inform|3|in-FORM|to tell|Please inform your teacher if you're sick.
+injure|4|IN-jer|to hurt|Wear a helmet so you don't injure your head.
+indeed|3|in-DEED|truly; yes|It was indeed a great show.
+initial|5|ih-NISH-ul|first; the first letter of a name|My first initial is M.
+international|5|in-ter-NASH-uh-nul|between countries|It was an international soccer game.
+illness|3|ILL-niss|being sick|She missed school because of an illness.
+Indian|3|IN-dee-un|from India, or Native American|We ate Indian food for dinner.
+increase|3|in-KREESS|to make bigger|Increase the volume, please.
+imitate|4|IM-ih-tayt|to copy|Parrots imitate sounds.
+individuality|6|in-dih-vij-oo-AL-ih-tee|what makes a person different from others|Her clothes show her individuality.
+influence|5|IN-floo-enss|the power to change someone or something|Friends can influence your choices.
+imperfect|4|im-PUR-fikt|not perfect|The apple was imperfect but tasty.
+island|5|EYE-lund|land surrounded by water|We sailed to a small island.
+Irish|3|EYE-rish|from Ireland|She danced an Irish jig.
+investigate|5|in-VESS-tih-gayt|to look into carefully|The detective will investigate the case.
+interest|4|IN-trist|wanting to know more|I have an interest in space.
+invisible|5|in-VIZ-ih-bul|not able to be seen|Air is invisible.
+income|3|IN-kum|money earned|Dad's income pays the bills.
+interrupt|5|in-ter-RUPT|to stop someone while they talk|Please don't interrupt me.
+issue|5|ISH-oo|a problem or topic|Pollution is a big issue.
+improve|3|im-PROOV|to make better|Practice will improve your spelling.
+invite|2|in-VITE|to ask someone to come|I will invite you to my party.
+invent|2|in-VENT|to create something new|Edison worked hard to invent the light bulb.
+index|2|IN-deks|a list at the back of a book|Look up the topic in the index.
+ignore|3|ig-NOR|to pay no attention to|Ignore the noise and keep reading.
+itch|2|ICH|a feeling that makes you want to scratch|The bug bite made me itch.
+indicate|4|IN-dih-kayt|to point out or show|The arrow will indicate the way.
+insult|3|IN-sult|a rude remark|It is mean to insult others.
+illogical|5|ih-LOJ-ih-kul|not making sense|It is illogical to wear a coat at the beach.
+jacket|2|JAK-it|a short coat|Wear your jacket; it's cold.
+jaw|1|JAW|the bone that holds your teeth|The shark has a strong jaw.
+job|1|JOB|work you do|My job is to feed the fish.
+jellyfish|3|JEL-ee-fish|a sea animal with a soft body that can sting|A jellyfish floated in the water.
+jam|1|JAM|fruit spread for bread|I like strawberry jam on toast.
+jumbled|3|JUM-buld|mixed up|The letters were all jumbled.
+jump|1|JUMP|to leap off the ground|Frogs can jump high.
+jubilant|5|JOO-bih-lunt|very happy and excited|The team was jubilant after the win.
+jade|2|JAYD|a green stone|She wore a jade necklace.
+juicy|3|JOO-see|full of juice|The peach was sweet and juicy.
+jogger|2|JOG-er|a person who runs slowly for exercise|A jogger ran past our house.
+jumper|2|JUM-per|someone who jumps; a sleeveless dress|The jumper won the high jump.
+Japan|2|juh-PAN|a country in Asia|Tokyo is the capital of Japan.
+javelin|4|JAV-lin|a long spear thrown in sports|He threw the javelin far.
+journalism|5|JUR-nul-iz-um|writing and reporting the news|She studies journalism.
+jellybean|3|JEL-ee-been|a small chewy candy|I love the red jellybean.
+justify|4|JUSS-tih-fy|to give a good reason for|Can you justify your answer?
+joyful|3|JOY-ful|full of joy|It was a joyful party.
+jury|3|JUR-ee|people who decide a court case|The jury said he was not guilty.
+jinx|2|JINKS|bad luck|Don't jinx the game!
+junior|3|JOON-yer|younger; a student in the third year of high school|My brother is a junior in high school.
+juvenile|5|JOO-vuh-nile|young; not grown up|A juvenile eagle has brown feathers.
+junction|4|JUNGK-shun|a place where things meet|Turn left at the road junction.
+jackal|3|JAK-ul|a wild dog of Africa and Asia|A jackal howled at night.
+jetlag|3|JET-lag|tiredness after a long flight|I had jetlag after flying to Spain.
+kidnapping|5|KID-nap-ing|taking someone away by force|The movie was about a kidnapping.
+karate|3|kuh-RAH-tee|a martial art from Japan|She has a yellow belt in karate.
+kirk|2|KURK|a church, in Scotland|The old kirk stood on the hill.
+kooky|3|KOO-kee|silly or strange|My uncle wears a kooky hat.
+karma|3|KAR-muh|the idea that good or bad actions come back to you|Be kind; good karma comes back.
+kraft|3|KRAFT|strong brown paper|We wrapped the gift in kraft paper.
+kindergartener|6|KIN-der-gart-ner|a child in kindergarten|My sister is a kindergartener.
+kennel|3|KEN-ul|a house or shelter for dogs|The dog sleeps in a kennel.
+king crab|3|KING krab|a very large crab (two words)|We ate king crab at the beach.
+keystone|3|KEE-stone|the top stone of an arch; the most important part|The keystone holds the arch together.
+kingdom|2|KING-dum|a land ruled by a king or queen|The kingdom had a big castle.
+keynote|3|KEE-note|the main speech or idea|She gave the keynote at the meeting.
+kilogram|4|KIL-uh-gram|a unit of weight, about 2.2 pounds|The puppy weighs one kilogram.
+kneecap|4|NEE-kap|the bone at the front of the knee|I bumped my kneecap.
+kept|2|KEPT|past of keep|I kept the note in my drawer.
+knelt|4|NELT|past of kneel|She knelt to pet the cat.
+kickboxing|4|KIK-boks-ing|a sport using punches and kicks|Mom takes kickboxing classes.
+knives|4|NIVZ|more than one knife|Be careful with sharp knives.
+keen|2|KEEN|eager, or sharp|Owls have keen eyesight.
+knocker|4|NOK-er|a metal handle used to knock on a door|The door has a brass knocker.
+kneel|4|NEEL|to go down on your knees|Kneel down to tie your shoe.
+kickboxer|4|KIK-boks-er|a person who does kickboxing|The kickboxer won the match.
+lasting|2|LASS-ting|going on for a long time|They have a lasting friendship.
+luster|4|LUSS-ter|shine|The pearl has a soft luster.
+lethal|4|LEE-thul|deadly|Some snakes have lethal venom.
+latent|4|LAY-tent|hidden; not yet showing|She has a latent talent for art.
+log|1|LOG|a piece of a tree trunk|We sat on a log by the fire.
+limber|3|LIM-ber|able to bend easily|Dancers are very limber.
+lazy|2|LAY-zee|not wanting to work|The lazy cat slept all day.
+leash|2|LEESH|a strap to walk a dog|Put the leash on the dog.
+lash|2|LASH|to hit hard; an eyelash|A lash fell on my cheek.
+lean|2|LEEN|to bend or rest against; thin|Don't lean on the wet paint.
+lapse|4|LAPS|a small mistake or slip|It was a lapse in memory.
+loop|1|LOOP|a circle shape in a string or path|Make a loop with the rope.
+lease|3|LEESS|an agreement to rent|We signed a lease for the apartment.
+lavender|4|LAV-en-der|a purple flower that smells nice|The soap smells like lavender.
+languid|6|LANG-gwid|slow and relaxed, without energy|The languid cat stretched in the sun.
+legal|3|LEE-gul|allowed by law|It is legal to ride bikes here.
+Latino|4|luh-TEE-noh|a person with roots in Latin America|She is proud to be Latino.
+lofty|3|LAWF-tee|very high|The eagle sat on a lofty perch.
+level|2|LEV-ul|flat and even; a step or stage|You reached the next level!
+lovely|2|LUV-lee|beautiful|What a lovely garden!
+lucky|2|LUK-ee|having good luck|I found a lucky penny.
+lipstick|2|LIP-stik|color for the lips|Mom wore red lipstick.
+leftover|3|LEFT-oh-ver|food that is not eaten|We had leftover pizza for lunch.
+laziness|5|LAY-zee-niss|not wanting to work|Laziness won't help you win.
+license|5|LY-senss|a paper that gives permission|Dad has a driver's license.
+liberty|4|LIB-er-tee|freedom|The Statue of Liberty is in New York.
+lunar|3|LOO-ner|about the moon|We watched the lunar eclipse.
+lynx|4|LINKS|a wild cat with tufted ears|The lynx hunted in the snow.
+latitude|5|LAT-ih-tood|distance north or south of the equator|The map shows lines of latitude.
+longitude|5|LON-jih-tood|distance east or west on a map|Lines of longitude run north to south.
+message|3|MESS-ij|words sent to someone|I sent Grandma a message.
+midnight|2|MID-nite|twelve o'clock at night|We stayed up until midnight.
+museum|4|myoo-ZEE-um|a building with art or history to see|We saw dinosaur bones at the museum.
+molt|3|MOHLT|to shed skin or feathers|Snakes molt their skin.
+moisture|4|MOISS-chur|a little wetness|There is moisture on the grass.
+magnet|2|MAG-nit|a metal that pulls iron|The magnet stuck to the fridge.
+mold|2|MOHLD|a fuzzy growth on old food; a shape|There is mold on the bread.
+material|4|muh-TEER-ee-ul|what something is made of|Wood is a strong material.
+meditate|4|MED-ih-tayt|to sit quietly and think|I meditate to feel calm.
+metaphor|5|MET-uh-for|comparing things without like or as|"Time is money" is a metaphor.
+monitor|3|MON-ih-ter|a screen, or to watch over|The nurse will monitor your heart.
+model|2|MOD-ul|a small copy of something|I built a model airplane.
+magnify|4|MAG-nih-fy|to make look bigger|A lens can magnify a bug.
+mischief|6|MISS-chif|playful trouble|The puppy is always getting into mischief.
+metamorphic|6|met-uh-MOR-fik|changed by heat and pressure (a type of rock)|Marble is a metamorphic rock.
+memory|3|MEM-er-ee|something you remember|I have a happy memory of the beach.
+movement|3|MOOV-ment|moving|The dancer's movement was graceful.
+mellow|3|MEL-oh|soft, calm, and gentle|The music was mellow.
+manager|3|MAN-ih-jer|a person in charge|The store manager helped us.
+myth|3|MITH|an old story about gods or heroes|We read a Greek myth.
+marvel|3|MAR-vul|to be amazed|We marvel at the stars.
+magnitude|5|MAG-nih-tood|size or importance|The earthquake had a large magnitude.
+migration|4|my-GRAY-shun|moving from one place to another|Bird migration happens in the fall.
+miscount|3|miss-KOUNT|to count wrong|Don't miscount the coins.
+magnificent|5|mag-NIF-ih-sent|very beautiful and grand|The palace was magnificent.
+medic|3|MED-ik|a person who gives medical help|The medic helped the hurt player.
+mention|3|MEN-shun|to say something briefly|Did she mention the party?
+marathon|4|MAIR-uh-thon|a very long race|Mom ran a marathon.
+mission|4|MISH-un|an important job|The astronauts went on a mission to space.
+misplace|3|miss-PLAYSS|to lose for a little while|I always misplace my keys.
+necessary|6|NESS-uh-sair-ee|needed|Water is necessary for life.
+naive|5|nah-EEV|believing things too easily|The naive boy believed the joke.
+numerous|4|NOO-mer-us|very many|There were numerous stars in the sky.
+nuisance|6|NOO-sunss|something that bothers you|The mosquitoes are a nuisance.
+nostril|3|NOSS-tril|an opening of the nose|A bug flew into my nostril.
+nutrition|4|noo-TRISH-un|healthy food your body needs|Good nutrition helps you grow.
+neighbor|5|NAY-ber|a person who lives near you|Our neighbor has a big dog.
+notable|4|NOH-tuh-bul|important; worth noticing|It was a notable win.
+navigate|4|NAV-ih-gayt|to find the way|Sailors navigate by the stars.
+negotiate|6|nih-GOH-shee-ayt|to talk to reach an agreement|We negotiate bedtime with Mom.
+nominate|4|NOM-ih-nayt|to name someone for a prize or job|I nominate Ana for class president.
+naughty|5|NAW-tee|badly behaved|The naughty puppy chewed my shoe.
+nickel|4|NIK-ul|a five-cent coin|A nickel is worth five cents.
+notice|3|NOH-tiss|to see; a sign|Did you notice the new sign?
+network|2|NET-wurk|a system of connected things|The computer network went down.
+niece|5|NEESS|the daughter of your brother or sister|My niece is three years old.
+nourish|4|NUR-ish|to feed and keep healthy|Food will nourish your body.
+neutral|5|NOO-trul|not taking sides|Switzerland stayed neutral.
+nifty|2|NIF-tee|cool or clever|That's a nifty trick!
+novice|4|NOV-iss|a beginner|I am a novice at chess.
+neither|4|NEE-ther|not one and not the other|Neither of us was hungry.
+nightmare|3|NITE-mair|a bad dream|I had a nightmare about a monster.
+nowadays|3|NOW-uh-dayz|these days|Nowadays, many people have phones.
+nightstand|3|NITE-stand|a small table by the bed|My book is on the nightstand.
+nibble|3|NIB-ul|to take small bites|The mouse began to nibble the cheese.
+numb|4|NUM|unable to feel|My fingers were numb from the cold.
+nobleman|3|NOH-bul-man|a man of high rank|The nobleman lived in a castle.
+ninety|4|NINE-tee|the number 90|My great-grandma is ninety.
+number|2|NUM-ber|a word or symbol for how many|Pick a number from one to ten.
+nomad|3|NOH-mad|a person who moves from place to place|The nomad traveled across the desert.
+oasis|4|oh-AY-siss|a place with water in the desert|The camels drank at the oasis.
+official|5|uh-FISH-ul|approved; a person in charge|The official blew the whistle.
+optimism|5|OP-tih-miz-um|hope that things will turn out well|She faced the test with optimism.
+obedient|5|oh-BEE-dee-ent|doing what you are told|The obedient dog sat down.
+orchid|5|OR-kid|a beautiful tropical flower|Mom grows a purple orchid.
+orchestra|6|OR-kess-truh|a large group of musicians|The orchestra played a symphony.
+obscure|5|ub-SKYOOR|hard to see or understand; not well known|The path was obscure in the fog.
+Olympics|4|oh-LIM-piks|world sports games held every four years|She wants to swim in the Olympics.
+ordination|5|or-dih-NAY-shun|a ceremony to make someone a minister or priest|The church held an ordination.
+obsolete|5|ob-suh-LEET|no longer used|Floppy disks are obsolete.
+omit|3|oh-MIT|to leave out|Don't omit any steps.
+organize|4|OR-guh-nize|to put in order|Organize your desk.
+obtuse|5|ub-TOOSS|an angle greater than 90 degrees; slow to understand|An obtuse angle is wider than a corner.
+omnibus|5|OM-nih-bus|a bus; a book with many stories|The omnibus has ten fairy tales.
+outrage|4|OUT-rayj|great anger|There was outrage over the unfair rule.
+occasion|5|uh-KAY-zhun|a special event|A birthday is a happy occasion.
+omnipotent|6|om-NIP-uh-tent|all-powerful|The wizard thought he was omnipotent.
+opponent|5|uh-POH-nent|a person you play against|I shook hands with my opponent.
+outfit|2|OUT-fit|a set of clothes|I love your new outfit.
+onomatopoeia|6|on-uh-mat-uh-PEE-uh|a word that sounds like what it means, like buzz|Buzz is an example of onomatopoeia.
+overtaking|4|oh-ver-TAY-king|passing someone|The red car is overtaking the bus.
+octopus|3|OK-tuh-pus|a sea animal with eight arms|The octopus squirted ink.
+offend|4|uh-FEND|to hurt someone's feelings|I didn't mean to offend you.
+outrageous|6|out-RAY-jus|shocking or very surprising|That's an outrageous price for gum!
+occupy|5|OK-yoo-py|to fill or take up|The kids occupy the whole couch.
+origin|4|OR-ih-jin|where something comes from|What is the origin of this word?
+oxygen|4|OK-sih-jen|a gas we breathe|We need oxygen to live.
+overlay|3|OH-ver-lay|to cover on top|Overlay the cake with icing.
+optimist|5|OP-tih-mist|a person who expects good things|An optimist sees the glass half full.
+overdue|3|oh-ver-DOO|late|My library book is overdue.
+paragraph|4|PAIR-uh-graf|a group of sentences about one idea|Write one paragraph about your pet.
+possibility|5|poss-ih-BIL-ih-tee|something that might happen|There is a possibility of rain.
+precious|5|PRESH-us|very valuable|The ring is precious to her.
+patient|5|PAY-shunt|able to wait calmly; a person seeing a doctor|Be patient; dinner is almost ready.
+prepare|3|prih-PAIR|to get ready|Prepare for the test.
+planetarium|5|plan-ih-TAIR-ee-um|a building that shows stars on a dome|We saw the stars at the planetarium.
+pattern|3|PAT-ern|a design that repeats|The shirt has a striped pattern.
+preview|3|PREE-vyoo|a look ahead of time|We watched a preview of the movie.
+primary|4|PRY-mair-ee|first or most important|Red is a primary color.
+permission|5|per-MISH-un|being allowed|Ask permission before you leave.
+process|4|PROSS-ess|steps to do something|Baking bread is a long process.
+privacy|4|PRY-vuh-see|being away from others|I want privacy in my room.
+population|4|pop-yuh-LAY-shun|the number of people in a place|The city has a large population.
+pressure|5|PRESH-er|pushing force; stress|Check the tire pressure.
+protective|4|pruh-TEK-tiv|keeping safe|Wear protective glasses.
+portable|4|POR-tuh-bul|easy to carry|We have a portable speaker.
+prediction|4|prih-DIK-shun|a guess about the future|My prediction is that our team will win.
+purpose|4|PUR-pus|the reason for something|What is the purpose of this button?
+predator|4|PRED-uh-ter|an animal that hunts others|The lion is a predator.
+potential|5|puh-TEN-shul|possible ability|She has the potential to be a star.
+peninsula|5|puh-NIN-suh-luh|land almost surrounded by water|Florida is a peninsula.
+perimeter|5|puh-RIM-ih-ter|the distance around a shape|Find the perimeter of the square.
+permanent|5|PUR-muh-nent|lasting forever|Use a permanent marker.
+peaceful|4|PEESS-ful|calm and quiet|The lake was peaceful.
+painter|2|PAYN-ter|a person who paints|The painter used bright colors.
+partnership|4|PART-ner-ship|working together|The two friends formed a partnership.
+position|4|puh-ZISH-un|where something is; a job|What position do you play?
+participate|5|par-TISS-ih-payt|to take part|Everyone can participate in the game.
+precaution|5|prih-KAW-shun|something done to stay safe|Wear a helmet as a precaution.
+quadrilateral|6|kwod-rih-LAT-er-ul|a shape with four sides|A square is a quadrilateral.
+quota|4|KWOH-tuh|a set amount|We met our reading quota.
+qualify|4|KWOL-ih-fy|to meet the rules to take part|She hopes to qualify for the finals.
+quotient|6|KWOH-shunt|the answer to a division problem|The quotient of ten divided by two is five.
+qualified|5|KWOL-ih-fyd|having the right skills|She is qualified to teach swimming.
+quenchless|6|KWENCH-liss|unable to be satisfied|He had a quenchless thirst for adventure.
+quorum|5|KWOR-um|the number of members needed for a meeting|We need a quorum to vote.
+quaver|4|KWAY-ver|to shake, like a voice|Her voice began to quaver.
+quizzical|6|KWIZ-ih-kul|puzzled; questioning|He gave me a quizzical look.
+quasar|5|KWAY-zar|a very bright, faraway object in space|A quasar shines like a billion stars.
+quandary|6|KWON-dree|a confusing situation|I was in a quandary about what to do.
+railroad|2|RAYL-rohd|a track for trains|The railroad goes through town.
+refuse|3|rih-FYOOZ|to say no|I refuse to give up.
+review|3|rih-VYOO|to look over again|Review your notes before the test.
+race|1|RAYSS|a contest of speed|I won the race.
+relax|2|rih-LAKS|to rest|Relax and take a deep breath.
+roar|2|ROR|a loud, deep sound|The lion let out a roar.
+rain|1|RAYN|water falling from clouds|The rain watered the garden.
+release|4|rih-LEESS|to let go|Release the bird into the sky.
+rock|1|ROK|a stone|I found a smooth rock.
+ramification|6|ram-ih-fih-KAY-shun|a result of an action|Think about the ramification of your choice.
+remove|3|rih-MOOV|to take away|Remove your shoes at the door.
+role|3|ROHL|a part played|She has the main role in the play.
+reasonable|4|REE-zun-uh-bul|fair and sensible|That's a reasonable price.
+resourceful|5|rih-SORSS-ful|good at solving problems|The resourceful girl fixed the bike.
+room|1|ROOM|a part of a house|My room is painted blue.
+rubric|4|ROO-brik|a scoring guide|The teacher gave us a rubric for the essay.
+rainforest|3|RAYN-for-ist|a thick forest with lots of rain|Parrots live in the rainforest.
+rope|1|ROHP|a thick cord|Climb the rope in gym class.
+rebuild|3|ree-BILD|to build again|They will rebuild the old bridge.
+rhythm|6|RITH-um|a repeated beat in music|Clap to the rhythm.
+round|1|ROWND|shaped like a circle|The ball is round.
+reuse|2|ree-YOOZ|to use again|Reuse your water bottle.
+receive|5|rih-SEEV|to get|I receive a letter every week.
+revolution|5|rev-uh-LOO-shun|a big change; a turn around|The American Revolution began in 1775.
+radiograph|5|RAY-dee-oh-graf|an X-ray picture|The radiograph showed a broken bone.
+respond|3|rih-SPOND|to answer|Please respond to my email.
+respectable|5|rih-SPEK-tuh-bul|deserving respect|He has a respectable job.
+reduce|3|rih-DOOSS|to make smaller|Reduce, reuse, and recycle.
+return|2|rih-TURN|to come or give back|Return the book to the library.
+remedy|4|REM-ih-dee|a cure|Hot tea is a remedy for a sore throat.
+sailor|3|SAY-ler|a person who works on a ship|The sailor tied a knot.
+senior|4|SEEN-yer|older; a student in the last year|My cousin is a senior in high school.
+skeleton|4|SKEL-ih-tun|all the bones of a body|The skeleton has 206 bones.
+scenery|5|SEE-ner-ee|the view of nature around you|The mountain scenery was beautiful.
+shave|1|SHAYV|to cut off hair with a razor|Dad will shave his beard.
+special|4|SPESH-ul|different and important|Today is a special day.
+schedule|5|SKEJ-ool|a plan of times|Check the bus schedule.
+skinny|2|SKIN-ee|very thin|The skinny cat ate a lot.
+speech|3|SPEECH|a talk given to a group|She gave a speech to the class.
+scavenger|5|SKAV-in-jer|an animal that eats leftovers; someone who searches|We went on a scavenger hunt.
+shiver|2|SHIV-er|to shake from cold|I shiver in the snow.
+spirit|3|SPEER-it|energy and attitude; a ghost|We have great school spirit.
+sufficient|6|suh-FISH-ent|enough|We have sufficient food for the trip.
+service|3|SUR-viss|helping others; work done|The restaurant has good service.
+sportsmanship|5|SPORTS-mun-ship|playing fair and being a good sport|Shaking hands shows sportsmanship.
+scribble|3|SKRIB-ul|to write messily|The baby likes to scribble.
+stupendous|5|stoo-PEN-dus|amazing|The fireworks were stupendous.
+station|3|STAY-shun|a place where trains or buses stop|We waited at the train station.
+sculpture|5|SKULP-chur|art carved or shaped from stone, clay, or wood|The sculpture was made of clay.
+shelter|3|SHEL-ter|a place that protects|We found shelter from the rain.
+stomach|5|STUM-uk|where food goes after you swallow|My stomach is growling.
+search|3|SURCH|to look for|Search for your lost shoe.
+submerge|4|sub-MURJ|to put under water|The submarine will submerge.
+struggle|4|STRUG-ul|to try very hard|It's okay to struggle when learning.
+sequence|5|SEE-kwenss|an order of things|Put the pictures in sequence.
+similar|4|SIM-ih-ler|almost the same|The twins look similar.
+succeed|5|suk-SEED|to do well; to reach a goal|If you practice, you will succeed.
+strategy|4|STRAT-ih-jee|a plan to win|We need a strategy for the game.
+simple|2|SIM-pul|easy|The answer is simple.
+surprise|4|ser-PRIZE|something you didn't expect|The party was a surprise.
+tablet|2|TAB-lit|a flat computer, or a pill|I read books on my tablet.
+tender|2|TEN-der|soft or gentle|The steak was tender.
+thunder|2|THUN-der|the loud noise after lightning|The thunder scared the dog.
+talent|3|TAL-ent|a natural skill|She has a talent for singing.
+therapy|4|THAIR-uh-pee|treatment to help you heal|He went to therapy for his hurt knee.
+title|3|TY-tul|the name of a book or movie|What is the title of your story?
+terminal|4|TUR-mih-nul|a station for planes or buses|We waited at the airport terminal.
+texture|4|TEKS-chur|how something feels to touch|Sandpaper has a rough texture.
+tolerate|4|TOL-er-ayt|to put up with|I can't tolerate loud noise.
+tapestry|5|TAP-ih-stree|a cloth with woven pictures|A tapestry hung on the castle wall.
+thriller|3|THRIL-er|an exciting story|We watched a spooky thriller.
+tortoise|5|TOR-tus|a slow land turtle|The tortoise won the race against the hare.
+tarantula|5|tuh-RAN-chuh-luh|a big hairy spider|The tarantula has eight hairy legs.
+thermometer|5|ther-MOM-ih-ter|a tool that measures temperature|The thermometer says seventy degrees.
+total|2|TOH-tul|the whole amount|The total is ten dollars.
+teaspoon|3|TEE-spoon|a small spoon|Add a teaspoon of sugar.
+thimble|3|THIM-bul|a cap to protect a finger when sewing|Grandma uses a thimble to sew.
+tourist|4|TUR-ist|a person who travels for fun|The tourist took photos.
+technology|5|tek-NOL-uh-jee|tools and machines made with science|Computers are technology.
+thorn|2|THORN|a sharp point on a plant|The rose has a thorn.
+tournament|5|TUR-nuh-ment|a series of games to find a winner|We won the soccer tournament.
+typical|4|TIP-ih-kul|normal; usual|It was a typical school day.
+thoughtful|5|THAWT-ful|kind and caring; thinking a lot|What a thoughtful gift!
+tragedy|5|TRAJ-ih-dee|a very sad event|The fire was a tragedy.
+temporary|5|TEM-puh-rair-ee|lasting a short time|The tattoo is temporary.
+threaten|4|THRET-un|to warn that you will hurt|Dark clouds threaten rain.
+translate|4|tranz-LAYT|to change words into another language|Can you translate this into Spanish?
+tenant|3|TEN-ent|a person who rents a home|The tenant pays rent each month.
+thrive|3|THRIVE|to grow strong and healthy|Plants thrive in sunlight.
+treasure|4|TREZH-er|gold, jewels, or something valuable|The pirates buried the treasure.
+ultimate|4|UL-tih-mit|the greatest or final|Winning is the ultimate goal.
+unfortunate|5|un-FOR-chuh-nit|unlucky|It was unfortunate that it rained.
+unripe|3|un-RIPE|not ready to eat|The banana is green and unripe.
+unbelievable|5|un-bih-LEE-vuh-bul|hard to believe|The magic trick was unbelievable.
+unimaginable|5|un-ih-MAJ-ih-nuh-bul|impossible to imagine|The size of space is unimaginable.
+upcoming|3|UP-kum-ing|happening soon|We have an upcoming test.
+understand|3|un-der-STAND|to know what something means|I understand the lesson.
+unintended|4|un-in-TEN-did|not planned|The joke had an unintended result.
+upholstery|6|up-HOHL-stuh-ree|the soft covering on chairs and sofas|The cat scratched the upholstery.
+uncomfortable|5|un-KUMF-ter-bul|not comfortable|These shoes are uncomfortable.
+unity|3|YOO-nih-tee|being together as one|The team showed unity.
+unnatural|5|un-NACH-er-ul|not natural|The hair was an unnatural green.
+ultrasound|4|UL-truh-sownd|a picture made with sound waves|The ultrasound showed the baby.
+universal|4|yoo-nih-VUR-sul|for everyone or everywhere|A smile is a universal sign.
+upward|2|UP-werd|toward a higher place|The balloon floated upward.
+understandable|5|un-der-STAN-duh-bul|easy to understand|Your mistake is understandable.
+unkind|2|un-KIND|not kind; mean|It is unkind to tease.
+urban|3|UR-bun|about the city|We live in an urban area.
+undertake|3|un-der-TAKE|to begin a job|We will undertake a big project.
+unpack|2|un-PAK|to take things out|Unpack your suitcase.
+urgency|5|UR-jen-see|needing fast action|The doctor spoke with urgency.
+unbutton|4|un-BUT-un|to open buttons|Unbutton your coat.
+unnecessary|6|un-NESS-uh-sair-ee|not needed|It's unnecessary to shout.
+utensil|5|yoo-TEN-sul|a tool for eating or cooking|A fork is a utensil.
+unfinished|4|un-FIN-isht|not done|My drawing is unfinished.
+unpredictable|5|un-prih-DIK-tuh-bul|hard to know ahead of time|The weather is unpredictable.
+unlike|2|un-LIKE|different from|Unlike my brother, I like peas.
+unfold|2|un-FOLD|to open up|Unfold the map.
+unravel|4|un-RAV-ul|to come apart|The sweater began to unravel.
+utilize|5|YOO-tih-lize|to use|Utilize your time wisely.
+vaporize|4|VAY-puh-rize|to turn into gas|Heat can vaporize water.
+vibration|4|vy-BRAY-shun|fast shaking|I felt the vibration of the phone.
+vortex|4|VOR-teks|a spinning mass of water or air|A tornado is a vortex.
+vague|5|VAYG|not clear|His answer was vague.
+victimize|5|VIK-tih-mize|to treat someone unfairly or hurt them|Bullies victimize others.
+valiant|5|VAL-yunt|very brave|The valiant knight saved the town.
+vacancy|5|VAY-kun-see|an empty room or job|The hotel has a vacancy.
+village|3|VIL-ij|a small town|The village had one store.
+visual|4|VIZH-oo-ul|about seeing|Use a visual aid in your talk.
+vertebrate|5|VUR-tuh-brit|an animal with a backbone|A fish is a vertebrate.
+view|3|VYOO|what you can see|The view from the top was amazing.
+variety|5|vuh-RY-ih-tee|many different kinds|The store has a variety of fruit.
+vegetation|5|vej-ih-TAY-shun|plants|The jungle is full of vegetation.
+victory|3|VIK-ter-ee|a win|The team celebrated the victory.
+vinegar|4|VIN-ih-ger|a sour liquid for cooking|Put vinegar on the salad.
+variable|5|VAIR-ee-uh-bul|something that can change|The weather is variable.
+videotape|3|VID-ee-oh-tayp|to record video|We will videotape the play.
+verify|4|VAIR-ih-fy|to check that something is true|Verify your answer.
+vertical|4|VUR-tih-kul|straight up and down|Draw a vertical line.
+vintage|4|VIN-tij|old and of good quality|She has a vintage dress.
+villager|4|VIL-ih-jer|a person who lives in a village|The villager fed the chickens.
+verse|3|VURSS|a part of a song or poem|Sing the first verse.
+vulture|4|VUL-chur|a large bird that eats dead animals|A vulture circled overhead.
+vegetable|5|VEJ-tuh-bul|a plant we eat, like a carrot|Eat a vegetable with dinner.
+velociraptor|6|vuh-LOSS-ih-rap-ter|a small, fast dinosaur|The velociraptor was a fast hunter.
+violin|3|vy-uh-LIN|a string instrument played with a bow|She plays the violin.
+wonderful|3|WUN-der-ful|very good|We had a wonderful time.
+weary|3|WEER-ee|very tired|The weary hikers rested.
+wisdom|3|WIZ-dum|good judgment and knowledge|Grandpa shares his wisdom.
+wagon|2|WAG-un|a cart with wheels|Pull the wagon up the hill.
+weave|3|WEEV|to make cloth by crossing threads|Spiders weave webs.
+willing|2|WIL-ing|ready to help|I am willing to help.
+wonder|2|WUN-der|to be curious; amazement|I wonder what is in the box.
+wedlock|3|WED-lok|marriage|The couple joined in wedlock.
+withdraw|4|with-DRAW|to take out or pull back|Withdraw money from the bank.
+wander|3|WON-der|to walk around without a plan|Don't wander off at the mall.
+welfare|3|WEL-fair|health and happiness|We care about our pets' welfare.
+witness|4|WIT-niss|a person who sees something happen|The witness saw the accident.
+wording|3|WUR-ding|the words used|Check the wording of the question.
+whale|3|WAYL|a huge sea mammal|The whale sprayed water.
+waterfall|3|WAW-ter-fawl|water falling over a cliff|We swam under the waterfall.
+warden|3|WOR-den|a person in charge, like of a park|The park warden helped us.
+whisker|4|WISS-ker|a long hair on an animal's face|The cat has a white whisker.
+worship|4|WUR-ship|to praise and pray|They worship at the church.
+warm|1|WORM|a little hot|The soup is warm.
+whistle|4|WISS-ul|a high sound made by blowing|The coach blew the whistle.
+woodland|2|WUD-land|land covered with trees|Deer live in the woodland.
+warp|2|WORP|to bend out of shape|Heat can warp plastic.
+wicked|3|WIK-id|evil|The wicked witch cast a spell.
+workshop|2|WURK-shop|a place where things are made or fixed|Dad fixes chairs in his workshop.
+warrior|4|WOR-ee-er|a fighter|The warrior was brave.
+wiggle|3|WIG-ul|to move side to side|Wiggle your toes.
+wrangle|5|RANG-gul|to round up animals; to argue|Cowboys wrangle the horses.
+wildlife|3|WILD-life|wild animals|We saw wildlife at the park.
+wreck|4|REK|to destroy; a ruined thing|The storm will wreck the boat.
+xylophone|5|ZY-luh-fone|an instrument with bars you hit|I played the xylophone in music class.
+x-ray|3|EKS-ray|a picture of the inside of the body (with a hyphen)|The x-ray showed my broken arm.
+yearn|4|YURN|to want very much|I yearn for summer.
+yearly|3|YEER-lee|once a year|We have a yearly checkup.
+yelp|2|YELP|a short, sharp cry|The puppy gave a yelp.
+yowl|3|YOWL|a long, loud cry|The cat let out a yowl.
+yardstick|3|YARD-stik|a ruler three feet long|Measure the table with a yardstick.
+yoke|3|YOKE|a wooden bar that joins two animals|The oxen wore a yoke.
+youngster|4|YUNG-ster|a young person|The youngster rode a bike.
+yodel|3|YOH-dul|to sing switching between high and low|He likes to yodel in the mountains.
+youthful|4|YOOTH-ful|young or looking young|Grandma has a youthful smile.
+yeti|3|YET-ee|a legendary snow monster|The yeti lives in the mountains.
+yonder|3|YON-der|over there|Look at the hill yonder.
+zany|3|ZAY-nee|silly and funny|The clown was zany.
+zip|1|ZIP|to close a zipper|Zip up your jacket.
+zoology|5|zoh-OL-uh-jee|the study of animals|She wants to study zoology.
+zeppelin|5|ZEP-uh-lin|a big airship shaped like a cigar|A zeppelin floated over the city.
+zodiac|4|ZOH-dee-ak|a circle of star signs|My zodiac sign is Leo.
+zeta|3|ZAY-tuh|a letter of the Greek alphabet|Zeta is the sixth Greek letter.
+zenith|4|ZEE-nith|the highest point|The sun is at its zenith at noon.
+zoning|3|ZOH-ning|rules for how land is used|Zoning rules keep factories away from homes.
+zucchini|6|zoo-KEE-nee|a long green squash|We grilled zucchini.

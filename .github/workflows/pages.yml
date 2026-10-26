@@ -24,6 +24,20 @@ jobs:
           unzip -q m.zip
           mv vosk-model-small-en-us-0.15 model
           tar -czf site/model.tar.gz model
+      - name: Lista de palabras que el modelo de voz no conoce
+        run: |
+          python3 - <<'PY'
+          import json, os
+          vocab = set()
+          for p in ('model/graph/words.txt', 'model/words.txt'):
+              if os.path.exists(p):
+                  vocab = {l.split()[0] for l in open(p, encoding='utf-8') if l.strip()}
+                  break
+          words = [l.split('|')[0].lower() for l in open('site/words.txt', encoding='utf-8') if l.strip()]
+          oov = [w for w in words if vocab and any(t not in vocab for t in w.replace('-', ' ').split())]
+          json.dump(oov, open('site/oov.json', 'w'))
+          print(len(vocab), 'palabras en el modelo;', len(oov), 'sin reconocer:', oov)
+          PY
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
